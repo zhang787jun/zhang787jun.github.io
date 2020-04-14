@@ -1,0 +1,475 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <link rel="Stylesheet" type="text/css" href="/Wiki/static/css/style.css">
+    <link rel="Stylesheet" type="text/css" href="/Wiki/static/css/tango.css">
+    <link rel="shortcut icon" href="/Wiki/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/Wiki/favicon.ico" type="image/x-icon">
+    <title>Docker Compose 镜像编排的最佳实践 - Jun's personal knowledge wiki</title>
+    <meta name="keywords" content="Technology, MachineLearning, DataMining, Wiki" />
+    <meta name="description" content="A wiki website" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+            }
+        });
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+        </script>
+</head>
+
+<body>
+
+    <div id="container">
+        
+<div id="header">
+  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Virtualization_and_Cloud_Computing\2. Container容器技术\Docker">Virtualization_and_Cloud_Computing\2. Container容器技术\Docker</a>&nbsp;»&nbsp;Docker Compose 镜像编排的最佳实践</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">Docker Compose 镜像编排的最佳实践</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#1">1. 概念</a></li>
+<li><a href="#2">2. 镜像编排实践</a><ul>
+<li><a href="#21">2.1. 忽略文件</a></li>
+<li><a href="#22-docker-compose">2.2. docker-compose 命令</a></li>
+<li><a href="#dockerfile">Dockerfile 编写</a></li>
+</ul>
+</li>
+<li><a href="#set-one-or-more-individual-labels">Set one or more individual labels</a></li>
+<li><a href="#set-multiple-labels-on-one-line">Set multiple labels on one line</a></li>
+<li><a href="#set-multiple-labels-at-once-using-line-continuation-characters-to-break-long-lines">Set multiple labels at once, using line-continuation characters to break long lines</a></li>
+<li><a href="#binbash">!/bin/bash</a></li>
+<li><a href="#_1">参考文献</a></li>
+</ul>
+</div>
+<h1 id="1">1. 概念</h1>
+<p>Docker Compose 是 Docker 官方编排（Orchestration）项目之一，负责快速的部署分布式应用。<br />
+本章将介绍 Compose 项目情况以及安装和使用。</p>
+<p>Compose 定位是 「定义和运行多个 Docker 容器的应用（Defining and running multi-container Docker applications）」，其前身是开源项目 Fig</p>
+<p>允许用户通过一个单独的 docker-compose.yml 模板文件（YAML 格式）来定义一组相关联的应用容器为一个项目（project）。</p>
+<p>Compose 中有两个重要的概念：<br />
+    • <strong>服务 (service)</strong>：一个应用的容器，实际上可以包括若干运行相同镜像的容器实例。<br />
+    • <strong>项目 (project)</strong>：由一组关联的应用容器组成的一个完整业务单元，在 docker-compose.yml 文件中定义。<br />
+Compose 的默认管理对象是项目，通过子命令对项目中的一组容器进行便捷地生命周期管理。</p>
+<p>Compose 项目由 Python 编写，实现上调用了 Docker 服务提供的 API 来对容器进行管理。因此，只要所操作的平台支持 Docker API，就可以在其上利用 Compose 来进行编排管理。</p>
+<h1 id="2">2. 镜像编排实践</h1>
+<h2 id="21">2.1. 忽略文件</h2>
+<p>在工作目录下新建 <code>.dockerignore</code> 文件<br />
+.dockerignore 语法与 .gitignore 语法一致。使用它排除构建无关的文件及目录，如 node_modules</p>
+<h2 id="22-docker-compose">2.2. docker-compose 命令</h2>
+<p>对于 Compose 来说，大部分命令的对象既可以是项目本身，也可以指定为项目中的服务或者容器。如果没有特别的说明，命令对象将是项目，这意味着项目中所有的服务都会受到命令影响。<br />
+执行 docker-compose [COMMAND] --help 或者 docker-compose help [COMMAND] 可以查看具体某个命令的使用格式。</p>
+<p><code>docker-compose</code> 命令的基本的使用格式是</p>
+<div class="hlcode"><pre><span class="nx">docker</span><span class="na">-compose</span> <span class="err">[</span><span class="na">-f</span><span class="o">=&lt;</span><span class="nx">arg</span><span class="o">&gt;</span><span class="nx">...</span><span class="cp">]</span> <span class="cp">[</span><span class="nx">options</span><span class="cp">]</span> <span class="cp">[</span><span class="nb">COMMAND</span><span class="cp">]</span> <span class="cp">[</span><span class="nx">ARGS...</span><span class="cp">]</span>
+</pre></div>
+
+
+<p><strong>命令行 选项参数</strong><br />
+    • -f, --file FILE 指定使用的 Compose 模板文件，默认为 docker-compose.yml，可以多次指定。<br />
+    • -p, --project-name NAME 指定项目名称，默认将使用所在目录名称作为项目名。<br />
+    • --x-networking 使用 Docker 的可拔插网络后端特性<br />
+    • --x-network-driver DRIVER 指定网络后端的驱动，默认为 bridge<br />
+    • --verbose 输出更多调试信息。<br />
+    • -v, --version 打印版本并退出。<br />
+<strong>命令行 命令</strong><br />
+- build<br />
+格式为 docker-compose build [options] [SERVICE...]。<br />
+构建（重新构建）项目中的服务容器。<br />
+服务容器一旦构建后，将会带上一个标记名，例如对于 web 项目中的一个 db 容器，可能是 web_db。<br />
+可以随时在项目目录下运行 docker-compose build 来重新构建服务。<br />
+选项包括：<br />
+    • --force-rm 删除构建过程中的临时容器。<br />
+    • --no-cache 构建镜像过程中不使用 cache（这将加长构建过程）。<br />
+    • --pull 始终尝试通过 pull 来获取更新版本的镜像。<br />
+- config<br />
+验证 Compose 文件格式是否正确，若正确则显示配置，若格式错误显示错误原因。<br />
+- down<br />
+此命令将会停止 up 命令所启动的容器，并移除网络<br />
+- exec<br />
+进入指定的容器。<br />
+- help<br />
+获得一个命令的帮助。<br />
+- images<br />
+列出 Compose 文件中包含的镜像。<br />
+- kill<br />
+格式为 docker-compose kill [options] [SERVICE...]。<br />
+通过发送 SIGKILL 信号来强制停止服务容器。<br />
+支持通过 -s 参数来指定发送的信号，例如通过如下指令发送 SIGINT 信号。</p>
+<div class="hlcode"><pre><span class="err">$</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">kill</span> <span class="o">-</span><span class="n">s</span> <span class="n">SIGINT</span>
+</pre></div>
+
+
+<ul>
+<li>logs<br />
+格式为 docker-compose logs [options] [SERVICE...]。<br />
+查看服务容器的输出。默认情况下，docker-compose 将对不同的服务输出使用不同的颜色来区分。可以通过 --no-color 来关闭颜色。<br />
+该命令在调试问题的时候十分有用。<br />
+pause<br />
+格式为 docker-compose pause [SERVICE...]。<br />
+暂停一个服务容器。<br />
+port<br />
+格式为 docker-compose port [options] SERVICE PRIVATE_PORT。<br />
+打印某个容器端口所映射的公共端口。<br />
+选项：<br />
+    • --protocol=proto 指定端口协议，tcp（默认值）或者 udp。<br />
+    • --index=index 如果同一服务存在多个容器，指定命令对象容器的序号（默认为 1）。<br />
+ps<br />
+格式为 docker-compose ps [options] [SERVICE...]。<br />
+列出项目中目前的所有容器。<br />
+选项：<br />
+    • -q 只打印容器的 ID 信息。<br />
+pull<br />
+格式为 docker-compose pull [options] [SERVICE...]。<br />
+拉取服务依赖的镜像。<br />
+选项：<br />
+    • --ignore-pull-failures 忽略拉取镜像过程中的错误。<br />
+push<br />
+推送服务依赖的镜像到 Docker 镜像仓库。<br />
+restart<br />
+格式为 docker-compose restart [options] [SERVICE...]。<br />
+重启项目中的服务。<br />
+选项：<br />
+    • -t, --timeout TIMEOUT 指定重启前停止容器的超时（默认为 10 秒）。<br />
+rm<br />
+格式为 docker-compose rm [options] [SERVICE...]。<br />
+删除所有（停止状态的）服务容器。推荐先执行 docker-compose stop 命令来停止容器。<br />
+选项：<br />
+    • -f, --force 强制直接删除，包括非停止状态的容器。一般尽量不要使用该选项。<br />
+    • -v 删除容器所挂载的数据卷。<br />
+run<br />
+格式为 docker-compose run [options] [-p PORT...] [-e KEY=VAL...] SERVICE [COMMAND] [ARGS...]。<br />
+在指定服务上执行一个命令。<br />
+例如：</li>
+</ul>
+<div class="hlcode"><pre><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">run</span> <span class="n">ubuntu</span> <span class="n">ping</span> <span class="n">docker</span><span class="p">.</span><span class="n">com</span>
+</pre></div>
+
+
+<p>将会启动一个 ubuntu 服务容器，并执行 ping docker.com 命令。<br />
+默认情况下，如果存在关联，则所有关联的服务将会自动被启动，除非这些服务已经在运行中。<br />
+该命令类似启动容器后运行指定的命令，相关卷、链接等等都将会按照配置自动创建。<br />
+两个不同点：<br />
+    • 给定命令将会覆盖原有的自动运行命令；<br />
+    • 不会自动创建端口，以避免冲突。<br />
+如果不希望自动启动关联的容器，可以使用 --no-deps 选项，例如</p>
+<div class="hlcode"><pre><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">run</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span> <span class="n">web</span> <span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">shell</span>
+</pre></div>
+
+
+<p>将不会启动 web 容器所关联的其它容器。<br />
+选项：<br />
+    • -d 后台运行容器。<br />
+    • --name NAME 为容器指定一个名字。<br />
+    • --entrypoint CMD 覆盖默认的容器启动指令。<br />
+    • -e KEY=VAL 设置环境变量值，可多次使用选项来设置多个环境变量。<br />
+    • -u, --user="" 指定运行容器的用户名或者 uid。<br />
+    • --no-deps 不自动启动关联的服务容器。<br />
+    • --rm 运行命令后自动删除容器，d 模式下将忽略。<br />
+    • -p, --publish=[] 映射容器端口到本地主机。<br />
+    • --service-ports 配置服务端口并映射到本地主机。<br />
+    • -T 不分配伪 tty，意味着依赖 tty 的指令将无法运行。<br />
+scale<br />
+格式为 docker-compose scale [options] [SERVICE=NUM...]。<br />
+设置指定服务运行的容器个数。<br />
+通过 service=num 的参数来设置数量。例如：</p>
+<div class="hlcode"><pre><span class="err">$</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">scale</span> <span class="n">web</span><span class="o">=</span><span class="mi">3</span> <span class="n">db</span><span class="o">=</span><span class="mi">2</span>
+</pre></div>
+
+
+<p>将启动 3 个容器运行 web 服务，2 个容器运行 db 服务。<br />
+一般的，当指定数目多于该服务当前实际运行容器，将新创建并启动容器；反之，将停止容器。<br />
+选项：<br />
+    • -t, --timeout TIMEOUT 停止容器时候的超时（默认为 10 秒）。<br />
+start<br />
+格式为 docker-compose start [SERVICE...]。<br />
+启动已经存在的服务容器。<br />
+stop<br />
+格式为 docker-compose stop [options] [SERVICE...]。<br />
+停止已经处于运行状态的容器，但不删除它。通过 docker-compose start 可以再次启动这些容器。<br />
+选项：<br />
+    • -t, --timeout TIMEOUT 停止容器时候的超时（默认为 10 秒）。<br />
+top<br />
+查看各个服务容器内运行的进程。<br />
+unpause<br />
+格式为 docker-compose unpause [SERVICE...]。<br />
+恢复处于暂停状态中的服务。<br />
+up<br />
+格式为 docker-compose up [options] [SERVICE...]。<br />
+该命令十分强大，它将尝试自动完成包括构建镜像，（重新）创建服务，启动服务，并关联服务相关容器的一系列操作。<br />
+链接的服务都将会被自动启动，除非已经处于运行状态。<br />
+可以说，大部分时候都可以直接通过该命令来启动一个项目。<br />
+默认情况，docker-compose up 启动的容器都在前台，控制台将会同时打印所有容器的输出信息，可以很方便进行调试。<br />
+当通过 Ctrl-C 停止命令时，所有容器将会停止。<br />
+如果使用 docker-compose up -d，将会在后台启动并运行所有的容器。一般推荐生产环境下使用该选项。<br />
+默认情况，如果服务容器已经存在，docker-compose up 将会尝试停止容器，然后重新创建（保持使用 volumes-from 挂载的卷），以保证新启动的服务匹配 docker-compose.yml 文件的最新内容。如果用户不希望容器被停止并重新创建，可以使用 docker-compose up --no-recreate。这样将只会启动处于停止状态的容器，而忽略已经运行的服务。如果用户只想重新部署某个服务，可以使用 docker-compose up --no-deps -d <SERVICE_NAME> 来重新创建服务并后台停止旧服务，启动新服务，并不会影响到其所依赖的服务。<br />
+选项：<br />
+    • -d 在后台运行服务容器。<br />
+    • --no-color 不使用颜色来区分不同的服务的控制台输出。<br />
+    • --no-deps 不启动服务所链接的容器。<br />
+    • --force-recreate 强制重新创建容器，不能与 --no-recreate 同时使用。<br />
+    • --no-recreate 如果容器已经存在了，则不重新创建，不能与 --force-recreate 同时使用。<br />
+    • --no-build 不自动构建缺失的服务镜像。<br />
+    • -t, --timeout TIMEOUT 停止容器时候的超时（默认为 10 秒）。<br />
+- version<br />
+格式为 docker-compose version。<br />
+打印版本信息。</p>
+<h2 id="dockerfile">Dockerfile 编写</h2>
+<p>参考官方文档</p>
+<p>如何写好Dockerfile，Dockerfile最佳实践<br />
+预览目录</p>
+<p>准则和建议<br />
+Dockerfile 指令<br />
+FROM<br />
+LABEL<br />
+RUN<br />
+APT-GET<br />
+USING PIPES<br />
+CMD<br />
+EXPOSE<br />
+ENV<br />
+ADD or COPY<br />
+ENTRYPOINT<br />
+VOLUME<br />
+USER<br />
+WORKDIR<br />
+ONBUILD<br />
+通过前面一篇 如何写Dockerfile，Dockerfile 参考文档，相信你已经了解了如何写 Dockerfile 文件。本篇文章主要介绍 Docker 公司和 Docker 社区推荐的最佳写法。so，在写 Dockerfile 文件的时候，你应该遵循这些做法。</p>
+<p>准则和建议<br />
+Docker 官方提供了一些建议和准则，在大多数情况下建议遵守。</p>
+<p>1、容器是短暂的，也就是说，你需要可以容易的创建、销毁、配置你的容器。<br />
+2、多数情况，构建镜像的时候是将 Dockerfile 和所需文件放在同一文件夹下。但为了构建性能，我们可以采用 .dockerignore 文件来排除文件和目录。<br />
+3、避免安装不必要的包，构建镜像应该尽可能减少复杂性、依赖关系、构建时间及镜像大小。<br />
+4、最小化层数。<br />
+5、排序多行参数，通过字母将参数排序来缓解以后的变化，这将帮你避免重复的包、使列表更容易更新，如：</p>
+<p>DOCKERFILE<br />
+RUN apt-get update &amp;&amp; apt-get install -y \<br />
+  bzr \<br />
+  cvs \<br />
+  git \<br />
+  mercurial \<br />
+  subversion<br />
+6、构建缓存，大家知道 Docker 构建镜像的过程是顺序执行 Dockerfile 每个指令的过程。执行过程中，Docker 将在缓存中查找可重用的镜像，如果不想使用缓存，你也可以使用 docker build --no-cache=true ... 命令。</p>
+<p>如果使用缓存，docker 将使用一下基本规则：</p>
+<p>从第一条指令开始，它将比较从基础镜像导出的所有子镜像，查看是否有相同的的构建指令，以此来获取缓存。<br />
+在大多数情况下，简单地比较 Dockerfile 与其中一个子镜像的指令是足够的。但是，某些说明需要更多的检查和解释。<br />
+对于 ADD 和 COPY 指令，会去比较文件的校验和，但不考虑文件的修改时间和访问时间。如果有任何变化，缓存无效。<br />
+除了 ADD 和 COPY 指令，缓存检查不会查看容器中的文件来确定缓存匹配。例如，当处理 RUN apt-get -y update 命令时，将不会检查在容器中更新的文件以确定是否存在高速缓存命中。在这种情况下，只需使用命令字符串本身来查找匹配。<br />
+一旦缓存无效，所有后续 Dockerfile 命令将生成新的映像，并且高速缓存将不被使用。</p>
+<p>Dockerfile 指令<br />
+那么如何最好的编写 Dockerfile 呢，下面有一些建议。</p>
+<p>FROM<br />
+尽可能的使用官方仓库存储的镜像作为基础镜像。官方建议使用 Debian，大小在 150mb 左右。不过在实际开发中，应该用到 alpine 的次数比较多，因为它仅 5mb 左右。</p>
+<p>LABEL<br />
+了解对象标签。你可以给镜像添加标签（LABEL），如记录许可信息，帮助自动化或其他信息。对象标签以键值对的形式出现，如果包含空格请用 " 扩起来。标签对象必须唯一，否则后者会覆盖前者。键可以包含 .、-、a-zA-Z、0-9。更多信息参考 Docker object labels。下面是一些例子：</p>
+<p>DOCKERFILE</p>
+<h1 id="set-one-or-more-individual-labels">Set one or more individual labels</h1>
+<p>LABEL com.example.version="0.0.1-beta"<br />
+LABEL vendor="ACME Incorporated"<br />
+LABEL com.example.release-date="2015-02-12"<br />
+LABEL com.example.version.is-production=""</p>
+<h1 id="set-multiple-labels-on-one-line">Set multiple labels on one line</h1>
+<p>LABEL com.example.version="0.0.1-beta" com.example.release-date="2015-02-12"</p>
+<h1 id="set-multiple-labels-at-once-using-line-continuation-characters-to-break-long-lines">Set multiple labels at once, using line-continuation characters to break long lines</h1>
+<p>LABEL vendor=ACME\ Incorporated \<br />
+      com.example.is-beta= \<br />
+      com.example.is-production="" \<br />
+      com.example.version="0.0.1-beta" \<br />
+      com.example.release-date="2015-02-12"<br />
+RUN<br />
+最常见的应该是安装软件包，如 RUN apt-get install -y foo...，你可以通过 \ 分隔成多行。</p>
+<p>APT-GET<br />
+使用 apt-get 你可以安装软件包，但这里有一些需要注意的地方。</p>
+<p>您应该避免 RUN apt-get upgrade 或者 dist-upgrade，如果你需要更新软件包，使用 apt-get install -y foo 命令将会自动更新。</p>
+<p>你应该将 RUN apt-get update 和 apt-get install 结合使用：</p>
+<p>DOCKERFILE<br />
+RUN apt-get update &amp;&amp; apt-get install -y \<br />
+    package-bar \<br />
+    package-baz \<br />
+    package-foo<br />
+如果单独使用，会导致缓存失效或后续 apt-get install 指令失败，如：</p>
+<p>DOCKERFILE<br />
+FROM ubuntu:14.04<br />
+RUN apt-get update<br />
+RUN apt-get install -y curl<br />
+why？ok，第一执行构建该镜像是没问题的。可是当你第二次构建，Docker 会将 RUN apt-get update 看作是与镜像一是同一指令，会命中缓存。导致结果就是，你可能会安装一些过时的软件包。所以，使用 RUN apt-get update &amp;&amp; apt-get install -y 能够破解缓存机制，实现清除缓存的结果。</p>
+<p>下面是一个使用 apt-get 的指导建议：</p>
+<p>DOCKERFILE<br />
+RUN apt-get update &amp;&amp; apt-get install -y \<br />
+    aufs-tools \<br />
+    automake \<br />
+    build-essential \<br />
+    curl \<br />
+    dpkg-sig \<br />
+    libcap-dev \<br />
+    libsqlite3-dev \<br />
+    mercurial \<br />
+    reprepro \<br />
+    ruby1.9.1 \<br />
+    ruby1.9.1-dev \<br />
+    s3cmd=1.1.<em> \<br />
+ &amp;&amp; rm -rf /var/lib/apt/lists/</em><br />
+当然 alpine 的使用也是同样的情况：</p>
+<p>apk add --update --no-cache sudo make<br />
+USING PIPES<br />
+在 RUN 指令中使用 | 会有什么问题，Docker 只关注最后一个命令执行的正确与否，如：</p>
+<p>RUN wget -O - https://some.site | wc -l &gt; /number<br />
+即使 wget 失败，wc 成功也会成功构建镜像。</p>
+<p>所以，如果想要执行过程中产生任何错误都失败，需要使用到 set -o pipefail &amp;&amp;。如：</p>
+<p>RUN set -o pipefail &amp;&amp; wget -O - https://some.site | wc -l &gt; /number<br />
+CMD<br />
+如果你的镜像用于 Server，CMD 的形式一般都是 CMD [“executable”, “param1”, “param2”…]。如 CMD ["apache2","-DFOREGROUND"]。</p>
+<p>CMD 还在大多数情况以交互式的方式出现。如 CMD ["python"]，当你执行 docker run -it python 的时候，将进入 shell 的交互模式。</p>
+<p>CMD 很少以 CMD [“param”, “param”] 协同 ENTRYPOINT 工作，除非你很了解它们的运行机制。</p>
+<p>EXPOSE<br />
+指定容器侦听端口，应该尽量使用应用程序通用的传统端口，如 Apache Web 服务器使用 EXPOSE 80 等。</p>
+<p>ENV<br />
+为容器添加环境变量，常用于为应用程序提供必要的环境变量以及版本号的设置，如：</p>
+<p>DOCKERFILE<br />
+ENV PG_MAJOR 9.3<br />
+ENV PG_VERSION 9.3.4<br />
+RUN curl -SL http://example.com/postgres-$PG_VERSION.tar.xz | tar -xJC /usr/src/postgress &amp;&amp; …<br />
+ENV PATH /usr/local/postgres-$PG_MAJOR/bin:$PATH<br />
+ADD or COPY<br />
+这两者很相似，推荐有限选择 COPY，它比 ADD 透明度更高。</p>
+<p>COPY，只支持将本地文件复制到容器中<br />
+ADD，除了 COPY 的功能外，还支持远程 URL。但最好的用途是将本地 tar 文件提取到镜像中 ADD rootfs.tar.xz /。<br />
+如果在 Dockerfile 中使用不用的文件，那么 COPY 它们可以单独使用。这样，特定文件的更改，将确保每一步的构建缓存无效，如：</p>
+<p>DOCKERFILE<br />
+COPY requirements.txt /tmp/<br />
+RUN pip install --requirement /tmp/requirements.txt<br />
+COPY . /tmp/<br />
+将 COPY . /tmp/ 放在后面，这能够使 RUN 的缓存无效的数量减少。</p>
+<p>因为镜像大小很重要，故用 ADD 远程 URL 提取包是不被鼓励的，因该使用 curl 或 wget 替代。这样，能够减小镜像的层数。例如，你应该避免这样做：</p>
+<p>DOCKERFILE<br />
+ADD http://example.com/big.tar.xz /usr/src/things/<br />
+RUN tar -xJf /usr/src/things/big.tar.xz -C /usr/src/things<br />
+RUN make -C /usr/src/things all<br />
+而是：</p>
+<p>DOCKERFILE<br />
+RUN mkdir -p /usr/src/things \<br />
+    &amp;&amp; curl -SL http://example.com/big.tar.xz \<br />
+    | tar -xJC /usr/src/things \<br />
+    &amp;&amp; make -C /usr/src/things all<br />
+对于不需要 ADD tar 自动提取功能的其他项目（文件，目录），您应该始终使用 COPY。</p>
+<p>ENTRYPOINT<br />
+ENTRYPOINT 的最好的用途时设置镜像的主命令，用 CMD 作为参数，这样就可以是镜像像命令一样运行。如：</p>
+<p>ENTRYPOINT ["s3cmd"]<br />
+CMD ["--help"]<br />
+当我们运行该镜像的时候，就会打印出帮助信息：</p>
+<p>$ docker run s3cmd<br />
+你也可以通过命令行覆盖 CMD 参数：</p>
+<p>$ docker run s3cmd ls s3://mybucket<br />
+ENTRYPOINT 也可以于脚本组合使用，允许其以类似于上述命令的方式运行。如一个 Postgres Official Image 的例子。：</p>
+<p>SH</p>
+<h1 id="binbash">!/bin/bash</h1>
+<p>set -e</p>
+<p>if [ "$1" = 'postgres' ]; then<br />
+    chown -R postgres "$PGDATA"</p>
+<div class="hlcode"><pre><span class="k">if</span> <span class="p">[</span> <span class="o">-</span><span class="n">z</span> <span class="s">&quot;$(ls -A &quot;</span><span class="err">$</span><span class="n">PGDATA</span><span class="s">&quot;)&quot;</span> <span class="p">];</span> <span class="n">then</span>
+    <span class="n">gosu</span> <span class="n">postgres</span> <span class="n">initdb</span>
+<span class="n">fi</span>
+
+<span class="n">exec</span> <span class="n">gosu</span> <span class="n">postgres</span> <span class="s">&quot;$@&quot;</span>
+</pre></div>
+
+
+<p>fi</p>
+<p>exec "$@"<br />
+注：此脚本使用的 exec bash 命令 ，使最终运行的应用程序成为容器的 PID 1。这允许应用程序接收发送到容器任何 Unix 信号。有关 ENTRYPOINT 详细信息，请参阅帮助。</p>
+<p>将脚本复制到容器，并通过 ENTRYPOINT 开始运行：</p>
+<p>COPY ./docker-entrypoint.sh /<br />
+ENTRYPOINT ["/docker-entrypoint.sh"]<br />
+此脚本允许用户以多种方式与 Postgres 进行交。它可以简单地启动Postgres：</p>
+<p>$ docker run postgres<br />
+或者，它可以用于运行 Postgres 并将参数传递给服务器：</p>
+<p>$ docker run postgres postgres --help<br />
+它也可以用来启动一个完全不同的工具，比如 Bash：</p>
+<p>$ docker run --rm -it postgres bash<br />
+VOLUME<br />
+VOLUME 指令应该用于如下内容：任何类型的数据库存储区域、配置存储、容器创建的文件或目录。</p>
+<p>推荐 VOLUME 用于挂载镜像中那些经常变化（易变化的）或者用户可维护的部分。</p>
+<p>USER<br />
+如果一个服务不需要超级权限来运行，你可以通过 USER 切换成非 root 用户。在 Dockerfile 中用如下方式创建：</p>
+<p>RUN groupadd -r postgres &amp;&amp; useradd --no-log-init -r -g postgres postgres<br />
+注意，重新构建镜像时，UID／GID 是不确定的，故你应该显示的分配 UID 和 GID。</p>
+<p>我们尽量避免安装和使用 sudo，因为它有不可预知的 TTY 和信号转发行为，这会给我们带来更多问题需要解决。如果一定要使用类似 sudo 功能（例如，以 root 用户身份初始化守护程序，但以非 root 身份运行），我们可以使用 gosu 替代它。</p>
+<p>最后，为了减少层数和复杂度，避免频繁使用 USER 进行用户切换。</p>
+<p>WORKDIR<br />
+为了清楚可靠，你应该使用绝对路径作为 WROKDIR。而不是增加的指令，如 RUN cd … &amp;&amp; do-something 难以阅读，排除故障和维护。</p>
+<p>ONBUILD<br />
+ONBUILD 指令在当前 Dockerfile 构建完成后执行，存储到镜像 的manifest 清单中，我们可以通过 docker inspect 查看 OnBuild 的信息。</p>
+<p>当我们使用带有 ONBUILD 触发器的镜像作为基础镜像来创建新镜像时，当 Dockerfile 执行到 FROM 时会自动查找 OnBuild 信息并执行这个触发器命令。成功后继续向下执行下一条指令，失败的话就停止向下执行并中止创建过程。如果成功创建了新的镜像后，这个新镜像中不会继承基础镜像中的 ONBUILD 触发器内容。参考 Ruby’s ONBUILD variants。</p>
+<p>建立的图像 ONBUILD 应该有一个单独的标签，例如：ruby:1.9-onbuild 或 ruby:2.0-onbuild。</p>
+<p>当把 ADD 或 COPY 加入 ONBUILD 中时要小心，如果新创建镜像的上下文缺少这些要添加的资源情况会导致创建的失败。因而添加单独的标签可以帮助我们减小这种情况发生的可能， 让 Dockerfile 作者来做决定。</p>
+<p>本文链接：https://deepzz.com/post/dockerfile-best-practices.html，参与评论 »</p>
+<p>--EOF--</p>
+<p>发表于 2017-06-10 15:38:00，并被添加「dockerfile、dockerfile-practices」标签。</p>
+<h1 id="_1">参考文献</h1>
+</div>
+<div id="renote">
+  <HR style=" FILTER: alpha (opacity = 100, finishopacity =0 , style= 3 )" width="80%" color=#987 cb 9 SIZE=3>
+  <p>如果你觉得这篇文章对你有帮助，不妨请我喝杯咖啡，鼓励我创造更多!</p>
+  <img src="/Wiki/static/images/pay.jpg" width="25%">
+</div>
+
+    </div>
+    <div id="footer">
+        <span>
+            Copyright © 2020 zhang787jun.
+            Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+        </span>
+    </div>
+
+    
+</body>
+<script>
+    function changeImgurl(site_root_url) {
+        var images = document.images;
+        var site_root = site_root_url;
+        for (i = 0, len = images.length; i < len; i++) {
+            image = images[i];
+            image_src = image.src;
+            if (image_src.search("attach") >= 0) {
+                re_image_src = image_src.slice(image_src.search("attach"));
+                abs_image_src = (site_root.endsWith("/")) ? site_root + re_image_src : site_root + "/" +
+                    re_image_src;
+                image.src = abs_image_src;
+            }
+        }
+    }
+    var site_root_url = "/Wiki";
+    changeImgurl(site_root_url);
+    let isMathjaxConfig = false; // 防止重复调用Config，造成性能损耗
+    const initMathjaxConfig = () => {
+        if (!window.MathJax) {
+            return;
+        }
+        window.MathJax.Hub.Config({
+            showProcessingMessages: false, //关闭js加载过程信息
+            messageStyle: "none", //不显示信息
+            jax: ["input/TeX", "output/HTML-CSS"],
+            tex2jax: {
+                inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+                displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+                skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+            },
+            "HTML-CSS": {
+                availableFonts: ["STIX", "TeX"], //可选字体
+                showMathMenu: false //关闭右击菜单显示
+            }
+        });
+        isMathjaxConfig = true; //
+    };
+    if (isMathjaxConfig === false) {
+        // 如果：没有配置MathJax
+        initMathjaxConfig();
+    };
+</script>
+
+</html>

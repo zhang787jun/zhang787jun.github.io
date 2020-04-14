@@ -1,0 +1,305 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <link rel="Stylesheet" type="text/css" href="/Wiki/static/css/style.css">
+    <link rel="Stylesheet" type="text/css" href="/Wiki/static/css/tango.css">
+    <link rel="shortcut icon" href="/Wiki/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/Wiki/favicon.ico" type="image/x-icon">
+    <title>算力核心-GPU - Jun's personal knowledge wiki</title>
+    <meta name="keywords" content="Technology, MachineLearning, DataMining, Wiki" />
+    <meta name="description" content="A wiki website" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+            }
+        });
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+        </script>
+</head>
+
+<body>
+
+    <div id="container">
+        
+<div id="header">
+  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Basic_CS\Computer Organization">Basic_CS\Computer Organization</a>&nbsp;»&nbsp;算力核心-GPU</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">算力核心-GPU</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#1-gpu">1. GPU 硬件性能</a><ul>
+<li><a href="#gpu">英伟达GPU 系列</a><ul>
+<li><a href="#_1">命名</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#2-gpu">2. GPU监测工具</a><ul>
+<li><a href="#21-nvidia-smi">2.1. nvidia-smi</a></li>
+<li><a href="#22-gpustat">2.2. gpustat</a></li>
+</ul>
+</li>
+<li><a href="#3-cuda">3. CUDA</a></li>
+</ul>
+</div>
+<h1 id="1-gpu">1. GPU 硬件性能</h1>
+<h2 id="gpu">英伟达GPU 系列</h2>
+<p>Nvidia的GPU命名有4个层次：</p>
+<ol>
+<li>GPU 架构(microarchitecture)<br />
+   表示GPU在芯片设计层面上的不同处理方式，包括的内容有计算单元(SIMD)的个数、有无L1,L2缓存、是否有双精度支持等。按时间顺序依次是：<br />
+<code>Tesla-&gt; Fermi-&gt; Keple -&gt; Maxwell-&gt; Pascal</code></li>
+<li>
+<p>显卡系列：<br />
+根据使用场景的不同，分成GeForce, Quadro, Tesla。</p>
+</li>
+<li>
+<p><code>GeForce</code> 用于家庭和个人电脑，包括游戏和娱乐等;</p>
+</li>
+<li><code>Quadro</code> 用于工业渲染、艺术设计，工作站等场合。</li>
+<li><code>Tesla</code> 用于科学计算，深度学习加速等场景。</li>
+</ol>
+<p>当然这三者的使用场景并没有严格的边界，想GeForce 系列的GTX 1080也可以用来做深度学习实验。</p>
+<ol>
+<li>芯片型号，例如GT200、GK210、GM104、GF104， K80, M40等。</li>
+<li>其中第二个字母表示架构，如K40 中的K表示Kepler架构,P100中的P表示Pascal架构。</li>
+</ol>
+<p>针对GeForce系列，还有2系列，3系列，200系列，400系列等分类，像GeForce GTX 1080 就是10系列。<br />
+需要注意的地方有：</p>
+<p>注意区分Tesla GPU架构和Tesla系列。前者已经用的不是很多了，而后者是最近才出的针对深度学习的系列，使用很多，像我们实验室用的K20,K80都是这个系列。</p>
+<h3 id="_1">命名</h3>
+<p>描述一个显卡的时候，一般是<code>系列名+芯片型号</code>，如 <code>Tesla K80</code>。</p>
+<p>针对GeForce系列，芯片型号一般是<code>显卡型号+具体编号</code>的形式，如 GeForce GT 705,其中GT 是显卡型号。</p>
+<p>最近新出了一款 TiTan X, 主要要和GeForce GTX Tian X 区分。</p>
+<table>
+<thead>
+<tr>
+<th>设备</th>
+<th>算力</th>
+<th></th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NVIDIA Tesla K40</td>
+<td>5</td>
+<td>TFLOPS</td>
+<td></td>
+</tr>
+<tr>
+<td>NVIDIA Tesla K80</td>
+<td>8.74</td>
+<td>TFLOPS</td>
+<td>Colab</td>
+</tr>
+<tr>
+<td>NVIDIA GeForce GTX Titan X</td>
+<td>7</td>
+<td>TFLOPS</td>
+<td></td>
+</tr>
+<tr>
+<td>NVIDIA Tesla P100 PCIe 16 GB</td>
+<td>9.3</td>
+<td>TFLOPS</td>
+<td>Kaggle</td>
+</tr>
+<tr>
+<td>NVIDIA Tesla V100 PCIe 16 GB</td>
+<td>14.1</td>
+<td>TFLOPS</td>
+<td>百度 AI Studio</td>
+</tr>
+<tr>
+<td>NVIDIA Tesla T4</td>
+<td>260</td>
+<td>TFLOPS</td>
+<td></td>
+</tr>
+<tr>
+<td>Google Colab Cloud TPU</td>
+<td>180</td>
+<td>TFLOPs</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-gpu">2. GPU监测工具</h1>
+<h2 id="21-nvidia-smi">2.1. nvidia-smi</h2>
+<p>nvidia-smi 简称NVSMI，提供监控GPU使用情况和更改GPU状态的功能，是一个跨平台工具，它支持所有标准的NVIDIA驱动程序支持的Linux发行版以及从WindowsServer 2008 R2开始的64位的系统。</p>
+<p><strong>该工具是N卡驱动附带的，只要安装好驱动后就会有它。</strong></p>
+<div class="hlcode"><pre><span class="n">nvidia</span><span class="o">-</span><span class="n">smi</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="n">Fri</span> <span class="n">Sep</span> <span class="mi">27</span> <span class="mi">09</span><span class="o">:</span><span class="mi">14</span><span class="o">:</span><span class="mo">07</span> <span class="mi">2019</span> 
+<span class="o">+-----------------------------------------------------------------------------+</span> 
+<span class="o">|</span> <span class="n">NVIDIA</span><span class="o">-</span><span class="n">SMI</span> <span class="mf">418.67</span> <span class="n">Driver</span> <span class="n">Version</span><span class="o">:</span> <span class="mf">418.67</span> <span class="n">CUDA</span> <span class="n">Version</span><span class="o">:</span> <span class="mf">10.1</span> <span class="o">|</span> 
+<span class="o">|-------------------------------+----------------------+----------------------+</span> 
+<span class="o">|</span> <span class="n">GPU</span> <span class="n">Name</span> <span class="n">Persistence</span><span class="o">-</span><span class="n">M</span><span class="o">|</span> <span class="n">Bus</span><span class="o">-</span><span class="n">Id</span> <span class="n">Disp</span><span class="p">.</span><span class="n">A</span> <span class="o">|</span> <span class="n">Volatile</span> <span class="n">Uncorr</span><span class="p">.</span> <span class="n">ECC</span> <span class="o">|</span> 
+<span class="o">|</span> <span class="n">Fan</span> <span class="n">Temp</span> <span class="n">Perf</span> <span class="n">Pwr</span><span class="o">:</span><span class="n">Usage</span><span class="o">/</span><span class="n">Cap</span><span class="o">|</span> <span class="n">Memory</span><span class="o">-</span><span class="n">Usage</span> <span class="o">|</span> <span class="n">GPU</span><span class="o">-</span><span class="n">Util</span> <span class="n">Compute</span> <span class="n">M</span><span class="p">.</span> <span class="o">|</span>
+<span class="o">|===============================+======================+======================|</span> 
+<span class="o">|</span> <span class="mi">0</span> <span class="n">Tesla</span> <span class="n">K80</span> <span class="n">Off</span> <span class="o">|</span> <span class="mo">00000000</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mf">04.0</span> <span class="n">Off</span> <span class="o">|</span> <span class="mi">0</span> <span class="o">|</span> 
+<span class="o">|</span> <span class="n">N</span><span class="o">/</span><span class="n">A</span> <span class="mi">35</span><span class="n">C</span> <span class="n">P8</span> <span class="mi">26</span><span class="n">W</span> <span class="o">/</span> <span class="mi">149</span><span class="n">W</span> <span class="o">|</span> <span class="mi">0</span><span class="n">MiB</span> <span class="o">/</span> <span class="mi">11441</span><span class="n">MiB</span> <span class="o">|</span> <span class="mi">0</span><span class="o">%</span> <span class="n">Default</span> <span class="o">|</span> 
+<span class="o">+-------------------------------+----------------------+----------------------+</span> <span class="o">+-----------------------------------------------------------------------------+</span> 
+<span class="o">|</span> <span class="n">Processes</span><span class="o">:</span> <span class="n">GPU</span> <span class="n">Memory</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">GPU</span> <span class="n">PID</span> <span class="n">Type</span> <span class="n">Process</span> <span class="n">name</span> <span class="n">Usage</span> <span class="o">|</span>
+<span class="o">|=============================================================================|</span>
+<span class="o">|</span> <span class="n">No</span> <span class="n">running</span> <span class="n">processes</span> <span class="n">found</span> <span class="o">|</span>
+ <span class="o">+-----------------------------------------------------------------------------+</span>
+</pre></div>
+
+
+<p><img alt="" src="/attach/images/2020-02-06-12-32-54.png" /></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPU</td>
+<td>GPU 编号；</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>GPU 型号</td>
+</tr>
+<tr>
+<td>Persistence-M</td>
+<td>持续模式的状态。持续模式虽然耗能大，但是在新的GPU应用启动时，花费的时间更少，这里显示的是off的状态；</td>
+</tr>
+<tr>
+<td>Fan</td>
+<td>风扇转速，从0到100%之间变动；</td>
+</tr>
+<tr>
+<td>Temp</td>
+<td>温度，单位是摄氏度；</td>
+</tr>
+<tr>
+<td>Perf</td>
+<td>性能状态，从P0到P12，P0表示最大性能，P12表示状态最小性能（即 GPU 未工作时为P0，达到最大工作限度时为P12）</td>
+</tr>
+<tr>
+<td>Pwr</td>
+<td>Usage/Cap：能耗；</td>
+</tr>
+<tr>
+<td>Memory Usage</td>
+<td>显存使用率；</td>
+</tr>
+<tr>
+<td>Bus-Id</td>
+<td>涉及GPU总线的东西，domain:bus:device.function；</td>
+</tr>
+<tr>
+<td>Disp.A</td>
+<td>Display Active，表示GPU的显示是否初始化；</td>
+</tr>
+<tr>
+<td>Volatile GPU-Util</td>
+<td>浮动的GPU利用率；</td>
+</tr>
+<tr>
+<td>Uncorr. ECC</td>
+<td>Error Correcting Code，错误检查与纠正；</td>
+</tr>
+<tr>
+<td>Compute M</td>
+<td>compute mode，计算模式。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="22-gpustat">2.2. gpustat</h2>
+<p><code>gpustat</code>: 基于nvidia-smi的监控GPU 小工具</p>
+<div class="hlcode"><pre><span class="cp"># 安装</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">gpustat</span>
+<span class="cp">#使用</span>
+<span class="n">watch</span> <span class="o">--</span><span class="n">color</span> <span class="o">-</span><span class="n">n1</span> <span class="n">gpustat</span> <span class="o">-</span><span class="n">cpu</span> 
+<span class="o">&gt;&gt;&gt;</span>
+</pre></div>
+
+
+<p><img alt="" src="/attach/images/2020-02-06-12-18-17.png" /></p>
+<h1 id="3-cuda">3. CUDA</h1>
+<ol>
+<li>
+<p>什么是CUDA<br />
+CUDA（Compute Unified Device Architecture），是显卡厂商NVIDIA推出的运算平台。 CUDA™是一种由NVIDIA推出的通用并行计算架构，该架构使GPU能够解决复杂的计算问题。 Cuda 基于GPU驱动</p>
+</li>
+<li>
+<p>什么是CUDNN<br />
+NVIDIA cuDNN是用于深度神经网络的GPU加速库。它强调性能、易用性和低内存开销。NVIDIA cuDNN可以集成到更高级别的机器学习框架中，如谷歌的Tensorflow、加州大学伯克利分校的流行caffe软件。简单的插入式设计可以让开发人员专注于设计和实现神经网络模型，而不是简单调整性能，同时还可以在GPU上实现高性能现代并行计算。</p>
+</li>
+</ol>
+</div>
+<div id="renote">
+  <HR style=" FILTER: alpha (opacity = 100, finishopacity =0 , style= 3 )" width="80%" color=#987 cb 9 SIZE=3>
+  <p>如果你觉得这篇文章对你有帮助，不妨请我喝杯咖啡，鼓励我创造更多!</p>
+  <img src="/Wiki/static/images/pay.jpg" width="25%">
+</div>
+
+    </div>
+    <div id="footer">
+        <span>
+            Copyright © 2020 zhang787jun.
+            Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+        </span>
+    </div>
+
+    
+</body>
+<script>
+    function changeImgurl(site_root_url) {
+        var images = document.images;
+        var site_root = site_root_url;
+        for (i = 0, len = images.length; i < len; i++) {
+            image = images[i];
+            image_src = image.src;
+            if (image_src.search("attach") >= 0) {
+                re_image_src = image_src.slice(image_src.search("attach"));
+                abs_image_src = (site_root.endsWith("/")) ? site_root + re_image_src : site_root + "/" +
+                    re_image_src;
+                image.src = abs_image_src;
+            }
+        }
+    }
+    var site_root_url = "/Wiki";
+    changeImgurl(site_root_url);
+    let isMathjaxConfig = false; // 防止重复调用Config，造成性能损耗
+    const initMathjaxConfig = () => {
+        if (!window.MathJax) {
+            return;
+        }
+        window.MathJax.Hub.Config({
+            showProcessingMessages: false, //关闭js加载过程信息
+            messageStyle: "none", //不显示信息
+            jax: ["input/TeX", "output/HTML-CSS"],
+            tex2jax: {
+                inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+                displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+                skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+            },
+            "HTML-CSS": {
+                availableFonts: ["STIX", "TeX"], //可选字体
+                showMathMenu: false //关闭右击菜单显示
+            }
+        });
+        isMathjaxConfig = true; //
+    };
+    if (isMathjaxConfig === false) {
+        // 如果：没有配置MathJax
+        initMathjaxConfig();
+    };
+</script>
+
+</html>

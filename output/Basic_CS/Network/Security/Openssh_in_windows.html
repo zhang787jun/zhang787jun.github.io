@@ -1,0 +1,248 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <link rel="Stylesheet" type="text/css" href="/Wiki/static/css/style.css">
+    <link rel="Stylesheet" type="text/css" href="/Wiki/static/css/tango.css">
+    <link rel="shortcut icon" href="/Wiki/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/Wiki/favicon.ico" type="image/x-icon">
+    <title>openssh 在windows 上的实践 - Jun's personal knowledge wiki</title>
+    <meta name="keywords" content="Technology, MachineLearning, DataMining, Wiki" />
+    <meta name="description" content="A wiki website" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+            }
+        });
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+        </script>
+</head>
+
+<body>
+
+    <div id="container">
+        
+<div id="header">
+  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Basic_CS\Network\Security">Basic_CS\Network\Security</a>&nbsp;»&nbsp;openssh 在windows 上的实践</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">openssh 在windows 上的实践</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#openssl">openssl 实践</a><ul>
+<li><a href="#carsa">创建CA证书的RSA密钥：</a></li>
+<li><a href="#ca">创建CA证书</a></li>
+<li><a href="#csr">什么是 CSR？</a><ul>
+<li><a href="#config-file">config file</a></li>
+</ul>
+</li>
+<li><a href="#ssh">ssh 掉线的问题</a></li>
+</ul>
+</li>
+<li><a href="#_1">给服务器添加公钥</a></li>
+<li><a href="#_2">参考资料</a></li>
+</ul>
+</div>
+<p>Installation of OpenSSH For Windows Server 2019 and Windows 10</p>
+<h1 id="openssl">openssl 实践</h1>
+<p><code>PKCS</code>全称是 Public-Key Cryptography Standards ，是由 RSA 实验室与其它安全系统开发商为促进公钥密码的发展而制订的一系列标准，PKCS 目前共发布过 15 个标准。 常用的有：<br />
+1. <code>PKCS#7</code> Cryptographic Message Syntax Standard<br />
+2. <code>PKCS#10</code> Certification Request Standard<br />
+3. <code>PKCS#12</code> Personal Information Exchange Syntax Standard</p>
+<p>X.509是常见通用的证书格式。所有的证书都符合为Public Key Infrastructure (PKI) 制定的 ITU-T X509 国际标准。<br />
+PKCS#7 常用的后缀是： .P7B .P7C .SPC<br />
+PKCS#12 常用的后缀有： .P12 .PFX<br />
+X.509 DER 编码(ASCII)的后缀是： .DER .CER .CRT<br />
+X.509 PAM 编码(Base64)的后缀是： .PEM .CER .CRT<br />
+.cer/.crt是用于存放证书，它是2进制形式存放的，不含私钥。<br />
+.pem跟crt/cer的区别是它以Ascii来表示。<br />
+pfx/p12用于存放个人证书/私钥，他通常包含保护密码，2进制方式<br />
+p10是证书请求<br />
+p7r是CA对证书请求的回复，只用于导入<br />
+p7b以树状展示证书链(certificate chain)，同时也支持单个证书，不含私钥。<br />
+—————-<br />
+注：<br />
+der,cer文件一般是二进制格式的，只放证书，不含私钥<br />
+crt文件可能是二进制的，也可能是文本格式的，应该以文本格式居多，功能同der/cer<br />
+pem文件一般是文本格式的，可以放证书或者私钥，或者两者都有<br />
+pem如果只含私钥的话，一般用.key扩展名，而且可以有密码保护<br />
+pfx,p12文件是二进制格式，同时含私钥和证书，通常有保护密码<br />
+怎么判断是文本格式还是二进制？用记事本打开，如果是规则的数字字母，如</p>
+<p>—–BEGIN CERTIFICATE—–<br />
+MIIE9jCCA96gAwIBAgIQVXD9d9wgivhJM//a3VIcDjANBgkqhkiG9w0BAQUFADBy<br />
+—–END CERTIFICATE—–</p>
+<p>就是文本的，上面的BEGIN CERTIFICATE，说明这是一个证书<br />
+如果是—–BEGIN RSA PRIVATE KEY—–，说明这是一个私钥<br />
+文本格式的私钥，也可能有密码保护<br />
+文本格式怎么变成二进制？ 从程序角度来说，去掉前后的—-行，剩下的去掉回车，用base64解码，就得到二进制了<br />
+不过一般都用命令行openssl完成这个工作。<br />
+—————</p>
+<h2 id="carsa">创建CA证书的RSA密钥：</h2>
+<div class="hlcode"><pre><span class="cp"># PEM格式</span>
+<span class="n">openssl</span> <span class="n">genrsa</span> <span class="o">-</span><span class="n">des3</span> <span class="o">-</span><span class="n">out</span> <span class="n">ca</span><span class="p">.</span><span class="n">key</span> <span class="mi">1024</span>
+</pre></div>
+
+
+<h2 id="ca">创建CA证书</h2>
+<div class="hlcode"><pre><span class="cp"># (PEM格式,假如有效期为一年)：</span>
+<span class="n">openssl</span> <span class="n">req</span> <span class="o">-</span><span class="n">new</span> <span class="o">-</span><span class="n">x509</span> <span class="o">-</span><span class="n">days</span> <span class="mi">365</span> <span class="o">-</span><span class="n">key</span> <span class="n">ca</span><span class="p">.</span><span class="n">key</span> <span class="o">-</span><span class="n">out</span> <span class="n">ca</span><span class="p">.</span><span class="n">crt</span> <span class="o">-</span><span class="n">config</span> <span class="n">openssl</span><span class="p">.</span><span class="n">cnf</span>
+
+<span class="cp"># req的基本功能主要有两个：</span>
+<span class="cp"># 1. 生成证书请求</span>
+<span class="cp"># 2. 生成自签名证书。</span>
+<span class="cp"># 其他还有一些校验、查看请求文件等功能，示例会简单说明下。参数说明如下</span>
+
+<span class="cp"># -new  要生成证书请求</span>
+<span class="cp"># -x509 要生成自签名证书</span>
+<span class="cp"># -days 有效期</span>
+</pre></div>
+
+
+<p>openssl是可以生成DER格式的CA证书的，最好用IE将PEM格式的CA证书转换成DER格式的CA证书。</p>
+<h2 id="csr">什么是 CSR？</h2>
+<p>CSR 即证书签名申请（Certificate Signing Request），获取 SSL 证书，需要先生成 CSR 文件并提交给证书颁发机构（CA）。CSR 包含了公钥和标识名称（Distinguished Name），通常从 Web 服务器生成 CSR，同时创建加解密的公钥私钥对。</p>
+<p>在创建 CSR 过程中，需要提供相关组织机构信息，web 服务器会根据提供的信息创建证书的标识名称，用来识别证书，内容如下：</p>
+<p>国家或地区代码<br />
+您的组织机构依法注册所在的国家或地区的代码，以国际标准化组织（ISO）的两字母格式表示。</p>
+<p>省或市或自治区<br />
+您的组织机构所在的省或市或自治区。</p>
+<p>城市或地区<br />
+您的组织机构注册或所在的城市或地区。</p>
+<p>组织机构<br />
+您的企业依法注册所用的名称。</p>
+<p>组织机构单位<br />
+此字段用于区分组织机构中的各部门，例如 “工程部” 或 “人力资源部”。</p>
+<p>通用名称<br />
+在 CSR 的通用名称字段中输入的名称必须是您要为其使用证书的网站的完全限定域名（FQDN），例如 “www.domainnamegoeshere”。</p>
+<p>但是腾讯云采用了在线生成 CSR 的方式，无需您生成和提交 CSR 文件，域名型证书仅需要提交通用名称即可申请，帮助您简化申请流程。</p>
+<h3 id="config-file">config file</h3>
+<p>编辑 config file </p>
+<p>三 x509到pfx</p>
+<div class="hlcode"><pre><span class="n">pkcs12</span> <span class="o">-</span><span class="n">export</span> <span class="err">–</span><span class="n">in</span> <span class="n">keys</span><span class="o">/</span><span class="n">client1</span><span class="p">.</span><span class="n">crt</span> <span class="o">-</span><span class="n">inkey</span> <span class="n">keys</span><span class="o">/</span><span class="n">client1</span><span class="p">.</span><span class="n">key</span> <span class="o">-</span><span class="n">out</span> <span class="n">keys</span><span class="o">/</span><span class="n">client1</span><span class="p">.</span><span class="n">pfx</span>
+</pre></div>
+
+
+<p>四 PEM格式的ca.key转换为Microsoft可以识别的pvk格式。</p>
+<div class="hlcode"><pre><span class="n">pvk</span> <span class="o">-</span><span class="n">in</span> <span class="n">ca</span><span class="p">.</span><span class="n">key</span> <span class="o">-</span><span class="n">out</span> <span class="n">ca</span><span class="p">.</span><span class="n">pvk</span> <span class="o">-</span><span class="n">nocrypt</span> <span class="o">-</span><span class="n">topvk</span>
+</pre></div>
+
+
+<p>五 PKCS#12 到 PEM 的转换</p>
+<div class="hlcode"><pre><span class="n">openssl</span> <span class="n">pkcs12</span> <span class="o">-</span><span class="n">nocerts</span> <span class="o">-</span><span class="n">nodes</span> <span class="o">-</span><span class="n">in</span> <span class="n">cert</span><span class="p">.</span><span class="n">p12</span> <span class="o">-</span><span class="n">out</span> <span class="n">private</span><span class="p">.</span><span class="n">pem</span>
+</pre></div>
+
+
+<p>验证 openssl pkcs12 -clcerts -nokeys -in cert.p12 -out cert.pem<br />
+六 从 PFX 格式文件中提取私钥格式文件 (.key)</p>
+<div class="hlcode"><pre><span class="n">openssl</span> <span class="n">pkcs12</span> <span class="o">-</span><span class="n">in</span> <span class="n">mycert</span><span class="p">.</span><span class="n">pfx</span> <span class="o">-</span><span class="n">nocerts</span> <span class="o">-</span><span class="n">nodes</span> <span class="o">-</span><span class="n">out</span> <span class="n">mycert</span><span class="p">.</span><span class="n">key</span>
+</pre></div>
+
+
+<p>七 转换 pem 到到 spc</p>
+<div class="hlcode"><pre><span class="n">openssl</span> <span class="n">crl2pkcs7</span> <span class="o">-</span><span class="n">nocrl</span> <span class="o">-</span><span class="n">certfile</span> <span class="n">venus</span><span class="p">.</span><span class="n">pem</span> <span class="o">-</span><span class="n">outform</span> <span class="n">DER</span> <span class="o">-</span><span class="n">out</span> <span class="n">venus</span><span class="p">.</span><span class="n">spc</span>
+</pre></div>
+
+
+<p>用 -outform -inform 指定 DER 还是 PAM 格式。例如：</p>
+<div class="hlcode"><pre><span class="n">openssl</span> <span class="n">x509</span> <span class="o">-</span><span class="n">in</span> <span class="n">Cert</span><span class="p">.</span><span class="n">pem</span> <span class="o">-</span><span class="n">inform</span> <span class="n">PEM</span> <span class="o">-</span><span class="n">out</span> <span class="n">cert</span><span class="p">.</span><span class="n">der</span> <span class="o">-</span><span class="n">outform</span> <span class="n">DER</span>
+</pre></div>
+
+
+<p>八 PEM 到 PKCS#12 的转换</p>
+<div class="hlcode"><pre><span class="n">openssl</span> <span class="n">pkcs12</span> <span class="o">-</span><span class="n">export</span> <span class="o">-</span><span class="n">in</span> <span class="n">Cert</span><span class="p">.</span><span class="n">pem</span> <span class="o">-</span><span class="n">out</span> <span class="n">Cert</span><span class="p">.</span><span class="n">p12</span> <span class="o">-</span><span class="n">inkey</span> <span class="n">key</span><span class="p">.</span><span class="n">pem</span>
+</pre></div>
+
+
+<h2 id="ssh">ssh 掉线的问题</h2>
+<div class="hlcode"><pre><span class="n">vim</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">ssh</span><span class="o">/</span><span class="n">sshd_config</span>
+
+<span class="o">&gt;&gt;&gt;</span>
+<span class="cp"># 找到ClientAliveInterval和ClientAliveCountMax ，去掉注释并修改</span>
+<span class="n">ClientAliveInterval</span> <span class="mi">30</span>
+<span class="n">ClientAliveCountMax</span> <span class="mi">86400</span>
+
+<span class="n">service</span> <span class="n">sshd</span> <span class="n">restart</span>
+</pre></div>
+
+
+<h1 id="_1">给服务器添加公钥</h1>
+<div class="hlcode"><pre><span class="cp"># 方案1</span>
+<span class="n">ssh</span><span class="o">-</span><span class="n">copy</span><span class="o">-</span><span class="n">id</span> <span class="o">-</span><span class="n">i</span> <span class="n">id_rsa</span> <span class="n">root</span><span class="err">@</span><span class="mf">172.28.44.120</span>
+
+<span class="cp"># 方案2</span>
+<span class="n">scp</span> <span class="n">id_rsa</span><span class="p">.</span><span class="n">pub</span> <span class="n">root</span><span class="err">@</span><span class="n">xxx</span><span class="p">.</span><span class="n">xxx</span><span class="p">.</span><span class="n">xxx</span><span class="p">.</span><span class="n">xxx</span><span class="o">:/</span><span class="n">root</span>
+<span class="n">mkdir</span> <span class="o">~/</span><span class="p">.</span><span class="n">ssh</span>                <span class="err">#</span> <span class="err">如果不存在该文件夹需先创建，若已存在则忽略</span>
+<span class="n">cat</span> <span class="o">~/</span><span class="n">id_rsa</span><span class="p">.</span><span class="n">pub</span> <span class="o">&gt;&gt;</span> <span class="o">~/</span><span class="p">.</span><span class="n">ssh</span><span class="o">/</span><span class="n">authorized_keys</span>
+<span class="n">rm</span> <span class="o">~/</span><span class="n">id_rsa</span><span class="p">.</span><span class="n">pub</span>                 <span class="err">#</span> <span class="err">用完就可以删掉了</span>
+</pre></div>
+
+
+<h1 id="_2">参考资料</h1>
+<p>https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse</p>
+</div>
+<div id="renote">
+  <HR style=" FILTER: alpha (opacity = 100, finishopacity =0 , style= 3 )" width="80%" color=#987 cb 9 SIZE=3>
+  <p>如果你觉得这篇文章对你有帮助，不妨请我喝杯咖啡，鼓励我创造更多!</p>
+  <img src="/Wiki/static/images/pay.jpg" width="25%">
+</div>
+
+    </div>
+    <div id="footer">
+        <span>
+            Copyright © 2020 zhang787jun.
+            Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+        </span>
+    </div>
+
+    
+</body>
+<script>
+    function changeImgurl(site_root_url) {
+        var images = document.images;
+        var site_root = site_root_url;
+        for (i = 0, len = images.length; i < len; i++) {
+            image = images[i];
+            image_src = image.src;
+            if (image_src.search("attach") >= 0) {
+                re_image_src = image_src.slice(image_src.search("attach"));
+                abs_image_src = (site_root.endsWith("/")) ? site_root + re_image_src : site_root + "/" +
+                    re_image_src;
+                image.src = abs_image_src;
+            }
+        }
+    }
+    var site_root_url = "/Wiki";
+    changeImgurl(site_root_url);
+    let isMathjaxConfig = false; // 防止重复调用Config，造成性能损耗
+    const initMathjaxConfig = () => {
+        if (!window.MathJax) {
+            return;
+        }
+        window.MathJax.Hub.Config({
+            showProcessingMessages: false, //关闭js加载过程信息
+            messageStyle: "none", //不显示信息
+            jax: ["input/TeX", "output/HTML-CSS"],
+            tex2jax: {
+                inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+                displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+                skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+            },
+            "HTML-CSS": {
+                availableFonts: ["STIX", "TeX"], //可选字体
+                showMathMenu: false //关闭右击菜单显示
+            }
+        });
+        isMathjaxConfig = true; //
+    };
+    if (isMathjaxConfig === false) {
+        // 如果：没有配置MathJax
+        initMathjaxConfig();
+    };
+</script>
+
+</html>

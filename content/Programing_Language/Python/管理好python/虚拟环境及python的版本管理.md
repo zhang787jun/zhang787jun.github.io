@@ -90,6 +90,13 @@ source activate py36  (conda4的是：conda activate py36)
 source deactivate (conda4的是：conda deactivate)
 ```
 
+
+查看所有环境列表
+
+```shell
+conda info -e 
+```
+
 管理 python版本
 ```shell
 # 安装python

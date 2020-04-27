@@ -59,7 +59,6 @@ docker run --rm -d -p 8888:8888/tcp  -v .:/notebooks registry.cn-zhangjiakou.ali
 ```python
 import tensorflow_data_validation as tfdv
 
-
 # 1. 从tfrecord 获得 
 stats = tfdv.generate_statistics_from_tfrecord(data_location=path)
 
@@ -111,6 +110,7 @@ schema = tfdv.infer_schema(statistics=train_stats)
 tfdv.display_schema(schema=schema)
 >>>
 # 数据模式表格
+
 ```
 
 # 3. 一些小问题
@@ -137,10 +137,9 @@ https://raw.githubusercontent.com/PAIR-code/facets/master/facets-dist/facets-jup
 
 <link rel="import" href="https://zhang787jun.github.io/Wiki/attach/tensorflow_data_validation/facets-jupyter.html">;
 
+
+https://zhang787jun.github.io/Wiki/attach/tensorflow_data_validation/facets-jupyter.html 可替换成任意可访问的的facets-jupyter.html 地址
 ```
-
-
-
 
 
 

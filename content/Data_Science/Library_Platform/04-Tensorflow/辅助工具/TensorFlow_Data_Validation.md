@@ -113,9 +113,9 @@ tfdv.display_schema(schema=schema)
 # 数据模式表格
 ```
 
-# 一些小问题 
+# 3. 一些小问题
 
-## 国内使用无法显示可视化界面 
+## 3.1. 国内使用无法显示可视化界面
 
 
 可视化面板的js脚本中 指向了 
@@ -145,7 +145,7 @@ https://raw.githubusercontent.com/PAIR-code/facets/master/facets-dist/facets-jup
 
 
 
-# 3. 参考资料
+# 4. 参考资料
 1. https://tensorflow.google.cn/tfx/guide/tfdv#drift_detection_tfdv_drift_detection
 
 2. https://github.com/tensorflow/data-validation

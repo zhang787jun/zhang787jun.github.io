@@ -13,7 +13,9 @@ date: 2019-06-17 00:00
 ### 1.1.1. 指令集问题
 >**背景**
 `指令集`是存储在CPU内部，对CPU运算进行指导和优化的硬程序。拥有这些指令集，CPU就可以更高效地运行。
+
 Intel主要有 [x86，EM64T，MMX，SSE，SSE2，SSE3，SSSE3 (Super SSE3)，SSE4A，SSE4.1，SSE4.2，AVX，AVX2，AVX-512，VMX] **（时间排序）** 等指令集。
+
 AMD主要是x86，x86-64，3D-Now!指令集。
 
 >**为兼容低版本CPU,从pip 源 安装的 tensorlfow 默认不适用高级指令集，使得运算没有充分利用硬件**
@@ -122,7 +124,10 @@ cat /usr/local/cuda/version.txt
 
 The NVIDIA CUDA® Deep Neural Network library (cuDNN) 是主要适用于深度神经网络的GPU加速器， cuDNN 为一些标准的神经网络（如前反馈、后反馈、卷积、池化、活化等 ） 提供了高适应性的基础设施。
 下载地址：
-https://developer.nvidia.com/cudnn （需要注册）
+https://developer.nvidia.com/cudnn （官网，需要注册开发者账户）
+
+conda 镜像里面有无需注册
+https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/win-64/
 
 For Linux
 ```shell

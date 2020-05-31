@@ -31,6 +31,8 @@ Setting Sync 快捷键：
  如果快捷键有冲突，可Ctrl + K + S快捷键设置配置其它快捷键 或 Ctrl + P / F1 在命令窗口输入 >sync 即会出现相应命令供选择
 
 
+
+
 # 2. VScode 远程开发
 
 
@@ -68,10 +70,50 @@ https://s0code0visualstudio0com.icopy.site/docs/python/jupyter-support
 
 
 
-## Markdown 代码块
+## 5.2. Markdown 代码块
 
 设置->快捷键->查找 block
 
+
+```json
+
+// 将按键绑定放在此文件中以覆盖默认值auto[]
+[
+    {
+        "key": "ctrl+shift+u",
+        "command": "-workbench.action.output.toggleOutput"
+    },
+    {
+        "key": "ctrl+shift+u",
+        "command": "-extension.ui"
+    },
+    {
+        "key": "ctrl+shift+u",
+        "command": "editor.action.transformToUppercase"
+    },
+    {
+        "key": "ctrl+b",
+        "command": "-workbench.action.toggleSidebarVisibility"
+    },
+    {
+        "key": "ctrl+shift+l",
+        "command": "-editor.action.selectHighlights",
+        "when": "editorFocus"
+    },
+    {
+        "key": "ctrl+shift+l",
+        "command": "-extension.launch"
+    },
+    {
+        "key": "ctrl+shift+l",
+        "command": "editor.action.transformToLowercase"
+    },
+    {
+        "key": "ctrl+u",
+        "command": "markdown.extension.editing.toggleCodeBlock"
+    }
+
+```
 
 # 6. debug
 
@@ -97,7 +139,7 @@ msg = "Hello again"
 print(msg)
 ```
 
-# python 代码补全方案
+# 8. python 代码补全方案
 
 
 VS code有两种补全方案：Jedi和python.language.server。

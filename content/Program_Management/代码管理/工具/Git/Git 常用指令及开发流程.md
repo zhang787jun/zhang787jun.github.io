@@ -4,6 +4,8 @@ layout: page
 date: 2099-06-02 00:00
 ---
 [TOC]
+
+
 # 1. Git常用指令
 
 
@@ -15,7 +17,7 @@ https://git-scm.com/book/zh/v2)
 
 <a><img src="/attach/images/git/Git_V2.16.2.png" ></a>
 
-## 1.1. 新建，初始化代码库
+## 1.1. 新建、初始化代码库
 ```shell
 # 在当前目录新建一个Git代码库
 git init
@@ -25,6 +27,7 @@ git init [project-name]
 
 # 下载一个项目和它的整个代码历史
 git clone [url]
+# url example： https://github.com/zhang787jun/tmp.git
 ```
 
 ## 1.2. 仓库内文件管理
@@ -95,7 +98,7 @@ git commit --amend [file1] [file2] ...
 
 ## 1.3. 分支管理
 
-### 1.3.1. 查看
+### 1.3.1. 查看分支
 ```shell
 # 列出所有本地分支
 git branch
@@ -106,19 +109,24 @@ git branch -r
 # 列出所有本地分支和远程分支
 git branch -a
 ```
-### 1.3.2. 创建
+### 1.3.2. 创建分支
 
-创建分支命名规范
-推荐使用如下格式：ownerName/featureName。 这样既便于知道分支覆盖的功能，也便于找到分支的负责人。以后清理分支的时候也很方便。
+**创建分支命名规范**
+推荐使用如下格式：`ownerName/featureName`。 这样既便于知道分支覆盖的功能，也便于找到分支的负责人。以后清理分支的时候也很方便。
 
 ```shell
 # 新建一个分支，但依然停留在当前分支
 git branch [branch-name]
-git checkout zhangjun/newFeature
 
+git branch zhangjun/newFeature
 
 # 新建一个分支，并切换到该分支
+
+git branch [branch-name]
 git checkout -b [branch-name]
+# example
+git branch zhangjun/newFeature
+git checkout zhangjun/newFeature
 
 # 新建一个分支，指向指定commit
 git branch [branch-name] [commit]
@@ -356,7 +364,18 @@ gitk
 
 ## 1.5. 远程仓库管理
 
-### 1.5.1. 设置/查看远程仓库
+### 1.5.1. 设置远程分支
+
+```shell
+# 增加一个新的远程仓库，并命名
+git remote add [remote shortname] [url]
+
+# [url] 格式
+# https://github.com/[user_name]/[Project_name].git
+
+git remote add origin https://github.com/zhang787jun/tmp.git
+```
+### 1.5.2. 查看远程仓库
 ```shell
 
 # 显示所有远程仓库
@@ -364,19 +383,13 @@ git remote -v
 
 # 显示某个远程仓库的信息
 git remote show [remote shortname]
-
-# 增加一个新的远程仓库，并命名
-git remote add [remote shortname] [url]
-
-# [url] 格式
-# https://github.com/[user_name]/[Project_name].git
 ```
 
-### 1.5.2. 删除
+### 1.5.3. 删除远程分支
 ```shell
 git remote rm [remote shortname]
 ```
-### 1.5.3. 同步
+### 1.5.4. 同步远程分支
 
 ``` shell 
 # 下载远程仓库的所有变动
@@ -454,7 +467,7 @@ git stash
 git stash pop
 ```
 ## 1.8. 第三方模块管理
-git submodule,git subtree这两个命令通常用来管理公用的第三方模块。比如一些通用的底层逻辑、中间件、还有一些可能会频繁变化的通用业务组件。 当然，两者还是有区别的。 
+`git submodule`,`git subtree`这两个命令通常用来管理公用的第三方模块。比如一些通用的底层逻辑、中间件、还有一些可能会频繁变化的通用业务组件。 当然，两者还是有区别的。 
 
 ### 1.8.1. git submodule
 git submodule 主要用来管理一些单向更新的公共模块或底层逻辑。 
@@ -588,7 +601,9 @@ dangling tree b24c2473f1fd3d91352a624795be026d64c8841f
 ❻  如果发布的软件出现BUG，以打了标签的版本为基础进行修正 （hotfixes）
 
 ### 2.2.1. 专栏：版本号的分配规则
-版本控制策略规定了软件版本号的分配规则，因此制定该策 略时应当尽量简单易懂。 比如在用 x.y.z 格式进行版本管理时的规则如下所示。
+
+
+版本控制策略规定了软件版本号的分配规则，因此制定该策 略时应当尽量简单易懂。 比如在用 `x.y.z `格式进行版本管理时的规则如下所示。
 
 1. x 在重大功能变更或新版本不向下兼容时加 1，此时 y 与 z 的数字归 0 
 2. y在添加新功能或者删除已有功能时加1，此时z的数字归0 
@@ -601,6 +616,6 @@ dangling tree b24c2473f1fd3d91352a624795be026d64c8841f
 1.1.0：添加新功能 …
 2.0.0：更新整体 UI 并添加新功能
 
-这便是版本号的大致分配规则。 如果团队采用了 Git…Flow，那么成员在交流的时候会经常用 到版本号，因此版本控制策略越早制定越好
+这便是版本号的大致分配规则。 如果团队采用了 GitFlow，那么成员在交流的时候会经常用到版本号，因此版本控制策略越早制定越好
 
 

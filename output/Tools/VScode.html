@@ -67,8 +67,46 @@ Setting Sync 可同步包含的所有扩展和完整的用户文件夹</p>
 </pre></div>
 
 
-<h2 id="markdown">Markdown 代码块</h2>
+<h2 id="52-markdown">5.2. Markdown 代码块</h2>
 <p>设置-&gt;快捷键-&gt;查找 block</p>
+<div class="hlcode"><pre><span class="err">//</span> <span class="err">将按键绑定放在此文件中以覆盖默认值auto</span><span class="p">[]</span>
+<span class="p">[</span>
+    <span class="p">{</span>
+        <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;ctrl+shift+u&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot;-workbench.action.output.toggleOutput&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;ctrl+shift+u&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot;-extension.ui&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;ctrl+shift+u&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot;editor.action.transformToUppercase&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;ctrl+b&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot;-workbench.action.toggleSidebarVisibility&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;ctrl+shift+l&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot;-editor.action.selectHighlights&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;when&quot;</span><span class="p">:</span> <span class="s2">&quot;editorFocus&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;ctrl+shift+l&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot;-extension.launch&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;ctrl+shift+l&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot;editor.action.transformToLowercase&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;ctrl+u&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot;markdown.extension.editing.toggleCodeBlock&quot;</span>
+    <span class="p">}</span>
+</pre></div>
+
+
 <h1 id="6-debug">6. debug</h1>
 <p>按钮1：运行/继续 F5，真正的一步一步运行<br />
 按钮2：单步跳过(又叫逐过程) F10，按语句单步执行。当有函数时，不会进入函数。<br />
@@ -89,7 +127,7 @@ You define Jupyter-like code cells within Python code using a #%% comment:</p>
 </pre></div>
 
 
-<h1 id="python">python 代码补全方案</h1>
+<h1 id="8-python">8. python 代码补全方案</h1>
 <p>VS code有两种补全方案：Jedi和python.language.server。</p>
 </div>
 <div id="renote">

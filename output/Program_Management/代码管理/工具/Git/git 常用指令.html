@@ -6,7 +6,7 @@
     <link rel="Stylesheet" type="text/css" href="/Wiki/static/css/tango.css">
     <link rel="shortcut icon" href="/Wiki/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/Wiki/favicon.ico" type="image/x-icon">
-    <title>[版本管理]Git 常用指令及开发流程 - Jun's personal knowledge wiki</title>
+    <title>[版本管理] Git常用指令 - Jun's personal knowledge wiki</title>
     <meta name="keywords" content="Technology, MachineLearning, DataMining, Wiki" />
     <meta name="description" content="A wiki website" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -28,14 +28,14 @@
     <div id="container">
         
 <div id="header">
-  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Program_Management\代码管理\工具\Git">Program_Management\代码管理\工具\Git</a>&nbsp;»&nbsp;[版本管理]Git 常用指令及开发流程</div>
+  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Program_Management\代码管理\工具\Git">Program_Management\代码管理\工具\Git</a>&nbsp;»&nbsp;[版本管理] Git常用指令</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">[版本管理]Git 常用指令及开发流程</div>
+<div id="title">[版本管理] Git常用指令</div>
 <div id="content">
   <div class="toc"><span class="toctitle">Table of Contents</span><ul>
 <li><a href="#1-git">1. Git常用指令</a><ul>
-<li><a href="#11">1.1. 新建，初始化代码库</a></li>
+<li><a href="#11">1.1. 新建、初始化代码库</a></li>
 <li><a href="#12">1.2. 仓库内文件管理</a><ul>
 <li><a href="#121">1.2.1. 增加/删除文件到暂存区</a></li>
 <li><a href="#122">1.2.2. 忽略文件</a></li>
@@ -43,8 +43,8 @@
 </ul>
 </li>
 <li><a href="#13">1.3. 分支管理</a><ul>
-<li><a href="#131">1.3.1. 查看</a></li>
-<li><a href="#132">1.3.2. 创建</a></li>
+<li><a href="#131">1.3.1. 查看分支</a></li>
+<li><a href="#132">1.3.2. 创建分支</a></li>
 <li><a href="#133">1.3.3. 切换分支</a></li>
 <li><a href="#134">1.3.4. 合并分支</a><ul>
 <li><a href="#1341-git-merge">1.3.4.1. git merge 合并</a><ul>
@@ -66,9 +66,10 @@
 </li>
 <li><a href="#14">1.4. 信息查看</a></li>
 <li><a href="#15">1.5. 远程仓库管理</a><ul>
-<li><a href="#151">1.5.1. 设置/查看远程仓库</a></li>
-<li><a href="#152">1.5.2. 删除</a></li>
-<li><a href="#153">1.5.3. 同步</a></li>
+<li><a href="#151">1.5.1. 设置远程分支</a></li>
+<li><a href="#152">1.5.2. 查看远程仓库</a></li>
+<li><a href="#153">1.5.3. 删除远程分支</a></li>
+<li><a href="#154">1.5.4. 同步远程分支</a></li>
 </ul>
 </li>
 <li><a href="#16">1.6. 打标签</a></li>
@@ -94,14 +95,6 @@
 </li>
 </ul>
 </li>
-<li><a href="#2-git">2. git 开发模式</a><ul>
-<li><a href="#21-github-flow">2.1. GitHub Flow——以部署为中心的开发模式</a></li>
-<li><a href="#22-git-flow">2.2. Git Flow——以开发为中心的开发模式</a><ul>
-<li><a href="#221">2.2.1. 专栏：版本号的分配规则</a></li>
-</ul>
-</li>
-</ul>
-</li>
 </ul>
 </div>
 <h1 id="1-git">1. Git常用指令</h1>
@@ -111,7 +104,7 @@
 https://git-scm.com/book/zh/v2">GitHub入门与实践</a></li>
 </ol>
 <p><a><img src="/attach/images/git/Git_V2.16.2.png" ></a></p>
-<h2 id="11">1.1. 新建，初始化代码库</h2>
+<h2 id="11">1.1. 新建、初始化代码库</h2>
 <div class="hlcode"><pre><span class="cp"># 在当前目录新建一个Git代码库</span>
 <span class="n">git</span> <span class="n">init</span>
 
@@ -120,6 +113,7 @@ https://git-scm.com/book/zh/v2">GitHub入门与实践</a></li>
 
 <span class="cp"># 下载一个项目和它的整个代码历史</span>
 <span class="n">git</span> <span class="n">clone</span> <span class="p">[</span><span class="n">url</span><span class="p">]</span>
+<span class="cp"># url example： https:</span><span class="c1">//github.com/zhang787jun/tmp.git</span>
 </pre></div>
 
 
@@ -191,7 +185,7 @@ https://git-scm.com/book/zh/v2">GitHub入门与实践</a></li>
 
 
 <h2 id="13">1.3. 分支管理</h2>
-<h3 id="131">1.3.1. 查看</h3>
+<h3 id="131">1.3.1. 查看分支</h3>
 <div class="hlcode"><pre><span class="cp"># 列出所有本地分支</span>
 <span class="n">git</span> <span class="n">branch</span>
 
@@ -203,16 +197,21 @@ https://git-scm.com/book/zh/v2">GitHub入门与实践</a></li>
 </pre></div>
 
 
-<h3 id="132">1.3.2. 创建</h3>
-<p>创建分支命名规范<br />
-推荐使用如下格式：ownerName/featureName。 这样既便于知道分支覆盖的功能，也便于找到分支的负责人。以后清理分支的时候也很方便。</p>
+<h3 id="132">1.3.2. 创建分支</h3>
+<p><strong>创建分支命名规范</strong><br />
+推荐使用如下格式：<code>ownerName/featureName</code>。 这样既便于知道分支覆盖的功能，也便于找到分支的负责人。以后清理分支的时候也很方便。</p>
 <div class="hlcode"><pre><span class="cp"># 新建一个分支，但依然停留在当前分支</span>
 <span class="n">git</span> <span class="n">branch</span> <span class="p">[</span><span class="n">branch</span><span class="o">-</span><span class="n">name</span><span class="p">]</span>
-<span class="n">git</span> <span class="n">checkout</span> <span class="n">zhangjun</span><span class="o">/</span><span class="n">newFeature</span>
 
+<span class="n">git</span> <span class="n">branch</span> <span class="n">zhangjun</span><span class="o">/</span><span class="n">newFeature</span>
 
 <span class="cp"># 新建一个分支，并切换到该分支</span>
+
+<span class="n">git</span> <span class="n">branch</span> <span class="p">[</span><span class="n">branch</span><span class="o">-</span><span class="n">name</span><span class="p">]</span>
 <span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="p">[</span><span class="n">branch</span><span class="o">-</span><span class="n">name</span><span class="p">]</span>
+<span class="cp"># example</span>
+<span class="n">git</span> <span class="n">branch</span> <span class="n">zhangjun</span><span class="o">/</span><span class="n">newFeature</span>
+<span class="n">git</span> <span class="n">checkout</span> <span class="n">zhangjun</span><span class="o">/</span><span class="n">newFeature</span>
 
 <span class="cp"># 新建一个分支，指向指定commit</span>
 <span class="n">git</span> <span class="n">branch</span> <span class="p">[</span><span class="n">branch</span><span class="o">-</span><span class="n">name</span><span class="p">]</span> <span class="p">[</span><span class="n">commit</span><span class="p">]</span>
@@ -445,27 +444,32 @@ git checkout <span class="cp">[</span><span class="nx">branch</span><span class=
 
 
 <h2 id="15">1.5. 远程仓库管理</h2>
-<h3 id="151">1.5.1. 设置/查看远程仓库</h3>
+<h3 id="151">1.5.1. 设置远程分支</h3>
+<div class="hlcode"><pre><span class="cp"># 增加一个新的远程仓库，并命名</span>
+<span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="p">[</span><span class="n">remote</span> <span class="n">shortname</span><span class="p">]</span> <span class="p">[</span><span class="n">url</span><span class="p">]</span>
+
+<span class="cp"># [url] 格式</span>
+<span class="cp"># https:</span><span class="c1">//github.com/[user_name]/[Project_name].git</span>
+
+<span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="n">origin</span> <span class="n">https</span><span class="o">:</span><span class="c1">//github.com/zhang787jun/tmp.git</span>
+</pre></div>
+
+
+<h3 id="152">1.5.2. 查看远程仓库</h3>
 <div class="hlcode"><pre><span class="cp"># 显示所有远程仓库</span>
 <span class="n">git</span> <span class="n">remote</span> <span class="o">-</span><span class="n">v</span>
 
 <span class="cp"># 显示某个远程仓库的信息</span>
 <span class="n">git</span> <span class="n">remote</span> <span class="n">show</span> <span class="p">[</span><span class="n">remote</span> <span class="n">shortname</span><span class="p">]</span>
-
-<span class="cp"># 增加一个新的远程仓库，并命名</span>
-<span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="p">[</span><span class="n">remote</span> <span class="n">shortname</span><span class="p">]</span> <span class="p">[</span><span class="n">url</span><span class="p">]</span>
-
-<span class="cp"># [url] 格式</span>
-<span class="cp"># https:</span><span class="c1">//github.com/[user_name]/[Project_name].git</span>
 </pre></div>
 
 
-<h3 id="152">1.5.2. 删除</h3>
+<h3 id="153">1.5.3. 删除远程分支</h3>
 <div class="hlcode"><pre><span class="n">git</span> <span class="n">remote</span> <span class="n">rm</span> <span class="p">[</span><span class="n">remote</span> <span class="n">shortname</span><span class="p">]</span>
 </pre></div>
 
 
-<h3 id="153">1.5.3. 同步</h3>
+<h3 id="154">1.5.4. 同步远程分支</h3>
 <div class="hlcode"><pre><span class="cp"># 下载远程仓库的所有变动</span>
 <span class="n">git</span> <span class="n">fetch</span> <span class="p">[</span><span class="n">remote</span> <span class="n">shortname</span><span class="p">]</span>
 
@@ -540,7 +544,7 @@ git checkout <span class="cp">[</span><span class="nx">branch</span><span class=
 
 
 <h2 id="18">1.8. 第三方模块管理</h2>
-<p>git submodule,git subtree这两个命令通常用来管理公用的第三方模块。比如一些通用的底层逻辑、中间件、还有一些可能会频繁变化的通用业务组件。 当然，两者还是有区别的。 </p>
+<p><code>git submodule</code>,<code>git subtree</code>这两个命令通常用来管理公用的第三方模块。比如一些通用的底层逻辑、中间件、还有一些可能会频繁变化的通用业务组件。 当然，两者还是有区别的。 </p>
 <h3 id="181-git-submodule">1.8.1. git submodule</h3>
 <p>git submodule 主要用来管理一些单向更新的公共模块或底层逻辑。 </p>
 <h3 id="182-git-subtree">1.8.2. git subtree</h3>
@@ -643,37 +647,6 @@ git commit --amend：追加 commit 到上一个 commit 上。</p>
 
 
 <p>“悬空对象"(dangling objects)并不是问题, 最坏的情况只是它们多占了一些磁盘空间. 有时候它们是找回丢失的工作的最后一丝希望.</p>
-<h1 id="2-git">2. git 开发模式</h1>
-<h2 id="21-github-flow">2.1. GitHub Flow——以部署为中心的开发模式</h2>
-<p>❶ 令 master 分支时常保持可以部署的状态<br />
-❷  进行新的作业时要从master分支创建新分支，新分支名称要具有 描述性<br />
-❸ 在❷新建的本地仓库分支中进行提交<br />
-❹ 在 GitHub 端仓库创建同名分支，定期 push<br />
-❺ 需要帮助或反馈时创建 Pull Request，以Pull Request进行交流 <br />
-❻ 让其他开发者进行审查，确认作业完成后与 master 分支合并 <br />
-❼ 与 master 分支合并后立刻部署</p>
-<h2 id="22-git-flow">2.2. Git Flow——以开发为中心的开发模式</h2>
-<p><img src="https://jeffkreeftmeijer.com/git-flow/git-flow.png" width="50%"></p>
-<p>❶  从开发版的分支（develop）创建工作分支（feature branches），进 行功能的实现或修正<br />
-❷  工作分支（feature branches）的修改结束后，与开发版的分支 （develop）进行合并<br />
-❸ 重复上述❶和❷，不断实现功能直至可以发布 <br />
-❹ 创建用于发布的分支（release branches），处理发布的各项工作<br />
-❺ 发布工作完成后与 master 分支合并，打上版本标签（Tag）进行发布 <br />
-❻  如果发布的软件出现BUG，以打了标签的版本为基础进行修正 （hotfixes）</p>
-<h3 id="221">2.2.1. 专栏：版本号的分配规则</h3>
-<p>版本控制策略规定了软件版本号的分配规则，因此制定该策 略时应当尽量简单易懂。 比如在用 x.y.z 格式进行版本管理时的规则如下所示。</p>
-<ol>
-<li>x 在重大功能变更或新版本不向下兼容时加 1，此时 y 与 z 的数字归 0 </li>
-<li>y在添加新功能或者删除已有功能时加1，此时z的数字归0 </li>
-<li>z 只在进行内部修改后加 1<br />
-下面举个具体例子：</li>
-</ol>
-<p>1.0.0：最初发布的版本 …<br />
-1.0.1：修正了轻微 BUG …<br />
-1.0.2：修复漏洞 …● <br />
-1.1.0：添加新功能 …<br />
-2.0.0：更新整体 UI 并添加新功能</p>
-<p>这便是版本号的大致分配规则。 如果团队采用了 Git…Flow，那么成员在交流的时候会经常用 到版本号，因此版本控制策略越早制定越好</p>
 </div>
 <div id="renote">
   <HR style=" FILTER: alpha (opacity = 100, finishopacity =0 , style= 3 )" width="80%" color=#987 cb 9 SIZE=3>

@@ -107,9 +107,11 @@
 <h3 id="111">1.1.1. 指令集问题</h3>
 <blockquote>
 <p><strong>背景</strong><br />
-<code>指令集</code>是存储在CPU内部，对CPU运算进行指导和优化的硬程序。拥有这些指令集，CPU就可以更高效地运行。<br />
-Intel主要有 [x86，EM64T，MMX，SSE，SSE2，SSE3，SSSE3 (Super SSE3)，SSE4A，SSE4.1，SSE4.2，AVX，AVX2，AVX-512，VMX] <strong>（时间排序）</strong> 等指令集。<br />
-AMD主要是x86，x86-64，3D-Now!指令集。</p>
+<code>指令集</code>是存储在CPU内部，对CPU运算进行指导和优化的硬程序。拥有这些指令集，CPU就可以更高效地运行。</p>
+</blockquote>
+<p>Intel主要有 [x86，EM64T，MMX，SSE，SSE2，SSE3，SSSE3 (Super SSE3)，SSE4A，SSE4.1，SSE4.2，AVX，AVX2，AVX-512，VMX] <strong>（时间排序）</strong> 等指令集。</p>
+<p>AMD主要是x86，x86-64，3D-Now!指令集。</p>
+<blockquote>
 <p><strong>为兼容低版本CPU,从pip 源 安装的 tensorlfow 默认不适用高级指令集，使得运算没有充分利用硬件</strong></p>
 </blockquote>
 <table>
@@ -210,7 +212,9 @@ Fro windows:</p>
 <h5 id="12123-cudacudnn">1.2.1.2.3. CUDA深度神经网络库(cuDNN)</h5>
 <p>The NVIDIA CUDA® Deep Neural Network library (cuDNN) 是主要适用于深度神经网络的GPU加速器， cuDNN 为一些标准的神经网络（如前反馈、后反馈、卷积、池化、活化等 ） 提供了高适应性的基础设施。<br />
 下载地址：<br />
-https://developer.nvidia.com/cudnn （需要注册）</p>
+https://developer.nvidia.com/cudnn （官网，需要注册开发者账户）</p>
+<p>conda 镜像里面有无需注册<br />
+https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/win-64/</p>
 <p>For Linux</p>
 <div class="hlcode"><pre><span class="n">cat</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">cuda</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">cudnn</span><span class="p">.</span><span class="n">h</span> <span class="o">|</span> <span class="n">grep</span> <span class="n">CUDNN_MAJOR</span> <span class="o">-</span><span class="n">A</span> <span class="mi">2</span>
 </pre></div>

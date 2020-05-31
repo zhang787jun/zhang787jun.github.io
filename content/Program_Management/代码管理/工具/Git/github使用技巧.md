@@ -4,33 +4,34 @@ layout: page
 date: 2099-06-02 00:00
 ---
 [TOC]
-
-# 设置代理 
-
-```shell
-# 使用代理
-git config --global https.proxy http://127.0.0.1:1080
-git config --global http.proxy http://127.0.0.1:1080
-# 禁用代理
-git config --global  --unset http.proxy
-git config --global  --unset https.proxy
-```
-
-
 # 连接仓库
 
 仓库地址通过`URL的方式`确定。连接仓库的方式主要有：
 1. HTTPS
-2. SSH 
+2. SSH
+
 ## SSH
 
 SSH这是最原始的方式，如果使用`git bash`只要按照官方文档一步一步配置就好了。
 小心坑：SSH有可能需要配置代理，否则无法解析服务器域名。错误如下：
+
+在 `C:\Users\xxx\.ssh\` 路径下创建 config 文件，内容如下：
+```shell
+# github
+Host github.com
+    HostName github.com
+    PreferredAuthentications publickey
+    IdentityFile  C:\Users\xxx\.ssh\github_id-rsa
+```
+
 ```
 >>>
 ssh: Could not resolve hostname github.com: no address associated with name
 ```
 解决办法：给SSH以及git 客户端配置代理。
+
+
+
 ## HTTPS
 HTTPS 这也是比较方便的方式，
 ### 密码机制
@@ -50,6 +51,19 @@ https://help.github.com/articles/creating-an-access-token-for-command-line-use/
 1. 从Github 主页 Settings页面生成唯一的Token
 2. 手动拼接出远程仓库的地址，比如：`https://$GH_TOKEN@github.com/owner/repo.git`
 3. 从以上地址克隆或使用git remote add 的方式关联本地仓库，之后都不需要输入用户名和密码信息。
+
+
+# 设置代理 
+
+```shell
+# 使用代理
+git config --global https.proxy http://127.0.0.1:1080
+git config --global http.proxy http://127.0.0.1:1080
+# 禁用代理
+git config --global  --unset http.proxy
+git config --global  --unset https.proxy
+```
+
 
 
 # GitHub Actions

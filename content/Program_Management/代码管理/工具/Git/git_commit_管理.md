@@ -1,5 +1,5 @@
 ---
-title: "[版本管理]Git 提交的commit规范"
+title: "[版本管理] Git 开发管理模式与规范"
 layout: page
 date: 2099-06-02 00:00
 ---
@@ -7,7 +7,53 @@ date: 2099-06-02 00:00
 > * 原文地址：[Commit messages guide](https://github.com/RomuloOliveira/commit-messages-guide/blob/master/README.md)
 > * 原文作者：[RomuloOliveira](https://github.com/RomuloOliveira)
 
-# commit 提交指南
+
+# 1. git 开发模式
+
+
+## 1.1. GitHub Flow——以部署为中心的开发模式
+
+❶ 令 master 分支时常保持可以部署的状态
+❷  进行新的作业时要从master分支创建新分支，新分支名称要具有 描述性
+❸ 在❷新建的本地仓库分支中进行提交
+❹ 在 GitHub 端仓库创建同名分支，定期 push
+❺ 需要帮助或反馈时创建 Pull Request，以Pull Request进行交流 
+❻ 让其他开发者进行审查，确认作业完成后与 master 分支合并 
+❼ 与 master 分支合并后立刻部署
+
+## 1.2. Git Flow——以开发为中心的开发模式
+
+<img src="https://jeffkreeftmeijer.com/git-flow/git-flow.png" width="50%">
+
+❶  从开发版的分支（develop）创建工作分支（feature branches），进 行功能的实现或修正
+❷  工作分支（feature branches）的修改结束后，与开发版的分支 （develop）进行合并
+❸ 重复上述❶和❷，不断实现功能直至可以发布 
+❹ 创建用于发布的分支（release branches），处理发布的各项工作
+❺ 发布工作完成后与 master 分支合并，打上版本标签（Tag）进行发布 
+❻  如果发布的软件出现BUG，以打了标签的版本为基础进行修正 （hotfixes）
+
+### 1.2.1. 专栏：版本号的分配规则
+
+
+版本控制策略规定了软件版本号的分配规则，因此制定该策 略时应当尽量简单易懂。 比如在用 `x.y.z `格式进行版本管理时的规则如下所示。
+
+1. x 在重大功能变更或新版本不向下兼容时加 1，此时 y 与 z 的数字归 0 
+2. y在添加新功能或者删除已有功能时加1，此时z的数字归0 
+3. z 只在进行内部修改后加 1
+下面举个具体例子：
+
+1.0.0：最初发布的版本 …
+1.0.1：修正了轻微 BUG …
+1.0.2：修复漏洞 …● 
+1.1.0：添加新功能 …
+2.0.0：更新整体 UI 并添加新功能
+
+这便是版本号的大致分配规则。 如果团队采用了 GitFlow，那么成员在交流的时候会经常用到版本号，因此版本控制策略越早制定越好
+
+
+
+
+# 2. commit 提交指南
 
 
 一份理解 commit 信息重要性以及如何写好它们的指导手册。
@@ -16,7 +62,7 @@ date: 2099-06-02 00:00
 
 
 
-## 什么是 “commit”？
+## 2.1. 什么是 “commit”？
 
 简而言之，commit 就是你本地仓库中文件的一个快照。
 和一些人的想法相反，[git 不仅存储文件之间的差异，还存储所有文件的完整版本](https://git-scm.com/book/eo/v1/Ekkomenci-Git-Basics#Snapshots,-Not-Differences)。
@@ -26,7 +72,7 @@ date: 2099-06-02 00:00
 
 ![](https://i.stack.imgur.com/AQ5TG.png)
 
-## 为什么 commit 信息很重要？
+## 2.2. 为什么 commit 信息很重要？
 
 - 加快和简化代码审查
 - 帮助理解代码变更
@@ -35,11 +81,11 @@ date: 2099-06-02 00:00
 
 为了最大化这些好处，我们可以使用下一节描述的一些好的实践和标准。
 
-## 好的实践
+## 2.3. 好的实践
 
 这些是从我的经验、网络文章和其他指南中收集的一些实践案例。如果您有其他实践(或有不同意见)，请尽管随时打开 Pull Request 并贡献您的意见。
 
-### 使用祈使形式
+### 2.3.1. 使用祈使形式
 
 ```
 # 好示例
@@ -73,7 +119,7 @@ If applied, this commit will use InventoryBackendPool to retrieve inventory back
 If applied, this commit will used InventoryBackendPool to retrieve inventory backend
 ```
 
-### 首字母大写
+### 2.3.2. 首字母大写
 
 ```
 # 好示例
@@ -90,7 +136,7 @@ add `use` method to Credit model
 这个实践的使用可能因人而异，团队间亦可能不同，甚至不同语言的人群间也会不同。
 大写与否，一个重要的点是要保持标准一致并且遵守它。
 
-### 尝试在不必查看源代码的情况下沟通变化内容
+### 2.3.3. 尝试在不必查看源代码的情况下沟通变化内容
 
 ```
 # 好示例
@@ -115,7 +161,7 @@ Adjust css
 
 很多场景中(例子：多次提交、多次变更和重构)这都有助于帮助代码审查者理解代码提交者当时的想法。
 
-### 使用消息体来解释『为什么』、『是什么』、『怎么做』以及附加细节信息
+### 2.3.4. 使用消息体来解释『为什么』、『是什么』、『怎么做』以及附加细节信息
 
 ```
 # 好示例
@@ -152,7 +198,7 @@ Add `use` method to Credit
 
 类似 `-`，`*` 和 `\` 的字符是用来提高可读性的元素。
 
-### 避免通用消息或者没有任何上下文的消息
+### 2.3.5. 避免通用消息或者没有任何上下文的消息
 
 ```
 # 坏示例
@@ -167,11 +213,11 @@ Change stuff
 Adjust css
 ```
 
-### 限制字符数量
+### 2.3.6. 限制字符数量
 
 [推荐](https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project#_commit_guidelines)主题最多使用 50 个字符，消息体最多使用 72 个字符。
 
-### 保持语言的一致性
+### 2.3.7. 保持语言的一致性
 
 对于项目所有者：选择一个语言并使用该语言书写所有的 commit 信息。理想情况下，它应该匹配代码注释、默认翻译区域（对于做了本地化的应用）等等。
 
@@ -198,7 +244,7 @@ efefef Add `use` method to Credit model
 cdcdcd Agora vai
 ```
 
-### 模板
+### 2.3.8. 模板
 
 这是一个样板，[由 Tim Pope 编写](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)，出现在文章[**高级 Git 手册**](https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project)。
 
@@ -232,25 +278,25 @@ Resolves: #123
 See also: #456, #789
 ```
 
-## Rebase 与 Merge
+## 2.4. Rebase 与 Merge
 
 这节是 Atlassian 优秀教程中的一个 **TL;DR**，[“Merge 与 Rebase”](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)。
 
 ![](https://wac-cdn.atlassian.com/dam/jcr:01b0b04e-64f3-4659-af21-c4d86bc7cb0b/01.svg?cdnVersion=hq)
 
-### Rebase
+### 2.4.1. Rebase
 
 **TL;DR:** 把你的分支中的 commit 一个接一个地应用到 base 分支，生成一个新树。
 
 ![](https://wac-cdn.atlassian.com/dam/jcr:5b153a22-38be-40d0-aec8-5f2fffc771e5/03.svg?cdnVersion=hq)
 
-### Merge
+### 2.4.2. Merge
 
 **TL;DR:** 使用两个分支间的差异，创建新的 commit，称作（适当地）**merge 提交**。
 
 ![](https://wac-cdn.atlassian.com/dam/jcr:e229fef6-2c2f-4a4f-b270-e1e1baa94055/02.svg?cdnVersion=hq)
 
-### 为什么有些人更倾向于 merge 而不是 rebase？
+### 2.4.3. 为什么有些人更倾向于 merge 而不是 rebase？
 
 我尤其更倾向于 rebase 而不是 merge，理由包含：
 
@@ -259,7 +305,7 @@ See also: #456, #789
 * 更多的 merge 被提交者解决，并且每个 merge 变化对应着具备合适信息的 commit。
     * 对 merge 类 commit 做挖掘和审核并不常见，因此避免这类操作可以确保所有的变更都归属于某个 commit。
 
-### 何时做 squash？
+### 2.4.4. 何时做 squash？
 
 “Squashing” 是处理一系列 commit 并将它们压缩为一个 commit 的过程。
 
@@ -269,14 +315,14 @@ See also: #456, #789
 - 将某些合并应用时更合理的独立变更结合起来
 - 重写**正在进行中**这类 commit
 
-### 何时避免 rebase 和 squash？
+### 2.4.5. 何时避免 rebase 和 squash？
 
 避免在多人协作的公共 commit 或者共享分支中执行 rebase 和 squash。
 rebase、squash 重写历史记录、覆盖已有 commit，在共享分支的 commit 中执行以上操作（例子，推送到远程仓库的 commit 或者来自其他分支的 commit）可能造成混淆，并且由于分歧的树干和冲突大家可能会丢失他们的变更（本地和远程的）。
 
-## 有用的 git 命令
+## 2.5. 有用的 git 命令
 
-### rebase -i
+### 2.5.1. rebase -i
 
 使用它来压制 commit，编辑信息，重写/删除/重新排序 commit，等等。
 
@@ -317,12 +363,12 @@ pick 9b81c72 Add "Rebase vs Merge" section
 # Note that empty commits are commented out
 ```
 
-#### fixup
+#### 2.5.1.1. fixup
 
 使用它轻松地清理 commit 并且无须一个更复杂的 rebase 操作。
 [这篇文章](http://fle.github.io/git-tip-keep-your-branch-clean-with-fixup-and-autosquash.html)提供了如何以及何时这么做的很好的示例。
 
-### cherry-pick
+### 2.5.2. cherry-pick
 
 它非常适用于在发布到错误分支上的 commit，无须再次编码。
 
@@ -335,7 +381,7 @@ $ git cherry-pick 790ab21
  1 file changed, 1 insertion(+), 1 deletion(-)
 ```
 
-### add/checkout/reset [--patch | -p]
+### 2.5.3. add/checkout/reset [--patch | -p]
 
 假设我们有以下差异：
 
@@ -374,7 +420,7 @@ index 7b45277..6b1993c 100644
 拆分成 2 个区块
 ```
 
-#### 区块 1
+#### 2.5.3.1. 区块 1
 
 ```diff
 @@ -186,7 +186,6 @@
@@ -388,7 +434,7 @@ index 7b45277..6b1993c 100644
 暂存这个区块 [y,n,q,a,d,/,j,J,g,e,?]？
 ```
 
-#### 区块 2
+#### 2.5.3.2. 区块 2
 
 ```diff
 @@ -190,6 +189,10 @@
@@ -406,7 +452,7 @@ index 7b45277..6b1993c 100644
 暂存这个区块 [y,n,q,a,d,/,K,j,J,g,e,?]？
 ```
 
-#### 区块 3
+#### 2.5.3.3. 区块 3
 
 ```diff
 @@ -202,3 +205,4 @@ 感谢任何形式的帮助，可以帮到我的主题示例：
@@ -419,7 +465,7 @@ index 7b45277..6b1993c 100644
 
 
 
-## 灵感、来源和进一步阅读材料
+## 2.6. 灵感、来源和进一步阅读材料
 
 - [如何书写 Git 的 Commit 信息](https://chris.beams.io/posts/git-commit/)
 - [高级 Git 手册 —— Commit 指导](https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project#_commit_guidelines)

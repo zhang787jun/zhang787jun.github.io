@@ -6,16 +6,16 @@ date: 2099-06-02 00:00
 [TOC]
 
 
+参考资料：
+
+1. [Scott Chacon, Ben Straub - Pro Git-Apress (2014) (官方书籍中文版)](https://git-scm.com/book/zh/v2)
+2. [Learn Git Branching(官方动手实践平台)](https://learngitbranching.js.org/)
+
 # 1. Git常用指令
 
 
-参考资料：
+![](./attach/images/git/Git_V2.16.2.png)
 
-1. [GitHub入门与实践](https://learngitbranching.js.org/
-https://git-scm.com/book/zh/v2)
-
-
-<a><img src="/attach/images/git/Git_V2.16.2.png" ></a>
 
 ## 1.1. 新建、初始化代码库
 ```shell
@@ -72,6 +72,147 @@ vim .gitignore
 /a/*.txt
 ```
 在线配置`.gitignore`文件: https://www.gitignore.io/
+
+
+```shell
+# 常见的忽略文件内容
+# windows bat
+*.bat
+# VScode 
+.vscode/
+# docker 
+.devcontainer/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don’t work, or not
+#   install all needed dependencies.
+#Pipfile.lock
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# Intellij project settings
+.idea
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pb2.py files
+*_pb2.py
+
+```
 
 
 ### 1.2.3. 代码提交
@@ -153,9 +294,10 @@ git checkout -
 1. rebase 操作可以把本地未push的分叉提交历史整理成直线；
 2. rebase的目的是使得我们在查看历史提交的变化时更容易，因为分叉的提交需要三方对比。
 
-有几点需要注意： 不要在master合并代码，保证master的可用性很重要。 确保在正确的分支执行正确的操作。 无论是处理冲突还是更新远端代码，请保有敬畏之心。
+注意： 
+1. **不要在master合并代码**。保证master的可用性很重要。 
+2. 确保在正确的分支执行正确的操作。 无论是处理冲突还是更新远端代码，请保有敬畏之心。
 
-到此，一个正常的基于功能分支的开发流程就完成了。接下来看看另外一个开发流程。
 #### 1.3.4.1. git merge 合并
 
 ```shell 
@@ -470,9 +612,10 @@ git stash pop
 `git submodule`,`git subtree`这两个命令通常用来管理公用的第三方模块。比如一些通用的底层逻辑、中间件、还有一些可能会频繁变化的通用业务组件。 当然，两者还是有区别的。 
 
 ### 1.8.1. git submodule
-git submodule 主要用来管理一些单向更新的公共模块或底层逻辑。 
+`git submodule` 主要用来管理一些单向更新的公共模块或底层逻辑。
+
 ### 1.8.2. git subtree
-git subtree 对于部分需要双向更新的可复用逻辑来说，特别适合管理。比如一些需要复用的业务组件代码。在我之前的实践中，我也曾用subtree来管理构建系统逻辑。
+`git subtree` 对于部分需要双向更新的可复用逻辑来说，特别适合管理。比如一些需要复用的业务组件代码。在我之前的实践中，我也曾用subtree来管理构建系统逻辑。
 
 ## 1.9. 储藏
 当你正在做一项复杂的工作时, 发现了一个和当前工作不相关但是又很讨厌的bug. 你这时想先修复bug再做手头的工作, 那么就可以用 git stash 来保存当前的工作状态, 等你修复完bug后,执行'反储藏'(unstash)操作就可以回到之前的工作里.

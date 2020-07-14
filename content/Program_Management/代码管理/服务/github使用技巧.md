@@ -1,9 +1,10 @@
 ---
-title: "[代码仓库]Github 使用笔记"
+title: "[git 服务]]Github 使用笔记"
 layout: page
 date: 2099-06-02 00:00
 ---
 [TOC]
+
 # 连接仓库
 
 仓库地址通过`URL的方式`确定。连接仓库的方式主要有：

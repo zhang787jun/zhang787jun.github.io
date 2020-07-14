@@ -42,7 +42,7 @@
 <li><a href="#141-flannel">1.4.1. 使用 flannel插件</a></li>
 </ul>
 </li>
-<li><a href="#15-15-worknode">1.5. 1.5 Worknode 加入</a></li>
+<li><a href="#15-worknode">1.5. Worknode 加入</a></li>
 <li><a href="#16">1.6. 安装遇到的问题汇总</a><ul>
 <li><a href="#161-not-ready">1.6.1. not-ready</a></li>
 </ul>
@@ -53,6 +53,7 @@
 </li>
 </ul>
 </li>
+<li><a href="#_1">第三方管理安装工具</a></li>
 <li><a href="#2">2. 卸载</a></li>
 <li><a href="#kuberneters">公有云上部署 kuberneters</a></li>
 </ul>
@@ -387,7 +388,7 @@
 </pre></div>
 
 
-<h2 id="15-15-worknode">1.5. 1.5 Worknode 加入</h2>
+<h2 id="15-worknode">1.5. Worknode 加入</h2>
 <p>在worknode 上运行以下命令 加入集群</p>
 <div class="hlcode"><pre><span class="n">kubeadm</span> <span class="n">join</span> <span class="mf">172.24.195.43</span><span class="o">:</span><span class="mi">6443</span> <span class="o">--</span><span class="n">token</span> <span class="n">bdibtv</span><span class="mf">.8</span><span class="n">iu07mfcpssfdrmg</span> \
     <span class="o">--</span><span class="n">discovery</span><span class="o">-</span><span class="n">token</span><span class="o">-</span><span class="n">ca</span><span class="o">-</span><span class="n">cert</span><span class="o">-</span><span class="n">hash</span> <span class="n">sha256</span><span class="o">:</span><span class="mi">6732957</span><span class="n">bd86580ac23b70bb7a1a0135149db580e3f25a7ce24c4c1409cd5b923</span>
@@ -452,6 +453,9 @@ Cgroups提供了以下四大功能:</p>
 <li>进程控制（Control）：cgroups可以对进程组执行挂起、恢复等操作。</li>
 </ol>
 <p><img alt="" src="../../attach/images/2019-12-09-15-51-28.png" /></p>
+<h1 id="_1">第三方管理安装工具</h1>
+<p>推荐查阅<br />
+https://github.com/easzlab/kubeasz</p>
 <h1 id="2">2. 卸载</h1>
 <div class="hlcode"><pre><span class="n">kubeadm</span> <span class="n">reset</span>
 <span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">purge</span> <span class="n">kubeadm</span> <span class="n">kubectl</span> <span class="n">kubelet</span> <span class="n">kubernetes</span><span class="o">-</span><span class="n">cni</span>

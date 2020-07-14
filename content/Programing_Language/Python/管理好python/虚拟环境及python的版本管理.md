@@ -137,6 +137,9 @@ conda update python *
 2. 使用pip因为每个环境安装使用的pip在不同的路径下，故会重复安装，而包会从缓存中取。
 
 ## 3.1. Conda
+
+Conda is an open source package management system and environment management system that runs on Windows, macOS and Linux.
+
 ### 3.1.1. 基本使用
 ```shell
 # 使用远程镜像
@@ -188,6 +191,9 @@ conda config --set show_channel_urls yes
 
 
 ## 3.2. pip--pypi
+
+pip is the package installer for Python
+pip 是python的包安装器
 ### 3.2.1. 基本操作
 ```shell
 pip install SomePackage              # 最新版本

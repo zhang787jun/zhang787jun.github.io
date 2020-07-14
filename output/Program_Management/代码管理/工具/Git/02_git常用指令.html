@@ -100,10 +100,10 @@
 <h1 id="1-git">1. Git常用指令</h1>
 <p>参考资料：</p>
 <ol>
-<li><a href="https://learngitbranching.js.org/
-https://git-scm.com/book/zh/v2">GitHub入门与实践</a></li>
+<li><a href="https://git-scm.com/book/zh/v2">Scott Chacon, Ben Straub - Pro Git-Apress (2014) (官方书籍中文版)</a></li>
+<li><a href="https://learngitbranching.js.org/">Learn Git Branching(官方动手实践平台)</a></li>
 </ol>
-<p><a><img src="/attach/images/git/Git_V2.16.2.png" ></a></p>
+<p><a><img src="./attach/images/git/Git_V2.16.2.png" ></a></p>
 <h2 id="11">1.1. 新建、初始化代码库</h2>
 <div class="hlcode"><pre><span class="cp"># 在当前目录新建一个Git代码库</span>
 <span class="n">git</span> <span class="n">init</span>
@@ -546,9 +546,9 @@ git checkout <span class="cp">[</span><span class="nx">branch</span><span class=
 <h2 id="18">1.8. 第三方模块管理</h2>
 <p><code>git submodule</code>,<code>git subtree</code>这两个命令通常用来管理公用的第三方模块。比如一些通用的底层逻辑、中间件、还有一些可能会频繁变化的通用业务组件。 当然，两者还是有区别的。 </p>
 <h3 id="181-git-submodule">1.8.1. git submodule</h3>
-<p>git submodule 主要用来管理一些单向更新的公共模块或底层逻辑。 </p>
+<p><code>git submodule</code> 主要用来管理一些单向更新的公共模块或底层逻辑。</p>
 <h3 id="182-git-subtree">1.8.2. git subtree</h3>
-<p>git subtree 对于部分需要双向更新的可复用逻辑来说，特别适合管理。比如一些需要复用的业务组件代码。在我之前的实践中，我也曾用subtree来管理构建系统逻辑。</p>
+<p><code>git subtree</code> 对于部分需要双向更新的可复用逻辑来说，特别适合管理。比如一些需要复用的业务组件代码。在我之前的实践中，我也曾用subtree来管理构建系统逻辑。</p>
 <h2 id="19">1.9. 储藏</h2>
 <p>当你正在做一项复杂的工作时, 发现了一个和当前工作不相关但是又很讨厌的bug. 你这时想先修复bug再做手头的工作, 那么就可以用 git stash 来保存当前的工作状态, 等你修复完bug后,执行'反储藏'(unstash)操作就可以回到之前的工作里.</p>
 <div class="hlcode"><pre><span class="n">git</span> <span class="n">stash</span> <span class="s">&quot;work in progress for foo feature&quot;</span>

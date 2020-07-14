@@ -72,6 +72,7 @@ https://s0code0visualstudio0com.icopy.site/docs/python/jupyter-support
 
 ## 5.2. Markdown 代码块
 
+安装 `Markdown ALL in One` 插件
 设置->快捷键->查找 block
 
 

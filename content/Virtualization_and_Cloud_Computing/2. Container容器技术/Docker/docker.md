@@ -7,11 +7,14 @@ date: 2099-06-02 00:00
 
 
 Docker 的主要笔记资料参考：
-[Docker — 从入门到实践]https://yeasy.gitbooks.io/docker_practice/content/
+1. [Docker — 从入门到实践](https://yeasy.gitbooks.io/docker_practice/content/)
 
 
 # 1. Docker 安装
-目前docker已经分为社区版(docker CE)和商业版（docker EE）。docker-ce 是docker公司维护的开源项目， 本节主要针对此版本进行说明。
+目前Docker已经分为社区版（Docker CE）和商业版（docker EE）。docker-ce 是docker公司维护的开源项目， 本节主要针对此版本进行说明。
+
+Docker 分为 CE 和 EE 两大版本。CE 即社区版（免费，支持周期 7 个月），EE 即企业版，强调安全，付费使用，支持周期 24 个月。
+Docker CE 分为 stable test 和 nightly 三个更新频道。
 
 ## 1.1. For Linux
 ```shell 

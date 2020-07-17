@@ -97,13 +97,13 @@
 </li>
 </ul>
 </div>
-<h1 id="1-git">1. Git常用指令</h1>
 <p>参考资料：</p>
 <ol>
 <li><a href="https://git-scm.com/book/zh/v2">Scott Chacon, Ben Straub - Pro Git-Apress (2014) (官方书籍中文版)</a></li>
 <li><a href="https://learngitbranching.js.org/">Learn Git Branching(官方动手实践平台)</a></li>
 </ol>
-<p><a><img src="./attach/images/git/Git_V2.16.2.png" ></a></p>
+<h1 id="1-git">1. Git常用指令</h1>
+<p><img alt="" src="./attach/images/git/Git_V2.16.2.png" /></p>
 <h2 id="11">1.1. 新建、初始化代码库</h2>
 <div class="hlcode"><pre><span class="cp"># 在当前目录新建一个Git代码库</span>
 <span class="n">git</span> <span class="n">init</span>
@@ -162,6 +162,145 @@
 
 
 <p>在线配置<code>.gitignore</code>文件: https://www.gitignore.io/</p>
+<div class="hlcode"><pre><span class="cp"># 常见的忽略文件内容</span>
+<span class="cp"># windows bat</span>
+<span class="o">*</span><span class="p">.</span><span class="n">bat</span>
+<span class="cp"># VScode </span>
+<span class="p">.</span><span class="n">vscode</span><span class="o">/</span>
+<span class="cp"># docker </span>
+<span class="p">.</span><span class="n">devcontainer</span><span class="o">/</span>
+<span class="cp"># Byte-compiled / optimized / DLL files</span>
+<span class="n">__pycache__</span><span class="o">/</span>
+<span class="o">*</span><span class="p">.</span><span class="n">py</span><span class="p">[</span><span class="n">cod</span><span class="p">]</span>
+<span class="o">*</span><span class="err">$</span><span class="n">py</span><span class="p">.</span><span class="n">class</span>
+
+<span class="cp"># C extensions</span>
+<span class="o">*</span><span class="p">.</span><span class="n">so</span>
+
+<span class="cp"># Distribution / packaging</span>
+<span class="p">.</span><span class="n">Python</span>
+<span class="n">build</span><span class="o">/</span>
+<span class="n">develop</span><span class="o">-</span><span class="n">eggs</span><span class="o">/</span>
+<span class="n">dist</span><span class="o">/</span>
+<span class="n">downloads</span><span class="o">/</span>
+<span class="n">eggs</span><span class="o">/</span>
+<span class="p">.</span><span class="n">eggs</span><span class="o">/</span>
+<span class="n">lib</span><span class="o">/</span>
+<span class="n">lib64</span><span class="o">/</span>
+<span class="n">parts</span><span class="o">/</span>
+<span class="n">sdist</span><span class="o">/</span>
+<span class="n">var</span><span class="o">/</span>
+<span class="n">wheels</span><span class="o">/</span>
+<span class="n">pip</span><span class="o">-</span><span class="n">wheel</span><span class="o">-</span><span class="n">metadata</span><span class="o">/</span>
+<span class="n">share</span><span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">wheels</span><span class="o">/</span>
+<span class="o">*</span><span class="p">.</span><span class="n">egg</span><span class="o">-</span><span class="n">info</span><span class="o">/</span>
+<span class="p">.</span><span class="n">installed</span><span class="p">.</span><span class="n">cfg</span>
+<span class="o">*</span><span class="p">.</span><span class="n">egg</span>
+<span class="n">MANIFEST</span>
+
+<span class="cp"># PyInstaller</span>
+<span class="cp">#  Usually these files are written by a python script from a template</span>
+<span class="cp">#  before PyInstaller builds the exe, so as to inject date/other infos into it.</span>
+<span class="o">*</span><span class="p">.</span><span class="n">manifest</span>
+<span class="o">*</span><span class="p">.</span><span class="n">spec</span>
+
+<span class="cp"># Installer logs</span>
+<span class="n">pip</span><span class="o">-</span><span class="n">log</span><span class="p">.</span><span class="n">txt</span>
+<span class="n">pip</span><span class="o">-</span><span class="n">delete</span><span class="o">-</span><span class="n">this</span><span class="o">-</span><span class="n">directory</span><span class="p">.</span><span class="n">txt</span>
+
+<span class="cp"># Unit test / coverage reports</span>
+<span class="n">htmlcov</span><span class="o">/</span>
+<span class="p">.</span><span class="n">tox</span><span class="o">/</span>
+<span class="p">.</span><span class="n">nox</span><span class="o">/</span>
+<span class="p">.</span><span class="n">coverage</span>
+<span class="p">.</span><span class="n">coverage</span><span class="p">.</span><span class="o">*</span>
+<span class="p">.</span><span class="n">cache</span>
+<span class="n">nosetests</span><span class="p">.</span><span class="n">xml</span>
+<span class="n">coverage</span><span class="p">.</span><span class="n">xml</span>
+<span class="o">*</span><span class="p">.</span><span class="n">cover</span>
+<span class="p">.</span><span class="n">hypothesis</span><span class="o">/</span>
+<span class="p">.</span><span class="n">pytest_cache</span><span class="o">/</span>
+
+<span class="cp"># Translations</span>
+<span class="o">*</span><span class="p">.</span><span class="n">mo</span>
+<span class="o">*</span><span class="p">.</span><span class="n">pot</span>
+
+<span class="cp"># Django stuff:</span>
+<span class="o">*</span><span class="p">.</span><span class="n">log</span>
+<span class="n">local_settings</span><span class="p">.</span><span class="n">py</span>
+<span class="n">db</span><span class="p">.</span><span class="n">sqlite3</span>
+
+<span class="cp"># Flask stuff:</span>
+<span class="n">instance</span><span class="o">/</span>
+<span class="p">.</span><span class="n">webassets</span><span class="o">-</span><span class="n">cache</span>
+
+<span class="cp"># Scrapy stuff:</span>
+<span class="p">.</span><span class="n">scrapy</span>
+
+<span class="cp"># Sphinx documentation</span>
+<span class="n">docs</span><span class="o">/</span><span class="n">_build</span><span class="o">/</span>
+
+<span class="cp"># PyBuilder</span>
+<span class="n">target</span><span class="o">/</span>
+
+<span class="cp"># Jupyter Notebook</span>
+<span class="p">.</span><span class="n">ipynb_checkpoints</span>
+
+<span class="cp"># IPython</span>
+<span class="n">profile_default</span><span class="o">/</span>
+<span class="n">ipython_config</span><span class="p">.</span><span class="n">py</span>
+
+<span class="cp"># pyenv</span>
+<span class="p">.</span><span class="n">python</span><span class="o">-</span><span class="n">version</span>
+
+<span class="cp"># pipenv</span>
+<span class="cp">#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.</span>
+<span class="cp">#   However, in case of collaboration, if having platform-specific dependencies or dependencies</span>
+<span class="cp">#   having no cross-platform support, pipenv may install dependencies that don’t work, or not</span>
+<span class="cp">#   install all needed dependencies.</span>
+<span class="cp">#Pipfile.lock</span>
+
+<span class="cp"># celery beat schedule file</span>
+<span class="n">celerybeat</span><span class="o">-</span><span class="n">schedule</span>
+
+<span class="cp"># SageMath parsed files</span>
+<span class="o">*</span><span class="p">.</span><span class="n">sage</span><span class="p">.</span><span class="n">py</span>
+
+<span class="cp"># Environments</span>
+<span class="p">.</span><span class="n">env</span>
+<span class="p">.</span><span class="n">venv</span>
+<span class="n">env</span><span class="o">/</span>
+<span class="n">venv</span><span class="o">/</span>
+<span class="n">ENV</span><span class="o">/</span>
+<span class="n">env</span><span class="p">.</span><span class="n">bak</span><span class="o">/</span>
+<span class="n">venv</span><span class="p">.</span><span class="n">bak</span><span class="o">/</span>
+
+<span class="cp"># Spyder project settings</span>
+<span class="p">.</span><span class="n">spyderproject</span>
+<span class="p">.</span><span class="n">spyproject</span>
+
+<span class="cp"># Rope project settings</span>
+<span class="p">.</span><span class="n">ropeproject</span>
+
+<span class="cp"># Intellij project settings</span>
+<span class="p">.</span><span class="n">idea</span>
+
+<span class="cp"># mkdocs documentation</span>
+<span class="o">/</span><span class="n">site</span>
+
+<span class="cp"># mypy</span>
+<span class="p">.</span><span class="n">mypy_cache</span><span class="o">/</span>
+<span class="p">.</span><span class="n">dmypy</span><span class="p">.</span><span class="n">json</span>
+<span class="n">dmypy</span><span class="p">.</span><span class="n">json</span>
+
+<span class="cp"># Pyre type checker</span>
+<span class="p">.</span><span class="n">pyre</span><span class="o">/</span>
+
+<span class="cp"># pb2.py files</span>
+<span class="o">*</span><span class="n">_pb2</span><span class="p">.</span><span class="n">py</span>
+</pre></div>
+
+
 <h3 id="123">1.2.3. 代码提交</h3>
 <div class="hlcode"><pre><span class="cp"># 提交暂存区到仓库区</span>
 <span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="p">[</span><span class="n">message</span><span class="p">]</span>
@@ -238,8 +377,9 @@
 <p>小结<br />
 1. rebase 操作可以把本地未push的分叉提交历史整理成直线；<br />
 2. rebase的目的是使得我们在查看历史提交的变化时更容易，因为分叉的提交需要三方对比。</p>
-<p>有几点需要注意： 不要在master合并代码，保证master的可用性很重要。 确保在正确的分支执行正确的操作。 无论是处理冲突还是更新远端代码，请保有敬畏之心。</p>
-<p>到此，一个正常的基于功能分支的开发流程就完成了。接下来看看另外一个开发流程。</p>
+<p>注意： <br />
+1. <strong>不要在master合并代码</strong>。保证master的可用性很重要。 <br />
+2. 确保在正确的分支执行正确的操作。 无论是处理冲突还是更新远端代码，请保有敬畏之心。</p>
 <h4 id="1341-git-merge">1.3.4.1. git merge 合并</h4>
 <div class="hlcode"><pre><span class="err">#</span> <span class="nx">建立追踪关系</span><span class="err">，</span><span class="nx">在现有分支与指定的远程分支之间</span>
 <span class="nx">git</span> <span class="nx">branch</span> <span class="o">--</span><span class="nb">set</span><span class="na">-upstream</span> <span class="err">[</span><span class="nx">branch</span><span class="na">-name</span><span class="cp">]</span> <span class="cp">[</span><span class="nx">remote</span><span class="na">-branch</span><span class="cp">]</span>

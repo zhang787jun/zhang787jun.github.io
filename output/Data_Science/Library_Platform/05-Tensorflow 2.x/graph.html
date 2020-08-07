@@ -6,7 +6,7 @@
     <link rel="Stylesheet" type="text/css" href="/Wiki/static/css/tango.css">
     <link rel="shortcut icon" href="/Wiki/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/Wiki/favicon.ico" type="image/x-icon">
-    <title>模型结构可视化神器——Netron - Jun's personal knowledge wiki</title>
+    <title>融合Tensorflow后的 Keras - Jun's personal knowledge wiki</title>
     <meta name="keywords" content="Technology, MachineLearning, DataMining, Wiki" />
     <meta name="description" content="A wiki website" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -28,39 +28,29 @@
     <div id="container">
         
 <div id="header">
-  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Data_Science\Library_Platform">Data_Science\Library_Platform</a>&nbsp;»&nbsp;模型结构可视化神器——Netron</div>
+  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Data_Science\Library_Platform\05-Tensorflow 2.x">Data_Science\Library_Platform\05-Tensorflow 2.x</a>&nbsp;»&nbsp;融合Tensorflow后的 Keras</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">模型结构可视化神器——Netron</div>
+<div id="title">融合Tensorflow后的 Keras</div>
 <div id="content">
   <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#netrontf-caffe-kerasmxnet">模型结构可视化神器——Netron(支持tf, caffe, keras,mxnet等多种框架)</a></li>
+<li><a href="#_1">模型的保存与加载</a></li>
 </ul>
 </div>
-<h1 id="netrontf-caffe-kerasmxnet">模型结构可视化神器——Netron(支持tf, caffe, keras,mxnet等多种框架)</h1>
-<p>很多时候，复现人家工程的时候，需要了解人家的网络结构。但不同框架之间可视化网络层方法不一样，这样给研究人员造成了很大的困扰。<br />
-前段时间，发现了一个可视化模型结构的神奇：Netron</p>
-<p>目前的Netron支持主流各种框架的模型结构可视化工作，我直接给出github链接： <br />
-https://github.com/lutzroeder/Netron <br />
-支持windows，Linux，mac系统 <br />
-在windows系统，下载一个.exe文件就很稳了，如下： </p>
-<p>安装以后，就是只需双击打开，添加模型文件的位置就可以了。 <br />
-Netron 支持的框架和对应文件如下：<br />
-| 框架            | 对应文件    |<br />
-| --------------- | ----------- |<br />
-| ONNX            | .onnx, .pb  |<br />
-| Keras           | .h5, .keras |<br />
-| CoreML          | .mlmodel    |<br />
-| TensorFlow Lite | .tflite     |<br />
-试验性支持，可能不同稳定：<br />
-| 框架          | 对应文件             |<br />
-| ------------- | -------------------- |<br />
-| Caffe         | .caffemodel          |<br />
-| Caffe2        | predict_net.pb       |<br />
-| MXNet         | .model, -symbol.json |<br />
-| TensorFlow.js | model.json, .pb      |<br />
-| TensorFlow    | .pb, .meta           |<br />
-只需按照上述表格将对应的文件路径加到netron中，就可以看到漂亮的网络结构图了，截取部分显</p>
+<h1 id="_1">模型的保存与加载</h1>
+<div class="hlcode"><pre><span class="n">imported</span> <span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">saved_model</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">export_dir</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+
+
+<span class="n">saver</span> <span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">saved_model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">export_dir</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+
+
+<p>= tf.summary.create_file_writer("/tmp/mylogs/eager")</p>
+<p>with writer.as_default():<br />
+  for step in range(100):<br />
+    # other model code would go here<br />
+    tf.summary.scalar("my_metric", 0.5, step=step)<br />
+    writer.flush()</p>
 </div>
 <div id="renote">
   <HR style=" FILTER: alpha (opacity = 100, finishopacity =0 , style= 3 )" width="80%" color=#987 cb 9 SIZE=3>

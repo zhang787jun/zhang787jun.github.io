@@ -56,7 +56,7 @@ Nvidia的GPU命名有4个层次：
 
 nvidia-smi 简称NVSMI，提供监控GPU使用情况和更改GPU状态的功能，是一个跨平台工具，它支持所有标准的NVIDIA驱动程序支持的Linux发行版以及从WindowsServer 2008 R2开始的64位的系统。
 
-**该工具是N卡驱动附带的，只要安装好驱动后就会有它。**
+该工具是**Nvidia显卡驱动**附带的，只要安装好驱动后就会有它。
 
 ```
 nvidia-smi
@@ -112,8 +112,13 @@ watch --color -n1 gpustat -cpu
 
 
 # 3. CUDA
+
 1. 什么是CUDA
 CUDA（Compute Unified Device Architecture），是显卡厂商NVIDIA推出的运算平台。 CUDA™是一种由NVIDIA推出的通用并行计算架构，该架构使GPU能够解决复杂的计算问题。 Cuda 基于GPU驱动
 
 2. 什么是CUDNN
 NVIDIA cuDNN是用于深度神经网络的GPU加速库。它强调性能、易用性和低内存开销。NVIDIA cuDNN可以集成到更高级别的机器学习框架中，如谷歌的Tensorflow、加州大学伯克利分校的流行caffe软件。简单的插入式设计可以让开发人员专注于设计和实现神经网络模型，而不是简单调整性能，同时还可以在GPU上实现高性能现代并行计算。
+
+# GPU 的虚拟化
+
+NVIDIA 虚拟 GPU (vGPU) 解决方案将 NVIDIA GPU 的强大性能应用于虚拟桌面、应用和工作站，从而加速图形和计算工作，以使居家办公或随时随地办公的创意和技术专业人士能够访问虚拟化工作空间。

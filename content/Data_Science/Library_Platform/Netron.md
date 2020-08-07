@@ -5,12 +5,23 @@ date: 2099-06-02 00:00
 ---
 [TOC]
 
+复现人家工程的时候，需要了解人家的网络结构。但不同框架之间可视化网络层方法不一样，这样给研究人员造成了很大的困扰。 `Netron` 是一个解决这个问题的神奇。
+
+# 什么是Netron
+
+`Netron` is a viewer for neural network, deep learning and machine learning models.
+Netron 是一个可以查看神经网络模型、深度学习模型、机器学习模型结构的可视化工具 
+
+#
+
+很多时候，
+
 # 模型结构可视化神器——Netron(支持tf, caffe, keras,mxnet等多种框架)
 
-很多时候，复现人家工程的时候，需要了解人家的网络结构。但不同框架之间可视化网络层方法不一样，这样给研究人员造成了很大的困扰。 
+
 前段时间，发现了一个可视化模型结构的神奇：Netron
 
-目前的Netron支持主流各种框架的模型结构可视化工作，我直接给出gayhub链接： 
+目前的Netron支持主流各种框架的模型结构可视化工作，我直接给出github链接： 
 https://github.com/lutzroeder/Netron 
 支持windows，Linux，mac系统 
 在windows系统，下载一个.exe文件就很稳了，如下： 

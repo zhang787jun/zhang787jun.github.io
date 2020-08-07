@@ -89,9 +89,11 @@
 </ul>
 </div>
 <p>Docker 的主要笔记资料参考：<br />
-[Docker — 从入门到实践]https://yeasy.gitbooks.io/docker_practice/content/</p>
+1. <a href="https://yeasy.gitbooks.io/docker_practice/content/">Docker — 从入门到实践</a></p>
 <h1 id="1-docker">1. Docker 安装</h1>
-<p>目前docker已经分为社区版(docker CE)和商业版（docker EE）。docker-ce 是docker公司维护的开源项目， 本节主要针对此版本进行说明。</p>
+<p>目前Docker已经分为社区版（Docker CE）和商业版（docker EE）。docker-ce 是docker公司维护的开源项目， 本节主要针对此版本进行说明。</p>
+<p>Docker 分为 CE 和 EE 两大版本。CE 即社区版（免费，支持周期 7 个月），EE 即企业版，强调安全，付费使用，支持周期 24 个月。<br />
+Docker CE 分为 stable test 和 nightly 三个更新频道。</p>
 <h2 id="11-for-linux">1.1. For Linux</h2>
 <div class="hlcode"><pre><span class="cp"># 使用官方安装脚本自动安装 （仅适用于公网环境 阿里云）</span>
 <span class="n">curl</span> <span class="o">-</span><span class="n">fsSL</span> <span class="n">https</span><span class="o">:</span><span class="c1">//get.docker.com | bash -s docker --mirror Aliyun</span>

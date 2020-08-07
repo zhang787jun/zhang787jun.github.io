@@ -47,6 +47,7 @@
 </ul>
 </li>
 <li><a href="#3-cuda">3. CUDA</a></li>
+<li><a href="#gpu_1">GPU 的虚拟化</a></li>
 </ul>
 </div>
 <h1 id="1-gpu">1. GPU 硬件性能</h1>
@@ -135,7 +136,7 @@
 <h1 id="2-gpu">2. GPU监测工具</h1>
 <h2 id="21-nvidia-smi">2.1. nvidia-smi</h2>
 <p>nvidia-smi 简称NVSMI，提供监控GPU使用情况和更改GPU状态的功能，是一个跨平台工具，它支持所有标准的NVIDIA驱动程序支持的Linux发行版以及从WindowsServer 2008 R2开始的64位的系统。</p>
-<p><strong>该工具是N卡驱动附带的，只要安装好驱动后就会有它。</strong></p>
+<p>该工具是<strong>Nvidia显卡驱动</strong>附带的，只要安装好驱动后就会有它。</p>
 <div class="hlcode"><pre><span class="n">nvidia</span><span class="o">-</span><span class="n">smi</span>
 <span class="o">&gt;&gt;&gt;</span>
 <span class="n">Fri</span> <span class="n">Sep</span> <span class="mi">27</span> <span class="mi">09</span><span class="o">:</span><span class="mi">14</span><span class="o">:</span><span class="mo">07</span> <span class="mi">2019</span> 
@@ -241,6 +242,8 @@ CUDA（Compute Unified Device Architecture），是显卡厂商NVIDIA推出的�
 NVIDIA cuDNN是用于深度神经网络的GPU加速库。它强调性能、易用性和低内存开销。NVIDIA cuDNN可以集成到更高级别的机器学习框架中，如谷歌的Tensorflow、加州大学伯克利分校的流行caffe软件。简单的插入式设计可以让开发人员专注于设计和实现神经网络模型，而不是简单调整性能，同时还可以在GPU上实现高性能现代并行计算。</p>
 </li>
 </ol>
+<h1 id="gpu_1">GPU 的虚拟化</h1>
+<p>NVIDIA 虚拟 GPU (vGPU) 解决方案将 NVIDIA GPU 的强大性能应用于虚拟桌面、应用和工作站，从而加速图形和计算工作，以使居家办公或随时随地办公的创意和技术专业人士能够访问虚拟化工作空间。</p>
 </div>
 <div id="renote">
   <HR style=" FILTER: alpha (opacity = 100, finishopacity =0 , style= 3 )" width="80%" color=#987 cb 9 SIZE=3>

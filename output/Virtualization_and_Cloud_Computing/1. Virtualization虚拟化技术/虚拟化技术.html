@@ -179,12 +179,11 @@ I/O、更改MMU设置等敏感指令只能在内核模式下执行，在用户�
 <li>Intel 386：忽略用户模式下的敏感指令，不支持硬件辅助全虚拟化</li>
 <li>英特尔VT, AMD-SVM 支持硬件辅助全虚拟化</li>
 </ul>
-<p>CPU 虚拟化主要指<br />
-1. intel 的 VT<br />
-2. AMD 的 AMD-V<br />
-为主的硬件辅助的 CPU 虚拟化技术。</p>
+<p>CPU 虚拟化主要指硬件辅助的 CPU 虚拟化技术，主流技术包括：<br />
+1. Intel 公司的 Intel VT<br />
+2. AMD 公司的 AMD-V</p>
 <h2 id="21-intel-vt">2.1. Intel VT 技术</h2>
-<p>Intel VT 全称为 Intel Virtualization Technology。 包括 VT-x （支持 CPU 虚拟化）、EPT（支持内存虚拟化）和 VT-d（支持 I/O 虚拟化）</p>
+<p>Intel VT 全称为 Intel Virtualization Technology。 包括： VT-x （支持 CPU 虚拟化）、EPT（支持内存虚拟化）和 VT-d（支持 I/O 虚拟化）。</p>
 <h3 id="211-intel-vt-x">2.1.1. Intel VT-x</h3>
 <p>VT-x 是 Intel CPU 的硬件虚拟化技术，提供内存以及虚拟机的硬件隔离，这也是平常我们想在 intel 平台上做虚拟化最基本需要支持的技术。</p>
 <blockquote>

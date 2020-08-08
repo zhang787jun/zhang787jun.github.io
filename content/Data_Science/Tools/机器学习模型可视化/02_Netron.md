@@ -1,5 +1,5 @@
 ---
-title: "模型结构可视化神器——Netron"
+title: "02-Netron 模型结构可视化神器"
 layout: page
 date: 2099-06-02 00:00
 ---
@@ -7,26 +7,26 @@ date: 2099-06-02 00:00
 
 复现人家工程的时候，需要了解人家的网络结构。但不同框架之间可视化网络层方法不一样，这样给研究人员造成了很大的困扰。 `Netron` 是一个解决这个问题的神奇。
 
-# 什么是Netron
+# 1. 什么是Netron
 
 `Netron` is a viewer for neural network, deep learning and machine learning models.
-Netron 是一个可以查看神经网络模型、深度学习模型、机器学习模型结构的可视化工具 
+Netron 是一个可以查看神经网络模型、深度学习模型、机器学习模型结构的可视化工具。
 
-#
+优点:
+1. 支持多平台
+缺点：
+1. 只能看网络结构
 
-很多时候，
-
-# 模型结构可视化神器——Netron(支持tf, caffe, keras,mxnet等多种框架)
-
-
-前段时间，发现了一个可视化模型结构的神奇：Netron
-
-目前的Netron支持主流各种框架的模型结构可视化工作，我直接给出github链接： 
+官方介绍:
 https://github.com/lutzroeder/Netron 
-支持windows，Linux，mac系统 
-在windows系统，下载一个.exe文件就很稳了，如下： 
 
-安装以后，就是只需双击打开，添加模型文件的位置就可以了。 
+
+# 2. 使用
+
+Netron支持windows，Linux，mac系统。在windows系统，下载一个`.exe`的可执行文件，安装以后，就是只需双击打开，添加模型文件的位置就可以了。 
+ 
+
+# 3. 支持格式
 Netron 支持的框架和对应文件如下：
 | 框架            | 对应文件    |
 | --------------- | ----------- |
@@ -42,4 +42,5 @@ Netron 支持的框架和对应文件如下：
 | MXNet         | .model, -symbol.json |
 | TensorFlow.js | model.json, .pb      |
 | TensorFlow    | .pb, .meta           |
-只需按照上述表格将对应的文件路径加到netron中，就可以看到漂亮的网络结构图了，截取部分显
+
+只需按照上述表格将对应的文件路径加到netron中，就可以看到漂亮的网络结构图了。

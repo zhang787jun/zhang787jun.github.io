@@ -44,7 +44,7 @@
 <li><a href="#22">2.2. 多变量的数学特征</a><ul>
 <li><a href="#221-">2.2.1. 协方差--关联方向协同性</a></li>
 <li><a href="#222-">2.2.2. 相关系数--关联紧密性</a><ul>
-<li><a href="#_1">皮尔逊相关系数</a></li>
+<li><a href="#2221">2.2.2.1. 皮尔逊相关系数</a></li>
 </ul>
 </li>
 </ul>
@@ -65,13 +65,13 @@
 </ul>
 </li>
 <li><a href="#234">2.3.4. 平稳性</a><ul>
-<li><a href="#2341">2.3.4.1. 分类</a></li>
+<li><a href="#2341">2.3.4.1. 平稳性分类</a></li>
 <li><a href="#2342">2.3.4.2. 定性判断平稳性</a><ul>
 <li><a href="#23421">2.3.4.2.1. 时序图</a></li>
 <li><a href="#23422">2.3.4.2.2. 自相关图/偏相关图</a></li>
 </ul>
 </li>
-<li><a href="#2343">2.3.4.3. 定量分析平稳性</a><ul>
+<li><a href="#2343">2.3.4.3. 定量判定平稳性</a><ul>
 <li><a href="#23431-adf">2.3.4.3.1. ADF检验</a></li>
 </ul>
 </li>
@@ -87,9 +87,9 @@
 <li><a href="#24">2.4. 多变量序列的数学特征</a><ul>
 <li><a href="#241">2.4.1. 多变量之间的相关性/独立性</a></li>
 <li><a href="#242">2.4.2. 多变量之间的协整关系</a><ul>
-<li><a href="#_2">多个序列变量组合的规则</a></li>
-<li><a href="#engle-granger">Engle-Granger两步协整检验</a></li>
-<li><a href="#jj">JJ检验</a></li>
+<li><a href="#2421">2.4.2.1. 多个序列变量组合的规则</a></li>
+<li><a href="#2422-engle-granger">2.4.2.2. Engle-Granger两步协整检验</a></li>
+<li><a href="#2423-jj">2.4.2.3. JJ检验</a></li>
 </ul>
 </li>
 </ul>
@@ -125,10 +125,6 @@
 <li><a href="#4">4. 随机变量序列的数据处理</a><ul>
 <li><a href="#41">4.1. 序列线性运算</a><ul>
 <li><a href="#411">4.1.1. 序列组合</a></li>
-<li><a href="#412">4.1.2. 序列分解</a><ul>
-<li><a href="#4121-emd">4.1.2.1. 经验模态分解(EMD)</a></li>
-</ul>
-</li>
 </ul>
 </li>
 <li><a href="#42">4.2. 序列差分运算</a></li>
@@ -145,14 +141,31 @@
 </li>
 <li><a href="#52">5.2. 时间序列的分解</a><ul>
 <li><a href="#521">5.2.1. 基本步骤</a></li>
-<li><a href="#522">5.2.2. 经典时间序列分解法</a></li>
-<li><a href="#523-stl">5.2.3. STL 分解法</a><ul>
+<li><a href="#522">5.2.2. 经典时间序列分解法</a><ul>
+<li><a href="#5221">5.2.2.1. 原理</a></li>
+<li><a href="#5222">5.2.2.2. 使用</a></li>
+</ul>
+</li>
+<li><a href="#523-x11">5.2.3. X11分解法</a><ul>
 <li><a href="#5231">5.2.3.1. 原理</a></li>
-<li><a href="#5232">5.2.3.2. 使用</a></li>
+</ul>
+</li>
+<li><a href="#524-seats">5.2.4. SEATS分解</a><ul>
+<li><a href="#5241">5.2.4.1. 原理</a></li>
+</ul>
+</li>
+<li><a href="#525-stl">5.2.5. STL 分解法</a><ul>
+<li><a href="#5251">5.2.5.1. 原理</a><ul>
+<li><a href="#52511-lowess">5.2.5.1.1. LOWESS 回归</a></li>
+</ul>
+</li>
+<li><a href="#5252">5.2.5.2. 特点</a></li>
+<li><a href="#5253">5.2.5.3. 使用</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li><a href="#53-emd">5.3. 经验模态分解(EMD)</a></li>
 </ul>
 </li>
 <li><a href="#6">6. 时间序列预测</a><ul>
@@ -176,7 +189,7 @@
 </li>
 <li><a href="#64">6.4. 模型评价与选择</a><ul>
 <li><a href="#641-aicbic">6.4.1. 模型选择AIC与BIC：选择更简单的模型</a><ul>
-<li><a href="#armapq-p-q">示例：ARMA(p,q) 模型中p q参数的确定</a></li>
+<li><a href="#6411-armapq-p-q">6.4.1.1. 示例：ARMA(p,q) 模型中p q参数的确定</a></li>
 </ul>
 </li>
 <li><a href="#642">6.4.2. 模型评估</a><ul>
@@ -195,7 +208,10 @@
 </li>
 <li><a href="#72">7.2. 近注意力</a><ul>
 <li><a href="#721-naive">7.2.1. Naïve 方法</a></li>
-<li><a href="#722">7.2.2. 指数平滑</a></li>
+<li><a href="#722">7.2.2. 指数平滑</a><ul>
+<li><a href="#_1">权重移动平均</a></li>
+</ul>
+</li>
 <li><a href="#723-ar">7.2.3. 自回归模型 AR</a></li>
 <li><a href="#724-ma">7.2.4. 移动平均模型 MA</a></li>
 <li><a href="#725-arma">7.2.5. 自回归移动平均模型 ARMA</a></li>
@@ -209,11 +225,6 @@
 </ul>
 </li>
 <li><a href="#74">7.4. 预测区间</a></li>
-</ul>
-</li>
-<li><a href="#8">8. 时间序列数据的可视化</a><ul>
-<li><a href="#81">8.1. 时序图</a></li>
-<li><a href="#82">8.2. 滞后图</a></li>
 </ul>
 </li>
 <li><a href="#9">9. 参考资料</a></li>
@@ -254,7 +265,7 @@ $\color{blue}{=E(X^2 )-[E(X)]^2}$</p>
 {=E(XY)-E(X)E(Y)}$$</p>
 <h3 id="222-">2.2.2. 相关系数--关联紧密性</h3>
 <p>相关性（correlation）是两个随机变量和之间<strong>线性关系的强度</strong>和方向。</p>
-<h4 id="_1">皮尔逊相关系数</h4>
+<h4 id="2221">2.2.2.1. 皮尔逊相关系数</h4>
 <p>Pearson product-moment correlation coefficient<br />
 称<br />
 $$ρ_{X,Y}=\frac{Cov(X,Y)}{\sqrt{D(X)D(Y)}}$$</p>
@@ -383,7 +394,7 @@ $$Q(m)= T(T +2) \sum_{j=1}^m=\frac{ρ2}{T −j} $$</p>
 
 <h3 id="234">2.3.4. 平稳性</h3>
 <p><strong>平稳性</strong>就是时间序列的统计性质关于时间平移的不变性，要求序列的均值和方差不发生明显变化。</p>
-<h4 id="2341">2.3.4.1. 分类</h4>
+<h4 id="2341">2.3.4.1. 平稳性分类</h4>
 <div class="hlcode"><pre><span class="n">digraph</span> <span class="p">{</span>
     <span class="err">序列数据</span><span class="o">-&gt;</span><span class="err">非平稳序列</span>
     <span class="err">序列数据</span><span class="o">-&gt;</span><span class="err">平稳序列</span>
@@ -421,7 +432,7 @@ F为{x1,x2,...xn}的联合分布。过于严苛，一般实际中都是弱平稳
 <h5 id="23422">2.3.4.2.2. 自相关图/偏相关图</h5>
 <p>平稳序列: 自相关系数快速（或某一阶段后）降低为0（或附近）<br />
 非平稳序列: 自相关系数缓慢降低</p>
-<h4 id="2343">2.3.4.3. 定量分析平稳性</h4>
+<h4 id="2343">2.3.4.3. 定量判定平稳性</h4>
 <h5 id="23431-adf">2.3.4.3.1. ADF检验</h5>
 <p>ADF检验全称是 Augmented Dickey-Fuller test，也叫做单位根（unit root）检验。顾名思义，ADF是 Dickey-Fuller检验的增广形式。DF检验只能应用于一阶情况，当序列存在高阶的滞后相关时，可以使用ADF检验，所以说ADF是对DF检验的扩展。<br />
 <strong>单位根</strong>就是指单位根过程，可以证明，序列中存在单位根过程就不平稳，会使回归分析中存在伪回归</p>
@@ -485,17 +496,28 @@ F为{x1,x2,...xn}的联合分布。过于严苛，一般实际中都是弱平稳
 <h4 id="2352">2.3.5.2. 检测</h4>
 <p>DDM（Drift Detection Method）</p>
 <p>EDDM（Early Drift Detection Method）</p>
-<p>DDD（Diversity for Dealing with Drifts）  Ensemble with different diversity</p>
+<p>DDD（Diversity for Dealing with Drifts）  </p>
+<p>Ensemble with different diversity</p>
 <p>Hoeffding trees</p>
 <p>Ensemble Learnings</p>
 <h2 id="24">2.4. 多变量序列的数学特征</h2>
 <h3 id="241">2.4.1. 多变量之间的相关性/独立性</h3>
 <p>相关关系（correlation）</p>
+<div class="hlcode"><pre><span class="n">stattools</span><span class="o">.</span><span class="n">ccovf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">[,</span> <span class="n">adjusted</span><span class="p">,</span> <span class="n">demean</span><span class="p">])</span>
+
+<span class="n">Calculate</span> <span class="n">the</span> <span class="n">crosscovariance</span> <span class="n">between</span> <span class="n">two</span> <span class="n">series</span><span class="o">.</span>
+
+<span class="n">stattools</span><span class="o">.</span><span class="n">ccf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">[,</span> <span class="n">adjusted</span><span class="p">])</span>
+
+<span class="n">The</span> <span class="n">cross</span><span class="o">-</span><span class="n">correlation</span> <span class="n">function</span><span class="o">.</span>
+</pre></div>
+
+
 <h3 id="242">2.4.2. 多变量之间的协整关系</h3>
 <p>如果两组序列是非平稳的，但它们的线性组合可以得到一个平稳序列，那么我们就说这两组时间序列数据具有协整(cointegration)的性质。</p>
-<h4 id="_2">多个序列变量组合的规则</h4>
+<h4 id="2421">2.4.2.1. 多个序列变量组合的规则</h4>
 <p><img alt="" src="../../../../attach/images/2019-10-31-10-12-02.png" /></p>
-<h4 id="engle-granger">Engle-Granger两步协整检验</h4>
+<h4 id="2422-engle-granger">2.4.2.2. Engle-Granger两步协整检验</h4>
 <p>若$Y_t$,$X_t$ 属于I(1) <br />
 <strong>步骤</strong><br />
 1. 通过最小二乘回归得到协整系数$\beta$和残差序列$R_t$<br />
@@ -518,7 +540,7 @@ F为{x1,x2,...xn}的联合分布。过于严苛，一般实际中都是弱平稳
 当两只股票的价差过大，根据平稳性我们预期价差会收敛，因此买入低价的股票，卖空高价的股票，等待价格回归的时候进行反向操作从而获利。<br />
 这就是配对交易（pairs trading）的由来。</p>
 <p>(Phillips and Ouliaris 1990)给出了利用回归残差进行协整检验的方法， 包含两种方法， 方差比方法和多元迹统计量方法。 R扩展包urca的ca.po()可以用来计算Phillips-Ouliaris检验。 选项demean="constant"指定有确定性常数趋势， demean="trend"指定有确定性线性趋势， 缺省为demean="none"，没有确定性趋势（无漂移）。 选项type="Pu"指定使用方差比方法， 选项type="Pz"指定使用多元迹方法， 多元迹方法对哪个分量作为回归因变量不敏感。</p>
-<h4 id="jj">JJ检验</h4>
+<h4 id="2423-jj">2.4.2.3. JJ检验</h4>
 <p>而Johansen协整检验法采用的是多元方程技术</p>
 <div class="hlcode"><pre><span class="n">statsmodels</span><span class="o">.</span><span class="n">tsa</span><span class="o">.</span><span class="n">vector_ar</span><span class="o">.</span><span class="n">vecm</span><span class="o">.</span><span class="n">coint_johansen</span><span class="p">(</span><span class="n">endog</span><span class="p">,</span> <span class="n">det_order</span><span class="p">,</span> <span class="n">k_ar_diff</span><span class="p">)</span>
 
@@ -763,27 +785,6 @@ $$ Y_n={y_1,y_2..,y_n}$$<br />
 时间序列Z_n</p>
 <p>$$ Z_n= {aX+bY+c} $$</p>
 <p>类似的减法、乘法（log变换后）、除法（log变换后）都可以进行序列组合</p>
-<h3 id="412">4.1.2. 序列分解</h3>
-<h4 id="4121-emd">4.1.2.1. 经验模态分解(EMD)</h4>
-<p>经验模态分解(EMD)的基本思想：将一个频率不规则的波化为多个单一频率的波+残波的形式。<br />
-$$原波形 =X_n= ∑IMFs + 余波$$</p>
-<div class="hlcode"><pre><span class="n">python</span><span class="err">安装</span>
-<span class="o">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">EMD</span><span class="o">-</span><span class="n">signal</span>
-
-<span class="n">from</span> <span class="n">PyEMD</span> <span class="n">import</span> <span class="n">EMD</span>
-<span class="n">import</span> <span class="n">numpy</span> <span class="n">as</span> <span class="n">np</span>
-
-<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">random</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
-<span class="n">emd</span> <span class="o">=</span> <span class="n">EMD</span><span class="p">()</span>
-<span class="n">IMFs</span> <span class="o">=</span> <span class="n">emd</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-</pre></div>
-
-
-<div class="hlcode"><pre><span class="n">from</span> <span class="n">pyhht</span><span class="p">.</span><span class="n">emd</span> <span class="n">import</span> <span class="n">EMD</span>
-<span class="n">decomposer</span> <span class="o">=</span> <span class="n">EMD</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>               
-</pre></div>
-
-
 <h2 id="42">4.2. 序列差分运算</h2>
 <p>时间序列<br />
 $$ X_n={x_1,x_2..,x_n}$$</p>
@@ -819,13 +820,17 @@ $$\Delta^p X=\Delta \Delta^{p-1}X$$</p>
 <p>$\color{red}{如：下图中最上面的蓝色图像是原始数据，绿色图像一阶差分后的数据，红色图像是二阶差分后的数据，从差分效果来看，实现了平稳的基本需求。}$<br />
 <img alt="这里写图片描述" src="http://img.blog.csdn.net/20171023100523600?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQva2ljaWxvdmU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" /></p>
 <h2 id="43-">4.3. 非平稳序列-&gt;平稳序列</h2>
-<p>可以看出时间序列不平稳，因此我们要将时间序列转为平稳序列，有如下几种方法：</p>
-<p>Deflation by CPI<br />
-Logarithmic<br />
-First Difference<br />
-Seasonal Difference<br />
-Seasonal Adjustment</p>
-<p>EMD 分解 </p>
+<p>我们要将时间序列转为平稳序列，有如下几种方法：</p>
+<ol>
+<li>取对数（Logarithmic）</li>
+<li>差分（Difference）<br />
+   a. 一阶差分 （First Difference）<br />
+   b. 季节性差分（Seasonal Difference）</li>
+<li>季节性调整 （Seasonal Adjustment）</li>
+<li>时间序列分解 EMD 分解 </li>
+</ol>
+<p>季节调整是从原始时间序列中剔除季节性影响以分离出趋势、循环、季节、不规则</p>
+<p>主流季节调整方法(即X-12-ARIMA和TRAMO/SEATS)</p>
 <h1 id="5">5. 时间序列数据的组成与分解</h1>
 <h2 id="51">5.1. 时间序列的组成</h2>
 <p><strong>时间序列主要由以下4部分组成：</strong></p>
@@ -932,48 +937,120 @@ F_St接近0时表示该序列几乎没有季节性</p>
 <li>计算平均残差数据</li>
 </ol>
 <h3 id="522">5.2.2. 经典时间序列分解法</h3>
+<h4 id="5221">5.2.2.1. 原理</h4>
+<p>经典的时间序列分解算法（Classical decomposition），起于1920年，直到1950年之前仍在广泛使用。经典算法步骤相对简单，同时也是很多其他分解算法的基础。经典分解法是假设<strong>周期性成分在每个周期内都是相同的</strong>（【例如每年的月周期成分都相同】）。</p>
 <p><strong>加法模式分解</strong><br />
-步骤 1 ：计算趋势周期项 T_t (移动平均MA)<br />
-步骤 2 ：计算去趋势序列 Z =y-T_t<br />
-步骤 3 ：估计每个季度的季节项 S_t<br />
-步骤 4 ：计算残差项。R_t= y-T_t-S_t</p>
-<p><strong>乘法分解</strong></p>
+步骤 1 ：计算趋势周期项 $T_t$ (移动平均MA)<br />
+步骤 2 ：计算去趋势序列 $Z =y-T_t$<br />
+步骤 3 ：估计每个季度的季节项 $S_t$<br />
+步骤 4 ：计算残差项。$R_t= y-T_t-S_t$</p>
+<p><strong>乘法模式分解</strong></p>
 <p>经典乘法分解与加法分解十分相似，只不过是用除法代替了减法。</p>
-<p>步骤 1 ：计算趋势周期项T_t (移动平均MA)<br />
-步骤 2 ：计算去趋势序列 Z =y/T_t<br />
-步骤 3 ：估计每个季度的季节项 S_t<br />
-步骤 4 ：计算残差项。R_t= y/(T_t*S_t)</p>
-<p><strong>问题</strong></p>
+<p>步骤 1 ：计算趋势周期项$T_t$ (移动平均MA)<br />
+步骤 2 ：计算去趋势序列 $Z =y/T_t$<br />
+步骤 3 ：估计每个季度的季节项 $S_t$<br />
+步骤 4 ：计算残差项。$R_t= y/(T_t*S_t)$</p>
+<p><strong>缺点</strong></p>
 <ol>
 <li>造成序列数据缺失。前几个项 和后几个项数据缺失</li>
 <li>T_t 趋势数据收到极值影响。T_t倾向于反应对快速上升或快速下降</li>
 <li>假设S_t 是重复的，对某些场景不适合。无法捕捉季节项S_t随时间变化而变化</li>
 <li>对存在异常值数据处理robust。</li>
 </ol>
+<h4 id="5222">5.2.2.2. 使用</h4>
 <div class="hlcode"><pre><span class="kn">from</span> <span class="nn">statsmodels.tsa.seasonal</span> <span class="kn">import</span> <span class="n">seasonal_decompose</span>
 
 <span class="n">decomposition</span><span class="o">=</span><span class="n">seasonal_decompose</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s">&#39;additive&#39;</span><span class="p">,</span> <span class="n">filt</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">two_sided</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">extrapolate_trend</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-<span class="c"># model:str {“additive”, “multiplicative”}  加法模型 乘法模型表示的</span>
-<span class="c"># np_series:时间序列，series类型; </span>
-<span class="c"># freq:周期，这里为1440分钟，即一天; </span>
-<span class="c"># two_sided:观察下图2、4行图，左边空了一段，如果设为True，则会出现左右两边都空出来的情况，False保证序列在最后的时间也有数据，方便预测。</span>
+<span class="n">trend</span> <span class="o">=</span> <span class="n">decomposition</span><span class="o">.</span><span class="n">trend</span>
+<span class="n">seasonal</span> <span class="o">=</span> <span class="n">decomposition</span><span class="o">.</span><span class="n">seasonal</span>
+<span class="n">residual</span> <span class="o">=</span> <span class="n">decomposition</span><span class="o">.</span><span class="n">resid</span>
+<span class="c"># residual: np.array()</span>
 
-
-<span class="bp">self</span><span class="o">.</span><span class="n">trend</span> <span class="o">=</span> <span class="n">decomposition</span><span class="o">.</span><span class="n">trend</span>
-<span class="bp">self</span><span class="o">.</span><span class="n">seasonal</span> <span class="o">=</span> <span class="n">decomposition</span><span class="o">.</span><span class="n">seasonal</span>
-<span class="bp">self</span><span class="o">.</span><span class="n">residual</span> <span class="o">=</span> <span class="n">decomposition</span><span class="o">.</span><span class="n">resid</span>
 <span class="n">decomposition</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
 
-<h3 id="523-stl">5.2.3. STL 分解法</h3>
+<p><img alt="" src="../../../../attach/images/2020-08-27-11-10-46.png" /></p>
+<div class="hlcode"><pre><span class="c"># model:str {“additive”, “multiplicative”}  加法模型 乘法模型表示的</span>
+<span class="c"># np_series:时间序列，series类型; </span>
+
+<span class="c"># Filt : 过滤参数，用来过滤掉季节性成分(seasonal)和趋势成分(trend)。可以设置你自己的过滤矩阵，也可以直接设置该参数等于None(default)。当Filt设置自定义为None时，里面代码会根据你的period给你一个Filt矩阵，因为这个在计算时是必须要有的。</span>
+
+<span class="c">#当不设置filt参数时，即filt=None时，period为偶数时：</span>
+
+
+<span class="c">#当不设置filt参数时，period为奇数时：</span>
+
+<span class="c"># 过滤矩阵确定下来后，过滤时所使用的具体移动平均方法，由two_sided的参数决定。</span>
+<span class="c"># freq:周期，这里为1440分钟，即一天; </span>
+<span class="c"># two_sided:观察下图2、4行图，左边空了一段，如果设为True，则会出现左右两边都空出来的情况，False保证序列在最后的时间也有数据，方便预测。</span>
+</pre></div>
+
+
+<h3 id="523-x11">5.2.3. X11分解法</h3>
 <h4 id="5231">5.2.3.1. 原理</h4>
+<p>X11分解法（X11 decomposition）是季度性数据和月度数据的分解算法。它发明于美国人口普查局和加拿大统计局。</p>
+<p>这方法是基于经典分解法的，但是包括很多其他的步骤和特点来客服经典分解法的一些不足。特别的，所有的数据点的趋势成分都可以得到（【经典分解法最开始和最后的部分数据无法计算得到移动平均值】），周期成分允许随着时间变化。X11有一些 复杂的方法来处理交易日、假期、一些已知的影响因素的影响。它同时处理了加性模型和乘性模型。这个过程是全自动的，而且对于时间序列中的异常值和数据平平变动很鲁棒。</p>
+<p>X11方法的细节可以参考 Dagum, E. B., &amp; Bianconcini, S. (2016). Seasonal adjustment methods and real time trend-cycle estimation. Springer。</p>
+<h3 id="524-seats">5.2.4. SEATS分解</h3>
+<h4 id="5241">5.2.4.1. 原理</h4>
+<p><code>SEATS</code>是指<code>Seasonal Extraction in ARIMA Time Series</code>。这个方法是由西班牙银行开发的，现在被广泛应用在各国的政府部门中。</p>
+<p><strong>缺点</strong></p>
+<p>这个算法只是针对季度性和月度数据。因此天级数据、小时级数据或者周数据，需要其他的方法。</p>
+<p>详细的算法过程请参考 Dagum, E. B., &amp; Bianconcini, S. (2016). Seasonal adjustment methods and real time trend-cycle estimation. Springer。</p>
+<h3 id="525-stl">5.2.5. STL 分解法</h3>
+<h4 id="5251">5.2.5.1. 原理</h4>
+<p>STL (Seasonal-Trend decomposition procedure based on Loess) 为时序分解中一种常见的算法，是时间序列分解的一种versatile和鲁棒的方法，基于LOESS将某时刻的数据分解为趋势分量（trend component）、周期分量（seasonal component）和余项（remainder component），其中Loess是一种鲁棒的回归算法。</p>
 <p>STL（Seasonal + Trend + Loess）</p>
-<p>STL (Seasonal-Trend decomposition procedure based on Loess) 为时序分解中一种常见的算法，基于LOESS将某时刻的数据分解为趋势分量（trend component）、周期分量（seasonal component）和余项（remainder component）:</p>
-<p>STL分为内循环（inner loop）与外循环（outer loop），其中内循环主要做了趋势拟合与周期分量的计算。假定、为内循环中第k-1次pass结束时的趋势分量、周期分量，初始时；并有以下参数：</p>
-<h4 id="5232">5.2.3.2. 使用</h4>
+<p>STL分为内循环（inner loop）与外循环（outer loop），其中内循环主要做了趋势拟合与周期分量的计算。假定、为内循环中第k-1次pass结束时的趋势分量、周期分量，初始时。</p>
+<h5 id="52511-lowess">5.2.5.1.1. LOWESS 回归</h5>
+<p>用kNN做平均回归：</p>
+<p>$$ f(x)^=Ave(yi|xi∈Nk(x))$$</p>
+<p>其中，Nk(x)为距离点x最近k个点组成的邻域集合（neighborhood set）。这种邻域平均回归存在很多缺点：</p>
+<p>没有考虑到不同距离的邻近点应有不同的权重；<br />
+拟合的曲线不连续（discontinuous），如下图。</p>
+<p>因此引入kernel加权平滑：</p>
+<p>$$ f(x0)^=∑Ni=1Kλ(x0,xi)yi∑Ni=1Kλ(x0,xi)$$</p>
+<p>比如，Epanechnikov 二次kernel：</p>
+<p>$$ Kλ(x0,xi)=D(|x0−xi|λ)$$</p>
+<p>$$ D(t)={34(1−t2)0for|t|&lt;1 otherwise } $$</p>
+<p>其中，λ为kernel的参数，称之为window width。对于kNN，只考虑最近的k个点影响；基于此，</p>
+<p>$$ λ=|x0−x[k]|$$</p>
+<p>其中，x[k]为距离x0第k近的点。如上图，经kernel加权平滑后，回归拟合的曲线为连续的了。但是，这种kernel回归同样存在着边界（boundary）问题，如下图：</p>
+<p>对于x序列的开始与结束区段的点，其左右邻域是不对称的，导致了平滑后的值偏大或偏小。因此，需要对权值做再修正，假定对$x_0$的估计值：</p>
+<p>f(x0)^=∑j=0dβjxj0<br />
+定义目标函数：</p>
+<p>minβ∑i=1NKλ(x0,xi)[yi−∑j=0dβjxji]2<br />
+令</p>
+<p>minΔ(Y−BΔ)TWx0(Y−BΔ)<br />
+求偏导，可得到</p>
+<p>Δ=(BTWx0B)−1(BTWx0Y)<br />
+那么，估计值</p>
+<p>f(x0)^=e(x0)(BTWx0B)−1(BTWx0Y)=∑iwi(x0)yi<br />
+其中，e(x0)=(1,x0,⋯,xd0)。上述回归方法称之为<code>LOWESS</code> (Local Weighted regression)。</p>
+<p>详细内容请参考 Cleveland, R. B., Cleveland, W. S., McRae, J. E., &amp; Terpenning, I. J. (1990). STL: A seasonal-trend decomposition procedure based on loess. Journal of Official Statistics, 6(1), 3–33.</p>
+<h4 id="5252">5.2.5.2. 特点</h4>
+<p>相比于经典分解法、SEATS和X-11分解法STL分解法有几点优势：</p>
+<ol>
+<li>
+<p>与SEATS和X-11不同的是，STL可以处理任何类型的季节性，不仅仅是月度数据和季度数据。</p>
+</li>
+<li>
+<p>季节项可以随时间变化而变换，并且变化的速率可以由用户掌控。</p>
+</li>
+<li>
+<p>趋势-周期项的平滑程度也可以由用户掌控。</p>
+</li>
+<li>
+<p>可以不受离群点干扰（例如，用户可以指定一个稳健的分解）</p>
+</li>
+</ol>
+<p>另一方面，STL也有一些不足之处。具体来讲，它不能自动地处理交易日或是其他有变动的日子，并且它提供了处理加法分解的方式。</p>
+<p>为了得到乘法分解我们可以首先对数据取对数，然后对各成分进行反向变换。对数据进行  0&lt;λ&lt;1的Box-Cox变换可以得到加法分解与乘法分解。 其中  λ=0的值对应于乘法分解， λ=1等价于加法分解。</p>
+<p>开始学习如何使用STL的最好方法是查看一些示例并对设置进行尝试。如图6.2展示了STL应用于电气设备订单数据的一个例子。 如图6.13显示了一种替代的STL分解，其中趋势-周期项更灵活，季节项不随时间变化，并且更加稳健。在这里，更明显的是，在该系列的末尾出现了向下转向，并且2009中的订单量异常低（对应于余数成分中的一些大的负值）。</p>
+<h4 id="5253">5.2.5.3. 使用</h4>
 <p>使用STL时要选择的两个主要参数是<br />
 1. 趋势-周期窗口(t.window) 和<br />
 2. 季节性窗口(s.window)。</p>
@@ -986,26 +1063,33 @@ F_St接近0时表示该序列几乎没有季节性</p>
 </pre></div>
 
 
-<p>相比于经典、SEATS和X-11分解法STL分解法有几点优势：</p>
-<ol>
-<li>
-<p>与SEATS和X-11不同的是，STL可以处理任何类型的季节性，不仅仅是月度数据和季度数据。</p>
-</li>
-<li>
-<p>季节项可以随时间变化而变换，并且变化的速率可以由用户掌控。</p>
-</li>
-</ol>
-<p>趋势-周期项的平滑程度也可以由用户掌控。</p>
-<p>可以不受离群点干扰（例如，用户可以指定一个稳健的分解）</p>
-<p>另一方面，STL也有一些不足之处。具体来讲，它不能自动地处理交易日或是其他有变动的日子，并且它提供了处理加法分解的方式。</p>
-<p>为了得到乘法分解我们可以首先对数据取对数，然后对各成分进行反向变换。对数据进行  0&lt;λ&lt;1的Box-Cox变换可以得到加法分解与乘法分解。 其中  λ=0的值对应于乘法分解， λ=1等价于加法分解。</p>
-<p>开始学习如何使用STL的最好方法是查看一些示例并对设置进行尝试。如图6.2展示了STL应用于电气设备订单数据的一个例子。 如图6.13显示了一种替代的STL分解，其中趋势-周期项更灵活，季节项不随时间变化，并且更加稳健。在这里，更明显的是，在该系列的末尾出现了向下转向，并且2009中的订单量异常低（对应于余数成分中的一些大的负值）。</p>
+<p><img alt="" src="../../../../attach/images/2020-08-27-16-36-57.png" /></p>
+<h2 id="53-emd">5.3. 经验模态分解(EMD)</h2>
+<p>经验模态分解(EMD)的基本思想：将一个频率不规则的波化为多个单一频率的波+残波的形式。<br />
+$$原波形 =X_n= ∑IMFs + 余波$$</p>
+<div class="hlcode"><pre><span class="n">python</span><span class="err">安装</span>
+<span class="o">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">EMD</span><span class="o">-</span><span class="n">signal</span>
+
+<span class="n">from</span> <span class="n">PyEMD</span> <span class="n">import</span> <span class="n">EMD</span>
+<span class="n">import</span> <span class="n">numpy</span> <span class="n">as</span> <span class="n">np</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">random</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">emd</span> <span class="o">=</span> <span class="n">EMD</span><span class="p">()</span>
+<span class="n">IMFs</span> <span class="o">=</span> <span class="n">emd</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="hlcode"><pre><span class="n">from</span> <span class="n">pyhht</span><span class="p">.</span><span class="n">emd</span> <span class="n">import</span> <span class="n">EMD</span>
+<span class="n">decomposer</span> <span class="o">=</span> <span class="n">EMD</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>               
+</pre></div>
+
+
 <h1 id="6">6. 时间序列预测</h1>
 <h2 id="61">6.1. 基本步骤</h2>
 <h2 id="62">6.2. 任务分类</h2>
 <h3 id="621">6.2.1. 一元时序时间预测</h3>
 <h4 id="6211">6.2.1.1. 平稳性时序预测</h4>
-<p>常见的分析方法都是建立在统计学基础上，例如ARMA系列（包括AR，MA，ARMA，ARIMA），这类方法需要满足一些假设（例如平稳性假设等），</p>
+<p>常见的分析方法都是建立在统计学基础上，例如ARMA系列（包括AR，MA，ARMA，ARIMA），这类方法需要满足一些假设（例如平稳性假设等）</p>
 <h4 id="6212">6.2.1.2. 差分时序数据结构</h4>
 <p>自变量就是历史时间点的数值，因变量就是待预测时间点的数值。这样抛开所有的假设就可以使用很多方法，例如神经网络（BP，RBF之类的）或是一些深度学习的方法（LSTM）。</p>
 <p>的问题，这种处理方式一般都在一些特定的领域，比如水动力学模型之类的。<br />
@@ -1023,8 +1107,14 @@ F_St接近0时表示该序列几乎没有季节性</p>
 
 
 <p>数据如果有异常，都会体现在残差数据集中。我们怎么从残差数据中早出有问题的数据时间点呢？我理解的会有下面几种方式：</p>
+<ol>
+<li>
 <p>确认残差数据满足正太分布，或者近似正太分布，可以计算出残差数据集的标准差，常规方式是数据点与均值的差值绝对值在3倍标准差外，则认为是异常点，也就是3sigma方案。也有例外，下图的残差数据集可能不能被上述方法将异常检测出来，这段数据连续几分钟都是在3倍标准差内，但是出现这种的可能性（1-99.7%）^n，这种情况出现的概率相当低，如果出现也应该被识别为异常点。</p>
+</li>
+<li>
 <p>使用历史数据分段平均的方式，对我们的原始数据进行未来数据点补全，对得到的新数据集使用STL方法去除残差数据，得到业务数据的基线，通过基线与真实值的比对判断是否是异常点。</p>
+</li>
+</ol>
 <h2 id="64">6.4. 模型评价与选择</h2>
 <h3 id="641-aicbic">6.4.1. 模型选择AIC与BIC：选择更简单的模型</h3>
 <p>1.AIC：赤池信息准则（Akaike Information Criterion，$AIC$）<br />
@@ -1033,7 +1123,7 @@ $$AIC=2k-2ln⁡(L)$$</p>
 <p>2.BIC：贝叶斯信息准则（Bayesian Information Criterion，$BIC$）<br />
 $$BIC=kln(n)-2ln⁡(L)$$<br />
 其中：$k$为模型参数个数，$n$为样本数量，$L$为似然函数</p>
-<h4 id="armapq-p-q">示例：ARMA(p,q) 模型中p q参数的确定</h4>
+<h4 id="6411-armapq-p-q">6.4.1.1. 示例：ARMA(p,q) 模型中p q参数的确定</h4>
 <p>已知 p, q的上限 P_0,Q_0。存在一对(k,j)<br />
 $$0&lt;=k&lt;=P_0,0&lt;j&lt;P_0$$</p>
 <p>$$L=\sigma^2(k,j)$$</p>
@@ -1061,8 +1151,14 @@ AIC(k,j)的最小值点(p,q)称为的AIC定阶. 如果最小值不惟一, 应先
 </ol>
 <h3 id="643">6.4.3. 过度拟合和参数冗余</h3>
 <p>对于统计建模或者是机器学习，我们一般都需要模型过拟合的问题，同样的，于时间序列而言，过度拟合和参数冗余也是不容忽视的问题：</p>
-<p>1.|在过度拟合时，不要同时增加AR和MA部分的阶数</p>
-<p>2.|例如：如果拟合了MA(1)模型后，残差在2阶滞后处仍存在明显的相关性，那么应该尝试MA(2)，而不是ARMA(1,1)模型。</p>
+<ol>
+<li>
+<p>在过度拟合时，不要同时增加AR和MA部分的阶数</p>
+</li>
+<li>
+<p>例如：如果拟合了MA(1)模型后，残差在2阶滞后处仍存在明显的相关性，那么应该尝试MA(2)，而不是ARMA(1,1)模型。</p>
+</li>
+</ol>
 <h1 id="7">7. 时间序列预测方法（模型）</h1>
 <h2 id="71">7.1. 平均注意力预测</h2>
 <h3 id="711-ma">7.1.1. 移动平均MA</h3>
@@ -1083,6 +1179,28 @@ $$x_{n+1}=mean(X)$$</p>
 <p>$$X_{t+s}={x_{1+s},x_{2+s}..x_{n+s}}=X_{t}={ x_1,x_2,x_3...x_n}$$</p>
 <h3 id="722">7.2.2. 指数平滑</h3>
 <p>换句话说，观察值越近，相应的权重越高。该框架能够快速生成可靠的预测结果，并且适用于广泛的时间序列，这是一个巨大的优势并且对于工业应用来说非常重要。</p>
+<h4 id="_1">权重移动平均</h4>
+<p>Weighted Moving Average(WMA) in Python<br />
+The simple moving average is very naïve as it gives equal weightage to all the values from the past. However it may make much more sense to give more weightage to recent values assuming recent data is closely related to actual values.</p>
+<p>To calculate WSMA all we do is multiply each observation in past by certain weights. For example we can give 6 weightage to recent value and 1 to the last value in the 6 week rolling window.</p>
+<div class="hlcode"><pre><span class="kn">import</span> <span class="nn">random</span>
+<span class="n">rand</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span>  <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">110</span><span class="p">)]</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">data</span><span class="p">[</span><span class="s">&quot;Sales&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">])</span>
+<span class="n">sum_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s">&#39;WMA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">&#39;Sales&#39;</span><span class="p">]</span>
+    <span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="n">sum_weights</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">&#39;WMA&#39;</span><span class="p">])</span>
+</pre></div>
+
+
 <h3 id="723-ar">7.2.3. 自回归模型 AR</h3>
 <p>描述<strong>当前值</strong>与<strong>历史值</strong>之间的关系，用变量自身的历史时间数据对自身进行预测；</p>
 <p>自回归模型必须满足<strong>平稳性</strong>的要求；</p>
@@ -1322,11 +1440,6 @@ $sigma_h$: 为h步预测的标准差</p>
   $\sigma_h =\sigma_{R_h}$</p>
 <p>（事实上，如果没有需要被估计的参数，这两个标准差是相同的，比如 naïve 方法。对于那些有需要估计参数的预测方法，预测分布的标准差略大于残差标准差，尽管这种差异经常被忽略。）<br />
 * 对于多步预测区间</p>
-<h1 id="8">8. 时间序列数据的可视化</h1>
-<h2 id="81">8.1. 时序图</h2>
-<h2 id="82">8.2. 滞后图</h2>
-<p><img alt="" src="../../../../attach/images/2019-10-18-14-57-53.png" /></p>
-<p><sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup></p>
 <h1 id="9">9. 参考资料</h1>
 <ol>
 <li>statsmodels  V 0.10.0 太难用了 用V0.11.0</li>

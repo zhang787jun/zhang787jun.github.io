@@ -12,6 +12,7 @@ Tensorflow把数据输送到计算图的过程中，在内存里的数据结构�
 
 ### 1.1.1. Constant 转换为常量存在图中
 #### 1.1.1.1. 描述
+
 把Dataset中的数据以const的形式存放在tensorflow的计算图中，主要使用的是tf.constant 函数。	 
 
 #### 1.1.1.2. 优劣及适用情景
@@ -39,7 +40,7 @@ Tensorflow把数据输送到计算图的过程中，在内存里的数据结构�
 
 #### 1.1.2.3. 表现形式
 
-以字典{tensor:value}的形式将数据传入到图中，构成feed_dict 系统。
+以字典`{tensor:value}`的形式将数据传入到图中，构成feed_dict 系统。
 ```python 
 import tensorflow as tf
 x = tf.placeholder(dtype=tf.float32, shape=None)

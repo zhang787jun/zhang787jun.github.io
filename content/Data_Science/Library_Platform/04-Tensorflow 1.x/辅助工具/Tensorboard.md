@@ -66,7 +66,7 @@ distribution_summary=tf.summary.distribution (记录 数据的分布图)
 
 ### 2.2. 语法糖--快捷操作所有可视化数据
 
-上面的每一个op 都是 构建图的一部分，没有会话的执行sess.run 都不会计算
+上面的每一个op 都是构建图的一部分，没有会话的执行sess.run 都不会计算
 
 为了会话计算方便，可以把上面所有在默认图中的 summaries op 合并为一个
 
@@ -80,15 +80,14 @@ type(summary_op)
 ```
 
 ### 2.3. 将输出的数据都保存到本地磁盘中
-这是一个命令，不是op， 不需要 sess run 
-
+这是一个命令，不是op， 不需要通过`sess run`运行。
 ```python
 filewriter=tf.summary.FileWriter(file_save_dir_path, graph=None, max_queue=10, flush_secs=120, graph_def=None, filename_suffix=None, session=None)
 
 >>>type(filewriter)
 tensorflow.python.summary.writer.writer.FileWriter
 ```
-执行filewriter命令,会在 file_save_dir_path 目录下 下保存一个 events.out.tfevents文件，文件名称为<code> events.out.tfevents.{time}.{machine-name}</code>
+执行filewriter命令，会在 file_save_dir_path 目录下 保存一个 events.out.tfevents文件，文件名称为： `events.out.tfevents.{time}.{machine-name}`
 
 
 
@@ -96,6 +95,7 @@ tensorflow.python.summary.writer.writer.FileWriter
 # 3. 使用Tensorboard
 
 ## 3.1. 安装
+通过conda 安装 tensorflow 自动安装 Tensorboard
 
 
 ## 3.2. 运行
@@ -109,6 +109,10 @@ tensorboard --logdir=g:\code\Projects\AI\Competation\Kaggle\003_MNIST_3\log\trai
 ```
 ### 3.2.2. jupyter 运行
 
+
+```python 
+%%tensorborad
+```
 ## 3.3. 注意事项
 ### 3.3.1. <dir_path> 字符串的书写
 

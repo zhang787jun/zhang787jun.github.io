@@ -129,7 +129,7 @@
 1. 自己维护DataProvider类相对麻烦，而且自己写的类原生是不支持多进程的（主要是Python API的问题）<br />
 2. 单进程读取数据较慢，很多时间花费在数据读取上，所以训练时间相对较长。</p>
 <h4 id="1123">1.1.2.3. 表现形式</h4>
-<p>以字典{tensor:value}的形式将数据传入到图中，构成feed_dict 系统。</p>
+<p>以字典<code>{tensor:value}</code>的形式将数据传入到图中，构成feed_dict 系统。</p>
 <div class="hlcode"><pre><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 <span class="n">y</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>

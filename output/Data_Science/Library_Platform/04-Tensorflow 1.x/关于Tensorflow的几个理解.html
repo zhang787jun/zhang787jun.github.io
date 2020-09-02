@@ -326,7 +326,7 @@
 <li><a href="#167-keras">16.7 在keras 中使用</a></li>
 </ul>
 </li>
-<li><a href="#17tfapp">17.命令行传递参数(tf.app)</a></li>
+<li><a href="#17tfappflags">17.命令行传递参数(tf.app.flags)</a></li>
 <li><a href="#18-tfnnbatch_normalization">18.归一化  tf.nn.batch_normalization</a></li>
 <li><a href="#19-tfgfile">19. tf.gfile文件操作模块</a><ul>
 <li><a href="#_8">复制</a></li>
@@ -3508,18 +3508,22 @@ tf.assign_sub</p>
 </pre></div>
 
 
-<h1 id="17tfapp">17.命令行传递参数(tf.app)</h1>
-<p>除了bool类，我们还可以定义其他的类型数据，如：</p>
-<p>tf.app.flags.DEFINE_integer<br />
-tf.app.flags.DEFINE_float<br />
-tf.app.flags.DEFINE_string</p>
+<h1 id="17tfappflags">17.命令行传递参数(tf.app.flags)</h1>
+<p><code>tf.app.flags</code> 是tensorflow自定义的用于命令行传递参数的函数，是对 <code>argparse</code>的封装，它还实现了一部分<code>python-gflags</code>功能。</p>
+<p>我们建议您使用argparse或任何您喜欢的库来实现自己的标志解析。</p>
+<p><a href="https://stackoverflow.com/questions/33932901/whats-the-purpose-of-tf-app-flags-in-tensorflow">stackoverflow: What's the purpose of tf.app.flags in TensorFlow?</a></p>
+<p><strong>使用方法</strong><br />
+我们还可以定义多种类型数据，如：</p>
 <div class="hlcode"><pre><span class="c"># /bin/bash/python</span>
 <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
 
-<span class="c">#第一个是参数名称，第二个参数是默认值，第三个是参数描述</span>
+
+<span class="c">#1. 声明</span>
+<span class="c">## 第一个是参数名称，第二个参数是默认值，第三个是参数描述</span>
 <span class="n">tf</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_string</span><span class="p">(</span><span class="s">&#39;str_name&#39;</span><span class="p">,</span> <span class="s">&#39;default_value&#39;</span><span class="p">,</span><span class="s">&quot;description1&quot;</span><span class="p">)</span>
 <span class="n">tf</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_integer</span><span class="p">(</span><span class="s">&#39;int_name&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span><span class="s">&quot;description2&quot;</span><span class="p">)</span>
 <span class="n">tf</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_boolean</span><span class="p">(</span><span class="s">&#39;bool_name&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&quot;description3&quot;</span><span class="p">)</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">DEFINE_float</span><span class="p">(</span><span class="s">&quot;float_name&quot;</span><span class="p">,</span><span class="mf">1.111</span><span class="p">,</span><span class="s">&quot;description4&quot;</span><span class="p">)</span>
 
 <span class="n">FLAGS</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">FLAGS</span>
 
@@ -3528,6 +3532,7 @@ tf.app.flags.DEFINE_string</p>
     <span class="k">print</span><span class="p">(</span><span class="n">FLAGS</span><span class="o">.</span><span class="n">str_name</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="n">FLAGS</span><span class="o">.</span><span class="n">int_name</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="n">FLAGS</span><span class="o">.</span><span class="n">bool_name</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">FLAGS</span><span class="o">.</span><span class="n">float_name</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">tf</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>  <span class="c">#执行main函数</span>
 </pre></div>

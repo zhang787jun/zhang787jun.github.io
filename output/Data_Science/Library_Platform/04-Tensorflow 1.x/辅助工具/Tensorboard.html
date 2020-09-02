@@ -122,7 +122,7 @@
 
 
 <h3 id="22-">2.2. 语法糖--快捷操作所有可视化数据</h3>
-<p>上面的每一个op 都是 构建图的一部分，没有会话的执行sess.run 都不会计算</p>
+<p>上面的每一个op 都是构建图的一部分，没有会话的执行sess.run 都不会计算</p>
 <p>为了会话计算方便，可以把上面所有在默认图中的 summaries op 合并为一个</p>
 <div class="hlcode"><pre><span class="n">summary_op</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">merge_all</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 
@@ -132,7 +132,7 @@
 
 
 <h3 id="23">2.3. 将输出的数据都保存到本地磁盘中</h3>
-<p>这是一个命令，不是op， 不需要 sess run </p>
+<p>这是一个命令，不是op， 不需要通过<code>sess run</code>运行。</p>
 <div class="hlcode"><pre><span class="n">filewriter</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">FileWriter</span><span class="p">(</span><span class="n">file_save_dir_path</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">max_queue</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">flush_secs</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">graph_def</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">filename_suffix</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span><span class="nb">type</span><span class="p">(</span><span class="n">filewriter</span><span class="p">)</span>
@@ -140,9 +140,10 @@
 </pre></div>
 
 
-<p>执行filewriter命令,会在 file_save_dir_path 目录下 下保存一个 events.out.tfevents文件，文件名称为<code> events.out.tfevents.{time}.{machine-name}</code></p>
+<p>执行filewriter命令，会在 file_save_dir_path 目录下 保存一个 events.out.tfevents文件，文件名称为： <code>events.out.tfevents.{time}.{machine-name}</code></p>
 <h1 id="3-tensorboard">3. 使用Tensorboard</h1>
 <h2 id="31">3.1. 安装</h2>
+<p>通过conda 安装 tensorflow 自动安装 Tensorboard</p>
 <h2 id="32">3.2. 运行</h2>
 <h3 id="321">3.2.1. 命令行运行</h3>
 <div class="hlcode"><pre><span class="nx">tensorboard</span> <span class="o">--</span><span class="n">logdir</span><span class="o">=&lt;</span><span class="nx">dir_path</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">host</span><span class="o">=&lt;</span><span class="nx">ip</span><span class="o">&gt;</span>
@@ -152,6 +153,10 @@
 
 
 <h3 id="322-jupyter">3.2.2. jupyter 运行</h3>
+<div class="hlcode"><pre><span class="o">%%</span><span class="n">tensorborad</span>
+</pre></div>
+
+
 <h2 id="33">3.3. 注意事项</h2>
 <h3 id="331">3.3.1. <dir_path> 字符串的书写</h3>
 <p>注意 <dir_path> 不要以<code>\ </code> 结尾，<dir_path>可以不用加双引号<code>" "</code> /单引号 <code>''</code> </p>

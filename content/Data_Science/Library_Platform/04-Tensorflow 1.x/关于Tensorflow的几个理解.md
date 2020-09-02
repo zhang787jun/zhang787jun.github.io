@@ -3255,23 +3255,30 @@ for i in range(4):
         f.write(ctf)
 ```
 
-# 17.命令行传递参数(tf.app)
+# 17.命令行传递参数(tf.app.flags)
+
+`tf.app.flags` 是tensorflow自定义的用于命令行传递参数的函数，是对 `argparse`的封装，它还实现了一部分`python-gflags`功能。
+
+我们建议您使用argparse或任何您喜欢的库来实现自己的标志解析。
+
+[stackoverflow: What's the purpose of tf.app.flags in TensorFlow?](https://stackoverflow.com/questions/33932901/whats-the-purpose-of-tf-app-flags-in-tensorflow)
 
 
-除了bool类，我们还可以定义其他的类型数据，如：
+**使用方法**
+我们还可以定义多种类型数据，如：
 
-tf.app.flags.DEFINE_integer
-tf.app.flags.DEFINE_float
-tf.app.flags.DEFINE_string
 
 ```python
 # /bin/bash/python
 import tensorflow as tf
- 
-#第一个是参数名称，第二个参数是默认值，第三个是参数描述
+
+
+#1. 声明
+## 第一个是参数名称，第二个参数是默认值，第三个是参数描述
 tf.app.flags.DEFINE_string('str_name', 'default_value',"description1")
 tf.app.flags.DEFINE_integer('int_name', 10,"description2")
 tf.app.flags.DEFINE_boolean('bool_name', False, "description3")
+tf.app.flags.DEFINE_float("float_name",1.111,"description4")
  
 FLAGS = tf.app.flags.FLAGS
  
@@ -3280,6 +3287,7 @@ def main(_):  
     print(FLAGS.str_name)
     print(FLAGS.int_name)
     print(FLAGS.bool_name)
+    print(FLAGS.float_name)
 if __name__ == '__main__':
     tf.app.run()  #执行main函数
 

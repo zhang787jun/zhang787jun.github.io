@@ -64,7 +64,7 @@
 </li>
 <li><a href="#14">1.4. 实践中怎样组织保存文件</a><ul>
 <li><a href="#141-checkpoint_model">1.4.1. checkpoint_model</a></li>
-<li><a href="#142-savedmodel">1.4.2. Savedmodel</a></li>
+<li><a href="#142-saved-model">1.4.2. Saved Model</a></li>
 <li><a href="#143-frozengraph">1.4.3. FrozenGraph</a></li>
 <li><a href="#144-tflite">1.4.4. Tflite</a></li>
 </ul>
@@ -120,6 +120,7 @@
 <li><a href="#3">3. 模型转换</a><ul>
 <li><a href="#31-ckpt-pd">3.1. ckpt -&gt; pd</a></li>
 <li><a href="#32-h5-pd">3.2. h5 -&gt;pd</a></li>
+<li><a href="#frozengraph-savedmodel">FrozenGraph-&gt;SavedModel</a></li>
 </ul>
 </li>
 <li><a href="#4">4. 预训练模型库</a><ul>
@@ -145,7 +146,7 @@
 Protobuf文件通常以<code>.proto</code>结尾。</p>
 <p>https://tensorflow.juejin.im/extend/tool_developers/index.html</p>
 <p>Protobuf 实际上支持两种不同的文件保存格式：（1）TextFormat 和（2）二进制格式。<br />
-1. TextFormat 是一种人眼可读的文本形式，这在调试和编辑时是很方便的，但它在存储数值数据时会变得很大，比如我们常见的权重数据。文件名为 <code>xxx.pbtxt</code>。<br />
+1. TextFormat 是一种人眼可读的文本形式，这在调试和编辑时是很方便的，但它在存储数值数据时会变得很大。比如我们常见的权重数据，文件名为 <code>xxx.pbtxt</code>。<br />
 2. 二进制格式的文件会小得多，缺点就是它不易读。文件名为 <code>xxx.pb</code>。</p>
 <p>Protocol Buffer <br />
 特性：<br />
@@ -179,8 +180,10 @@ Protobuf文件通常以<code>.proto</code>结尾。</p>
 </tbody>
 </table>
 <h4 id="121">1.2.1. 图信息</h4>
-<p>图被定义为 “一些 Operation（Node节点） 和 Tensor（Edge边缘） 的集合”。</p>
-<p><strong>图信息的主要内容包括： 1.Node节点信息;2.边信息（Tensor）</strong></p>
+<p>图被定义为 “一些 Operation（Node节点） 和 Tensor（Edge边缘）的集合”。</p>
+<p>图信息的主要内容包括： <br />
+1.Node节点信息（op）<br />
+2.边信息（Tensor）。</p>
 <h5 id="1211-node-operation">1.2.1.1. Node节点信息--operation</h5>
 <p>图中的节点又称为算子，它代表一个操作（operation，OP），一般用来表示施加的数学运算，也可以表示数据输入（feed in）的起点以及输出（push out）的终点，或者是读取/写入持久 变量（persistent variable）的终点。</p>
 <p>Operation包含OpDef和NodeDef两个主要成员变量。<br />
@@ -215,39 +218,41 @@ Protobuf文件通常以<code>.proto</code>结尾。</p>
 <table>
 <thead>
 <tr>
-<th align="right">组成</th>
-<th align="right">内容</th>
+<th align="left">组成</th>
+<th align="left">内容</th>
 <th align="right">例如</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="right">MetaInfoDef</td>
-<td align="right">存一些元信息</td>
+<td align="left">MetaInfoDef</td>
+<td align="left">存一些元信息</td>
 <td align="right">版本和其他用户信息</td>
 </tr>
 <tr>
-<td align="right">GraphDef</td>
-<td align="right">Graph的序列化信息，MetaGraph的核心内容之一 ,不包含模型权重变量信息</td>
+<td align="left">GraphDef</td>
+<td align="left">Graph的序列化信息，MetaGraph的核心内容之一 ,不包含模型权重变量信息</td>
 <td align="right">Node(Placeholder + op)</td>
 </tr>
 <tr>
-<td align="right">SaverDef</td>
-<td align="right">图的Saver信息</td>
+<td align="left">SaverDef</td>
+<td align="left">图的Saver信息</td>
 <td align="right">最多同时保存的check-point数量；需保存的Tensor名字等，但并不保存Tensor中的实际内容</td>
 </tr>
 <tr>
-<td align="right">CollectionDef</td>
-<td align="right">任何需要特殊注意的 Python 对象，需要特殊的标注以方便import_meta_graph 后取回。</td>
-<td align="right">“train_op”,"prediction"等等</td>
+<td align="left">CollectionDef</td>
+<td align="left">任何需要特殊注意的 Python 对象，需要特殊的标注以方便import_meta_graph 后取回。</td>
+<td align="right">"train_op","prediction"等等</td>
 </tr>
 </tbody>
 </table>
 <div class="hlcode"><pre><span class="n">graph</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">get_default_graph</span><span class="p">()</span>
 <span class="n">graph_def</span><span class="o">=</span><span class="n">graph</span><span class="o">.</span><span class="n">as_graph_def</span><span class="p">()</span>
+<span class="c">##</span>
 <span class="nb">type</span><span class="p">(</span><span class="n">graph_def</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">tensorflow</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">framework</span><span class="o">.</span><span class="n">graph_pb2</span><span class="o">.</span><span class="n">GraphDef</span>
 
+<span class="c">##</span>
 <span class="n">graph_def</span>
 <span class="o">&gt;&gt;&gt;</span>
   <span class="n">node</span> <span class="p">{</span>
@@ -328,8 +333,15 @@ Protobuf文件通常以<code>.proto</code>结尾。</p>
 </li>
 </ol>
 <h3 id="132-variables">1.3.2. Variables 变量数据</h3>
-<p>主要为tf.Variables类的节点信息即变量的初始值、具体数值、shape等。</p>
-<p>参数信息持久化时保存为(1)索引和(2)数据 两部分。其中：<br />
+<p><strong>范围</strong><br />
+主要为<code>tf.Variables</code>类的节点信息。<br />
+<strong>内容</strong><br />
+主要为变量：<br />
+1. 初始值<br />
+2. 具体数值<br />
+3. shape等。</p>
+<p><strong>持久化格式</strong><br />
+参数信息持久化时保存为(1)索引和(2)数据 两部分。其中：<br />
 1. 索引命名为: <code>xxx_name.index</code><br />
 2. 数据命名为: <code>xxx_name.data</code></p>
 <table>
@@ -354,34 +366,36 @@ Protobuf文件通常以<code>.proto</code>结尾。</p>
 </tbody>
 </table>
 <h3 id="133-checkpoint">1.3.3. Checkpoint</h3>
-<p>记录：<br />
+<p><strong>范围及内容</strong><br />
+Checkpoint记录：<br />
 1. all_model_checkpoint_paths<br />
 2. model_checkpoint_path </p>
+<p><strong>持久化格式</strong></p>
+<p>持久化格式保存为 <code>Checkpoint</code>，没有后缀格式，可以直接用记事本打开，为文本类文件。</p>
 <h2 id="14">1.4. 实践中怎样组织保存文件</h2>
 <p>TensorFlow提供3种模型保存模型：</p>
-<p>checkpoints，这是一种依赖于创建模型的代码的格式。<br />
-SavedModel，这是一种独立于创建模型的代码的格式。<br />
-FrozenGraph，将变量信息设定为常量的模型<br />
-tflite, 支持安卓和ios设备的模型格式</p>
+<ol>
+<li>checkpoints，这是一种依赖于创建模型的代码的格式。</li>
+<li>SavedModel，这是一种独立于创建模型的代码的格式。</li>
+<li>FrozenGraph，将变量信息设定为常量的模型</li>
+<li>tflite ，支持安卓和ios设备的模型格式</li>
+</ol>
 <h3 id="141-checkpoint_model">1.4.1. checkpoint_model</h3>
-<h3 id="142-savedmodel">1.4.2. Savedmodel</h3>
-<p>在此环境中，SavedModel允许你使用不同的配置保存图形。在我们的例子中，我们有三个不同的图形和相应的标签，如“训练”、“推理”和“移动”。此外，这三个图形为了提升内存效率还<strong>共享相同的变量集</strong>。</p>
+<h3 id="142-saved-model">1.4.2. Saved Model</h3>
+<p>在此环境中，Saved Model允许你使用不同的配置保存图形。在我们的例子中，我们有三个不同的图形和相应的标签，如“训练”、“推理”和“移动”。此外，这三个图形为了提升内存效率还<strong>共享相同的变量集</strong>。</p>
 <p>就在不久前，如果我们想在移动设备上部署TF模型时，我们需要知道输入和输出张量的名称，以便向模型提供数据或从模型获取数据。这需要强制程序员在图的所有张量中搜索他们所需的张量。如果张量没有正确命名，那么任务可能非常繁琐。</p>
 <p>为了简化操作，SavedModel提供对SignatureDefs的支持，SignatureDefs定义了TensorFlow支持的计算的签名。它确定了计算图的正确输入和输出张量，也就是说使用这些签名，你可以指定用于输入和输出的确切节点。要使用其内置的服务API，TF Serving要求模型包含一个或多个SignatureDefs。</p>
 <h3 id="143-frozengraph">1.4.3. FrozenGraph</h3>
+<p>将图中的变量变为常量，压缩模型。</p>
 <h3 id="144-tflite">1.4.4. Tflite</h3>
-<p>可供TensorFlow Lite框架使用tflite文件</p>
+<p>可供TensorFlow Lite 框架使用tflite文件</p>
 <h2 id="15-checkpoint_model">1.5. 怎么保存checkpoint_model</h2>
 <h3 id="151-tfsaver">1.5.1. tf.saver</h3>
-<p>saver是一个tensorflow.python.training.saver.Saver 类 <br />
-saver的建立主要通过 tf.train 子类建立，有以下方式:</p>
-<blockquote>
-<ol>
-<li>saver = tf.train.Saver()</li>
-<li>saver = tf.train.import_meta_graph()<br />
-返回MetaGraphDef里面的saver_def 或者None</li>
-</ol>
-</blockquote>
+<p>saver是一个<code>tensorflow.python.training.saver.Saver</code> 类， <br />
+saver的建立主要通过 tf.train 子类建立，有以下方式:<br />
+1. saver = tf.train.Saver()<br />
+2. saver = tf.train.import_meta_graph()</p>
+<p>返回MetaGraphDef里面的saver_def 或者None</p>
 <p>参数</p>
 <div class="hlcode"><pre><span class="k">class</span> <span class="nc">Saver</span><span class="p">()</span>
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
@@ -501,7 +515,7 @@ saver的建立主要通过 tf.train 子类建立，有以下方式:</p>
 4. checkpoints</p>
 <h2 id="16-saved_model">1.6. 怎么保存Saved_model 版本</h2>
 <h3 id="161-savedmodebuilder">1.6.1. [基础模块]SavedModeBuilder</h3>
-<p>SavedModel：使用saved_model接口导出的模型文件，包含模型Graph和权限可直接用于上线，TensorFlow和Keras模型推荐使用这种模型格式。</p>
+<p>SavedModel：使用saved_model接口导出的模型文件，包含模型Graph和权限可直接用于上线Tensorflow serving，TensorFlow和Keras模型推荐使用这种模型格式。</p>
 <p>例如，图显示了一个包含三个 MetaGraphDef 的 SavedModel，它们三个都共享同一组检查点和资源：</p>
 <p><img alt="" src="../../../../../attach/images/2019-10-09-11-23-18.png" /></p>
 <p>SavedModel 是一种独立于语言且可恢复的神秘序列化格式，使较高级别的系统和工具可以创建、使用和转换 TensorFlow 模型。</p>
@@ -1029,7 +1043,7 @@ TFLite：基于flatbuf对模型进行优化，可以直接部署到Android、iOS
 
 
 <h2 id="32-h5-pd">3.2. h5 -&gt;pd</h2>
-<p>因为keras的很多ops封装的很简单，所以现在一般用keras搭模型的人很多，那么问题来了，如果想在生产环境中使用keras框架产生的hdf5格式的模型文件，也需要将其转换为pb格式，怎么做呢？</p>
+<p>如果想在生产环境中使用keras框架产生的hdf5格式的模型文件，也需要将其转换为pb格式，怎么做呢？</p>
 <div class="hlcode"><pre><span class="k">def</span> <span class="nf">freeze_session</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">keep_var_names</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">output_names</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">clear_devices</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Freezes the state of a session into a prunned computation graph.</span>
@@ -1074,6 +1088,41 @@ TFLite：基于flatbuf对模型进行优化，可以直接部署到Android、iOS
 <span class="kn">from</span> <span class="nn">tensorflow.python.framework</span> <span class="kn">import</span> <span class="n">graph_io</span>
 <span class="n">graph_io</span><span class="o">.</span><span class="n">write_graph</span><span class="p">(</span><span class="n">frozen_graph</span><span class="p">,</span> <span class="n">output_fld</span><span class="p">,</span> <span class="n">output_graph_name</span><span class="p">,</span> <span class="n">as_text</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="s">&#39;saved the constant graph (ready for inference) at: &#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_fld</span><span class="p">,</span> <span class="n">output_graph_name</span><span class="p">))</span>
+</pre></div>
+
+
+<h2 id="frozengraph-savedmodel">FrozenGraph-&gt;SavedModel</h2>
+<div class="hlcode"><pre><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">tensorflow.python.saved_model</span> <span class="kn">import</span> <span class="n">signature_constants</span>
+<span class="kn">from</span> <span class="nn">tensorflow.python.saved_model</span> <span class="kn">import</span> <span class="n">tag_constants</span>
+
+<span class="n">export_dir</span> <span class="o">=</span> <span class="s">&#39;./saved&#39;</span>
+<span class="n">graph_pb</span> <span class="o">=</span> <span class="s">&#39;my_quant_graph.pb&#39;</span>
+
+<span class="n">builder</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">saved_model</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">SavedModelBuilder</span><span class="p">(</span><span class="n">export_dir</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">gfile</span><span class="o">.</span><span class="n">GFile</span><span class="p">(</span><span class="n">graph_pb</span><span class="p">,</span> <span class="s">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">graph_def</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">GraphDef</span><span class="p">()</span>
+    <span class="n">graph_def</span><span class="o">.</span><span class="n">ParseFromString</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+<span class="n">sigs</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">Graph</span><span class="p">())</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+    <span class="c"># name=&quot;&quot; is important to ensure we don&#39;t get spurious prefixing</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">import_graph_def</span><span class="p">(</span><span class="n">graph_def</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_default_graph</span><span class="p">()</span>
+    <span class="n">inp</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">&quot;real_A_and_B_images:0&quot;</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">&quot;generator/Tanh:0&quot;</span><span class="p">)</span>
+
+    <span class="n">sigs</span><span class="p">[</span><span class="n">signature_constants</span><span class="o">.</span><span class="n">DEFAULT_SERVING_SIGNATURE_DEF_KEY</span><span class="p">]</span> <span class="o">=</span> \
+        <span class="n">tf</span><span class="o">.</span><span class="n">saved_model</span><span class="o">.</span><span class="n">signature_def_utils</span><span class="o">.</span><span class="n">predict_signature_def</span><span class="p">(</span>
+            <span class="p">{</span><span class="s">&quot;in&quot;</span><span class="p">:</span> <span class="n">inp</span><span class="p">},</span> <span class="p">{</span><span class="s">&quot;out&quot;</span><span class="p">:</span> <span class="n">out</span><span class="p">})</span>
+
+    <span class="n">builder</span><span class="o">.</span><span class="n">add_meta_graph_and_variables</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span>
+                                         <span class="p">[</span><span class="n">tag_constants</span><span class="o">.</span><span class="n">SERVING</span><span class="p">],</span>
+                                         <span class="n">signature_def_map</span><span class="o">=</span><span class="n">sigs</span><span class="p">)</span>
+
+<span class="n">builder</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 
 

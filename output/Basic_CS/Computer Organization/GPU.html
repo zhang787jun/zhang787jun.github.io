@@ -72,6 +72,10 @@
 <li><a href="#33-amd">3.3. AMD</a></li>
 </ul>
 </li>
+<li><a href="#_1">英伟达架构设计</a><ul>
+<li><a href="#_2">设计思想</a></li>
+</ul>
+</li>
 <li><a href="#4-gpu">4. GPU 参数解读</a><ul>
 <li><a href="#41">4.1. 算力</a><ul>
 <li><a href="#411">4.1.1. 处理器核心数</a></li>
@@ -83,6 +87,7 @@
 <li><a href="#422-gpu">4.2.2. 专有GPU内存</a></li>
 </ul>
 </li>
+<li><a href="#43">4.3. 性能与价格</a></li>
 </ul>
 </li>
 <li><a href="#5-gpu">5. GPU监测工具</a><ul>
@@ -303,18 +308,90 @@
 
 <h2 id="33-amd">3.3. AMD</h2>
 <p>AMD(ATI)是世界上第二大的独立显卡生产销售商。他的前身就是ATI。旗下有民用的Radeon系列，还有专业的FireGL系列等。就发售量和发售盈利方面，AMD显卡方面仍然略输于nv，不过两者不相伯仲，差距只是几个百分点。其GPU具有Stream通用运算，ATI Video Converter视频转码，UVD高清视频技术，Havok、Bullet和Pixelux DMM三种物理引擎等。</p>
+<h1 id="_1">英伟达架构设计</h1>
+<h2 id="_2">设计思想</h2>
+<ol>
+<li>使用轻量级线程并行计算</li>
+<li>每个核心里面配满 ALUs，Pack cores full of ALUs </li>
+<li>交错执行 减少间隔时间</li>
+</ol>
+<p>CUDA 核（CUDA core）= SIMD function unit ，本质是ALU </p>
+<p>control shared across 16 16 units </p>
 <h1 id="4-gpu">4. GPU 参数解读</h1>
 <h2 id="41">4.1. 算力</h2>
-<p><img alt="" src="../../../attach/images/2020-08-08-10-27-12.png" /><br />
-| 设备                         | 算力 |        | 备注           |<br />
-| ---------------------------- | ---- | ------ | -------------- |<br />
-| NVIDIA Tesla K40             | 5    | TFLOPS |                |<br />
-| NVIDIA Tesla K80             | 8.74 | TFLOPS | Colab          |<br />
-| NVIDIA GeForce GTX Titan X   | 7    | TFLOPS |                |<br />
-| NVIDIA Tesla P100 PCIe 16 GB | 9.3  | TFLOPS | Kaggle         |<br />
-| NVIDIA Tesla V100 PCIe 16 GB | 14.1 | TFLOPS | 百度 AI Studio |<br />
-| NVIDIA Tesla T4              | 260  | TFLOPS |                |<br />
-| Google Colab Cloud TPU       | 180  | TFLOPs |                |</p>
+<p><img alt="" src="../../../attach/images/2020-08-08-10-27-12.png" /></p>
+<table>
+<thead>
+<tr>
+<th>设备</th>
+<th>算力</th>
+<th>FP32 (float)</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NVIDIA GeForce 940MX</td>
+<td>0.74</td>
+<td>TFLOPS</td>
+<td>小米笔记本</td>
+</tr>
+<tr>
+<td>NVIDIA Quadro P620</td>
+<td>1.35</td>
+<td>TFLOPS</td>
+<td></td>
+</tr>
+<tr>
+<td>NVIDIA Tesla K40</td>
+<td>5</td>
+<td>TFLOPS</td>
+<td></td>
+</tr>
+<tr>
+<td>NVIDIA Tesla P4</td>
+<td>5.4</td>
+<td>TFLOPS</td>
+<td></td>
+</tr>
+<tr>
+<td>NVIDIA Tesla K80</td>
+<td>8.74</td>
+<td>TFLOPS</td>
+<td>Colab GPU基础版本</td>
+</tr>
+<tr>
+<td>NVIDIA GeForce GTX Titan X</td>
+<td>7</td>
+<td>TFLOPS</td>
+<td></td>
+</tr>
+<tr>
+<td>NVIDIA Tesla P100 PCIe 16 GB</td>
+<td>9.3</td>
+<td>TFLOPS</td>
+<td>Kaggle</td>
+</tr>
+<tr>
+<td>NVIDIA Tesla V100 PCIe 16 GB</td>
+<td>14.1</td>
+<td>TFLOPS</td>
+<td>百度 AI Studio</td>
+</tr>
+<tr>
+<td>NVIDIA Tesla T4</td>
+<td>260</td>
+<td>TFLOPS</td>
+<td>Colab GPU高级版本</td>
+</tr>
+<tr>
+<td>Google Colab Cloud TPU</td>
+<td>180</td>
+<td>TFLOPs</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <p>在挑选的时候要注意的几个参数是处理器核心(core)、工作频率、显存位宽、单卡or双卡。</p>
 <h3 id="411">4.1.1. 处理器核心数</h3>
 <h3 id="412">4.1.2. 工作频率</h3>
@@ -327,6 +404,9 @@
 <p>共享GPU内存不超过物理内存的大小，一般为物理内存的大小的一半。</p>
 <h3 id="422-gpu">4.2.2. 专有GPU内存</h3>
 <p>专有GPU内存是指独立显卡上专有的显存大小。</p>
+<h2 id="43">4.3. 性能与价格</h2>
+<p>推荐参考网址 <a href="https://www.techpowerup.com/gpu-specs/">https://www.techpowerup.com/gpu-specs</a></p>
+<p><img alt="" src="../../../attach/images/2020-08-13-10-22-20.png" /></p>
 <h1 id="5-gpu">5. GPU监测工具</h1>
 <h2 id="51-nvidia-smi">5.1. nvidia-smi</h2>
 <p>nvidia-smi 简称NVSMI，提供监控GPU使用情况和更改GPU状态的功能，是一个跨平台工具，它支持所有标准的NVIDIA驱动程序支持的Linux发行版以及从WindowsServer 2008 R2开始的64位的系统。</p>
@@ -443,6 +523,7 @@
 <p>NVIDIA cuDNN可以集成到更高级别的机器学习框架中，如谷歌的Tensorflow、加州大学伯克利分校的流行caffe软件。简单的插入式设计可以让开发人员专注于设计和实现神经网络模型，而不是简单调整性能，同时还可以在GPU上实现高性能现代并行计算。</p>
 <h1 id="8-gpu">8. GPU 的虚拟化</h1>
 <p>NVIDIA 虚拟 GPU (vGPU) 解决方案将 NVIDIA GPU 的强大性能应用于虚拟桌面、应用和工作站，从而加速图形和计算工作，以使居家办公或随时随地办公的创意和技术专业人士能够访问虚拟化工作空间。</p>
+<p><sup id="fnref:4"><a class="footnote-ref" href="#fn:4" rel="footnote">4</a></sup></p>
 <h1 id="9">9. 参考文献</h1>
 <div class="footnote">
 <hr />
@@ -455,6 +536,9 @@
 </li>
 <li id="fn:3">
 <p><a href="https://www.cnblogs.com/timlly/p/11471507.html">深入GPU硬件架构及运行机制</a>&#160;<a class="footnote-backref" href="#fnref:3" rev="footnote" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:4">
+<p><a href="https://www.techpowerup.com/gpu-specs/">https://www.techpowerup.com/gpu-specs</a>&#160;<a class="footnote-backref" href="#fnref:4" rev="footnote" title="Jump back to footnote 4 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>

@@ -45,12 +45,14 @@
 </pre></div>
 
 
-<p>= tf.summary.create_file_writer("/tmp/mylogs/eager")</p>
-<p>with writer.as_default():<br />
-  for step in range(100):<br />
-    # other model code would go here<br />
-    tf.summary.scalar("my_metric", 0.5, step=step)<br />
-    writer.flush()</p>
+<div class="hlcode"><pre><span class="n">writer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">create_file_writer</span><span class="p">(</span><span class="s">&quot;/tmp/mylogs/eager&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">writer</span><span class="o">.</span><span class="n">as_default</span><span class="p">():</span>
+  <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="c"># other model code would go here</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">scalar</span><span class="p">(</span><span class="s">&quot;my_metric&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</pre></div>
 </div>
 <div id="renote">
   <HR style=" FILTER: alpha (opacity = 100, finishopacity =0 , style= 3 )" width="80%" color=#987 cb 9 SIZE=3>

@@ -219,20 +219,42 @@ G/GS<GT<GTS<GTX
 
 AMD(ATI)是世界上第二大的独立显卡生产销售商。他的前身就是ATI。旗下有民用的Radeon系列，还有专业的FireGL系列等。就发售量和发售盈利方面，AMD显卡方面仍然略输于nv，不过两者不相伯仲，差距只是几个百分点。其GPU具有Stream通用运算，ATI Video Converter视频转码，UVD高清视频技术，Havok、Bullet和Pixelux DMM三种物理引擎等。
 
+
+# 英伟达架构设计
+
+## 设计思想 
+
+1. 使用轻量级线程并行计算
+2. 每个核心里面配满 ALUs，Pack cores full of ALUs 
+3. 交错执行 减少间隔时间
+
+CUDA 核（CUDA core）= SIMD function unit ，本质是ALU 
+
+
+control shared across 16 16 units 
+
+
 # 4. GPU 参数解读
 
 ## 4.1. 算力
 
 ![](../../../attach/images/2020-08-08-10-27-12.png)
-| 设备                         | 算力 |        | 备注           |
-| ---------------------------- | ---- | ------ | -------------- |
-| NVIDIA Tesla K40             | 5    | TFLOPS |                |
-| NVIDIA Tesla K80             | 8.74 | TFLOPS | Colab          |
-| NVIDIA GeForce GTX Titan X   | 7    | TFLOPS |                |
-| NVIDIA Tesla P100 PCIe 16 GB | 9.3  | TFLOPS | Kaggle         |
-| NVIDIA Tesla V100 PCIe 16 GB | 14.1 | TFLOPS | 百度 AI Studio |
-| NVIDIA Tesla T4              | 260  | TFLOPS |                |
-| Google Colab Cloud TPU       | 180  | TFLOPs |                |
+
+
+
+
+| 设备                         | 算力 | FP32 (float) | 备注              |
+| ---------------------------- | ---- | ------------ | ----------------- |
+| NVIDIA GeForce 940MX         | 0.74 | TFLOPS       | 小米笔记本        |
+| NVIDIA Quadro P620           | 1.35 | TFLOPS       |                   |
+| NVIDIA Tesla K40             | 5    | TFLOPS       |                   |
+| NVIDIA Tesla P4              | 5.4  | TFLOPS       |                   |
+| NVIDIA Tesla K80             | 8.74 | TFLOPS       | Colab GPU基础版本 |
+| NVIDIA GeForce GTX Titan X   | 7    | TFLOPS       |                   |
+| NVIDIA Tesla P100 PCIe 16 GB | 9.3  | TFLOPS       | Kaggle            |
+| NVIDIA Tesla V100 PCIe 16 GB | 14.1 | TFLOPS       | 百度 AI Studio    |
+| NVIDIA Tesla T4              | 260  | TFLOPS       | Colab GPU高级版本 |
+| Google Colab Cloud TPU       | 180  | TFLOPs       |                   |
 
 
 在挑选的时候要注意的几个参数是处理器核心(core)、工作频率、显存位宽、单卡or双卡。
@@ -257,6 +279,13 @@ AMD(ATI)是世界上第二大的独立显卡生产销售商。他的前身就是
 ### 4.2.2. 专有GPU内存
 
 专有GPU内存是指独立显卡上专有的显存大小。
+
+
+## 4.3. 性能与价格
+
+推荐参考网址 [https://www.techpowerup.com/gpu-specs](https://www.techpowerup.com/gpu-specs/)
+
+![](../../../attach/images/2020-08-13-10-22-20.png)
 
 
 # 5. GPU监测工具
@@ -355,6 +384,8 @@ NVIDIA cuDNN可以集成到更高级别的机器学习框架中，如谷歌的Te
 
 NVIDIA 虚拟 GPU (vGPU) 解决方案将 NVIDIA GPU 的强大性能应用于虚拟桌面、应用和工作站，从而加速图形和计算工作，以使居家办公或随时随地办公的创意和技术专业人士能够访问虚拟化工作空间。
 
+
+[^4]
 # 9. 参考文献
 
 [^1]:[东莞证券：集成电路系列报告三--从全球领先企业看GPU发展方向](http://pdf.dfcfw.com/pdf/H3_AP202003121376165580_1.pdf)
@@ -362,3 +393,5 @@ NVIDIA 虚拟 GPU (vGPU) 解决方案将 NVIDIA GPU 的强大性能应用于虚�
 [^2]:[CUDA编程(三): GPU架构了解一下!](https://www.jianshu.com/p/87cf95b1faa0)
 
 [^3]:[深入GPU硬件架构及运行机制](https://www.cnblogs.com/timlly/p/11471507.html)
+
+[^4]:[https://www.techpowerup.com/gpu-specs](https://www.techpowerup.com/gpu-specs/)

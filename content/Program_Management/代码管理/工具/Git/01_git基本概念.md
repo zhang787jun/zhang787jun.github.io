@@ -4,16 +4,14 @@ layout: page
 date: 2099-06-02 00:00
 ---
 
+[TOC]
 # 什么是Git
+
 Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
 
 
-
-
-
-
-
 Git是怎么储存信息的
+
 这里会用一个简单的例子让大家直观感受一下git是怎么储存信息的。
 
 首先我们先创建两个文件
@@ -24,6 +22,7 @@ $ echo '222' > b.txt
 $ git add *.txt
 Git会将整个数据库储存在.git/目录下，如果你此时去查看.git/objects目录，你会发现仓库里面多了两个object。
 
+```shell 
 $ tree .git/objects
 .git/objects
 ├── 58
@@ -32,6 +31,7 @@ $ tree .git/objects
 │   └── 00906efd24ec5e783bee7f23b5d7c941b0c12c
 ├── info
 └── pack
+```
 好奇的我们来看一下里面存的是什么东西
 
 $ cat .git/objects/58/c9bdf9d017fcd178dc8c073cbfcbb7ff240d6c

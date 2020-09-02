@@ -31,7 +31,7 @@ https://tensorflow.juejin.im/extend/tool_developers/index.html
 
 
 Protobuf 实际上支持两种不同的文件保存格式：（1）TextFormat 和（2）二进制格式。
-1. TextFormat 是一种人眼可读的文本形式，这在调试和编辑时是很方便的，但它在存储数值数据时会变得很大，比如我们常见的权重数据。文件名为 `xxx.pbtxt`。
+1. TextFormat 是一种人眼可读的文本形式，这在调试和编辑时是很方便的，但它在存储数值数据时会变得很大。比如我们常见的权重数据，文件名为 `xxx.pbtxt`。
 2. 二进制格式的文件会小得多，缺点就是它不易读。文件名为 `xxx.pb`。
 
 
@@ -55,9 +55,11 @@ Protocol Buffer
 | 3    | 其他信息（服务器信息） |
 
 #### 1.2.1. 图信息
-图被定义为 “一些 Operation（Node节点） 和 Tensor（Edge边缘） 的集合”。
+图被定义为 “一些 Operation（Node节点） 和 Tensor（Edge边缘）的集合”。
 
-**图信息的主要内容包括： 1.Node节点信息;2.边信息（Tensor）**
+图信息的主要内容包括： 
+1.Node节点信息（op）
+2.边信息（Tensor）。
 
 ##### 1.2.1.1. Node节点信息--operation
    图中的节点又称为算子，它代表一个操作（operation，OP），一般用来表示施加的数学运算，也可以表示数据输入（feed in）的起点以及输出（push out）的终点，或者是读取/写入持久 变量（persistent variable）的终点。
@@ -103,19 +105,21 @@ all_model_checkpoint_path=xxx;
 
 在实际操作中，很少单独持久化Graph信息，一般都是直接保存MetaGraph信息，MetaGraphDef 是 MetaGraph信息的序列化文件，同样是由 Protocol Buffer来定义的一个包含**更多图信息**的序列化文件。其中包括：
    
-|          组成 |                                                                           内容 |                                                                              例如 |
-| ------------: | -----------------------------------------------------------------------------: | --------------------------------------------------------------------------------: |
-|   MetaInfoDef |                                                                   存一些元信息 |                                                                版本和其他用户信息 |
-|      GraphDef |             Graph的序列化信息，MetaGraph的核心内容之一 ,不包含模型权重变量信息 |                                                            Node(Placeholder + op) |
-|      SaverDef |                                                                  图的Saver信息 | 最多同时保存的check-point数量；需保存的Tensor名字等，但并不保存Tensor中的实际内容 |
-| CollectionDef | 任何需要特殊注意的 Python 对象，需要特殊的标注以方便import_meta_graph 后取回。 |                                                       “train_op”,"prediction"等等 |
+| 组成          | 内容                                                                           |                                                                              例如 |
+| :------------ | :----------------------------------------------------------------------------- | --------------------------------------------------------------------------------: |
+| MetaInfoDef   | 存一些元信息                                                                   |                                                                版本和其他用户信息 |
+| GraphDef      | Graph的序列化信息，MetaGraph的核心内容之一 ,不包含模型权重变量信息             |                                                            Node(Placeholder + op) |
+| SaverDef      | 图的Saver信息                                                                  | 最多同时保存的check-point数量；需保存的Tensor名字等，但并不保存Tensor中的实际内容 |
+| CollectionDef | 任何需要特殊注意的 Python 对象，需要特殊的标注以方便import_meta_graph 后取回。 |                                                       "train_op","prediction"等等 |
 ``` python 
 
 graph=tf.get_default_graph()
 graph_def=graph.as_graph_def()
+##
 type(graph_def)
 >>> tensorflow.core.framework.graph_pb2.GraphDef
 
+##
 graph_def
 >>>
   node {
@@ -193,9 +197,15 @@ graph_def
 
 ### 1.3.2. Variables 变量数据
 
-主要为tf.Variables类的节点信息即变量的初始值、具体数值、shape等。
-
-
+**范围**
+主要为`tf.Variables`类的节点信息。
+**内容**
+主要为变量：
+1. 初始值
+2. 具体数值
+3. shape等。
+   
+**持久化格式**
 参数信息持久化时保存为(1)索引和(2)数据 两部分。其中：
 1. 索引命名为: `xxx_name.index`
 2. 数据命名为: `xxx_name.data`
@@ -206,24 +216,29 @@ graph_def
 | model.ckpt-20.data-00000-of-00002 | 二进制文件 | 数据       |
 
 ### 1.3.3. Checkpoint
-记录：
+
+**范围及内容**
+Checkpoint记录：
 1. all_model_checkpoint_paths
 2. model_checkpoint_path 
 
+**持久化格式**
+
+持久化格式保存为 `Checkpoint`，没有后缀格式，可以直接用记事本打开，为文本类文件。
 
 
 
 ## 1.4. 实践中怎样组织保存文件
 TensorFlow提供3种模型保存模型：
 
-checkpoints，这是一种依赖于创建模型的代码的格式。
-SavedModel，这是一种独立于创建模型的代码的格式。
-FrozenGraph，将变量信息设定为常量的模型
-tflite, 支持安卓和ios设备的模型格式
+1. checkpoints，这是一种依赖于创建模型的代码的格式。
+2. SavedModel，这是一种独立于创建模型的代码的格式。
+3. FrozenGraph，将变量信息设定为常量的模型
+4. tflite ，支持安卓和ios设备的模型格式
 ### 1.4.1. checkpoint_model
 
-### 1.4.2. Savedmodel
-在此环境中，SavedModel允许你使用不同的配置保存图形。在我们的例子中，我们有三个不同的图形和相应的标签，如“训练”、“推理”和“移动”。此外，这三个图形为了提升内存效率还**共享相同的变量集**。
+### 1.4.2. Saved Model
+在此环境中，Saved Model允许你使用不同的配置保存图形。在我们的例子中，我们有三个不同的图形和相应的标签，如“训练”、“推理”和“移动”。此外，这三个图形为了提升内存效率还**共享相同的变量集**。
 
 就在不久前，如果我们想在移动设备上部署TF模型时，我们需要知道输入和输出张量的名称，以便向模型提供数据或从模型获取数据。这需要强制程序员在图的所有张量中搜索他们所需的张量。如果张量没有正确命名，那么任务可能非常繁琐。
 
@@ -232,19 +247,22 @@ tflite, 支持安卓和ios设备的模型格式
 
 ### 1.4.3. FrozenGraph
 
+将图中的变量变为常量，压缩模型。
+
 ### 1.4.4. Tflite
 
-可供TensorFlow Lite框架使用tflite文件
+可供TensorFlow Lite 框架使用tflite文件
 
 ## 1.5. 怎么保存checkpoint_model
 
 ### 1.5.1. tf.saver
 
-saver是一个tensorflow.python.training.saver.Saver 类 
+saver是一个`tensorflow.python.training.saver.Saver` 类， 
 saver的建立主要通过 tf.train 子类建立，有以下方式:
->1. saver = tf.train.Saver()
->2. saver = tf.train.import_meta_graph()
-> 返回MetaGraphDef里面的saver_def 或者None
+1. saver = tf.train.Saver()
+2. saver = tf.train.import_meta_graph()
+  
+返回MetaGraphDef里面的saver_def 或者None
 
 参数
 ```python
@@ -345,7 +363,7 @@ saver_path= saver.save(sess, 'my-model', global_step=1000)
 ## 1.6. 怎么保存Saved_model 版本
 
 ### 1.6.1. [基础模块]SavedModeBuilder
-SavedModel：使用saved_model接口导出的模型文件，包含模型Graph和权限可直接用于上线，TensorFlow和Keras模型推荐使用这种模型格式。
+SavedModel：使用saved_model接口导出的模型文件，包含模型Graph和权限可直接用于上线Tensorflow serving，TensorFlow和Keras模型推荐使用这种模型格式。
 
 例如，图显示了一个包含三个 MetaGraphDef 的 SavedModel，它们三个都共享同一组检查点和资源：
 
@@ -934,7 +952,7 @@ def freeze_graph(input_checkpoint,output_graph):
 
 ## 3.2. h5 ->pd
 
-因为keras的很多ops封装的很简单，所以现在一般用keras搭模型的人很多，那么问题来了，如果想在生产环境中使用keras框架产生的hdf5格式的模型文件，也需要将其转换为pb格式，怎么做呢？
+如果想在生产环境中使用keras框架产生的hdf5格式的模型文件，也需要将其转换为pb格式，怎么做呢？
 ```python
 def freeze_session(session, keep_var_names=None, output_names=None, clear_devices=True):
     """
@@ -982,7 +1000,41 @@ graph_io.write_graph(frozen_graph, output_fld, output_graph_name, as_text=False)
 print('saved the constant graph (ready for inference) at: ', os.join(output_fld, output_graph_name))
 ```
 
+## FrozenGraph->SavedModel
 
+```python 
+import tensorflow as tf
+from tensorflow.python.saved_model import signature_constants
+from tensorflow.python.saved_model import tag_constants
+
+export_dir = './saved'
+graph_pb = 'my_quant_graph.pb'
+
+builder = tf.saved_model.builder.SavedModelBuilder(export_dir)
+
+with tf.gfile.GFile(graph_pb, "rb") as f:
+    graph_def = tf.GraphDef()
+    graph_def.ParseFromString(f.read())
+
+sigs = {}
+
+with tf.Session(graph=tf.Graph()) as sess:
+    # name="" is important to ensure we don't get spurious prefixing
+    tf.import_graph_def(graph_def, name="")
+    g = tf.get_default_graph()
+    inp = g.get_tensor_by_name("real_A_and_B_images:0")
+    out = g.get_tensor_by_name("generator/Tanh:0")
+
+    sigs[signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY] = \
+        tf.saved_model.signature_def_utils.predict_signature_def(
+            {"in": inp}, {"out": out})
+
+    builder.add_meta_graph_and_variables(sess,
+                                         [tag_constants.SERVING],
+                                         signature_def_map=sigs)
+
+builder.save()
+```
 
 # 4. 预训练模型库
 ## 4.1. Keras

@@ -33,25 +33,32 @@
 <div class="clearfix"></div>
 <div id="title">[版本管理] 01_Git基本概念</div>
 <div id="content">
-  <h1 id="git">什么是Git</h1>
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#git">什么是Git</a></li>
+</ul>
+</div>
+<h1 id="git">什么是Git</h1>
 <p>Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.</p>
-<p>Git是怎么储存信息的<br />
-这里会用一个简单的例子让大家直观感受一下git是怎么储存信息的。</p>
+<p>Git是怎么储存信息的</p>
+<p>这里会用一个简单的例子让大家直观感受一下git是怎么储存信息的。</p>
 <p>首先我们先创建两个文件</p>
 <p>$ git init<br />
 $ echo '111' &gt; a.txt<br />
 $ echo '222' &gt; b.txt<br />
 $ git add *.txt<br />
 Git会将整个数据库储存在.git/目录下，如果你此时去查看.git/objects目录，你会发现仓库里面多了两个object。</p>
-<p>$ tree .git/objects<br />
-.git/objects<br />
-├── 58<br />
-│   └── c9bdf9d017fcd178dc8c073cbfcbb7ff240d6c<br />
-├── c2<br />
-│   └── 00906efd24ec5e783bee7f23b5d7c941b0c12c<br />
-├── info<br />
-└── pack<br />
-好奇的我们来看一下里面存的是什么东西</p>
+<div class="hlcode"><pre><span class="err">$</span> <span class="n">tree</span> <span class="p">.</span><span class="n">git</span><span class="o">/</span><span class="n">objects</span>
+<span class="p">.</span><span class="n">git</span><span class="o">/</span><span class="n">objects</span>
+<span class="err">├──</span> <span class="mi">58</span>
+<span class="err">│</span>   <span class="err">└──</span> <span class="n">c9bdf9d017fcd178dc8c073cbfcbb7ff240d6c</span>
+<span class="err">├──</span> <span class="n">c2</span>
+<span class="err">│</span>   <span class="err">└──</span> <span class="mo">00</span><span class="mi">906</span><span class="n">efd24ec5e783bee7f23b5d7c941b0c12c</span>
+<span class="err">├──</span> <span class="n">info</span>
+<span class="err">└──</span> <span class="n">pack</span>
+</pre></div>
+
+
+<p>好奇的我们来看一下里面存的是什么东西</p>
 <p>$ cat .git/objects/58/c9bdf9d017fcd178dc8c073cbfcbb7ff240d6c<br />
 xKOR0a044K%<br />
 怎么是一串乱码？这是因为Git将信息压缩成二进制文件。但是不用担心，因为Git也提供了一个能够帮助你探索它的api git cat-file [-t] [-p]， -t可以查看object的类型，-p可以查看object储存的具体内容。</p>

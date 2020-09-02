@@ -5,32 +5,28 @@ render: True
 tag: Tensorflow,框架,AI,
 ---
 
-tf.add_to_collection("training_collection",loss)
-
-tf.add_to_collection("training_collection",train_op)
+[TOC]
 
 
-
-##  图的管理 
+# 1. 图的概念
 
 图=edge(边缘)+node(节点)
 
-### 10.1 图的管理
 
-#### 10.1.1 图的建立/加载 
+# 2. 图的操作
+## 2.1. 图的建立/加载
 ```python
 graph=tf.Graph()
 graph=tf.get_default_graph() 
 ```
 
-#### 10.1.2 图的管理操作
-##### 1. 设置为默认图
+## 2.2. 图的管理操作
+### 2.2.1. 设置为默认图
 ```python
 graph.as_default()
 graph.as_graph_def(from_version=None, add_shapes=False)
 ```
-##### 1. 设置为默认图
-tf中可以定义多个计算图，**不同计算图上的张量和运算是相互独立的**，不会共享。计算图可以用来隔离张量和计算，同时提供了管理张量和计算的机制。**计算图可以通过Graph.device函数来指定运行计算的设备**，为TensorFlow充分利用GPU/CPU提供了机制。
+tensorflow 中可以定义多个计算图，**不同计算图上的张量和运算是相互独立的**，不会共享。计算图可以用来隔离张量和计算，同时提供了管理张量和计算的机制。计算图可以通过`Graph.device`函数来指定运行计算的设备，为TensorFlow充分利用GPU/CPU提供了机制。
  
 1. 使用 g = tf.Graph()函数创建新的计算图;
 2. **在with g.as_default()语句下**定义属于计算图g的张量和操作
@@ -39,8 +35,36 @@ tf中可以定义多个计算图，**不同计算图上的张量和运算是相�
 4. 如果没有显式指定张量和操作所属的计算图，则这些张量和操作属于默认计算图;
 5. 一个图可以在多个sess中运行，一个sess也能运行多个图
 
+### 2.2.2. 多图合并
+1. 什么是并联神经网络
+如下图所示，有时候需要搭建一个如下图的网络：“并联”两个子网络，将他们的输出层Concat到一起，然后在二者合并之后的网络上继续添加隐层。
 
-###　10.2 edge(边缘)操作
+![](../../../../../attach/images/2020-08-18-11-08-15.png)
+
+
+
+```python
+with tf.Graph().as_default() as g_combined:
+	with tf.Session(graph=g_combined) as sess:
+		graph_def_detect = load_def(detect_pb_path)
+		graph_def_seg= load_def(seg_pb_path)
+		input_image = tf.placeholder(dtype=tf.uint8,shape=[1,None,None,3], name="image")#定义新的网络输入
+		input_image1 = tf.placeholder(dtype=tf.float32,shape=[1,None,None,3], name="image1")
+		#将原始网络的输入映射到input_image(节点为：新的输入节点“image”)
+		detection = tf.import_graph_def(graph_def_detect, input_map={'image_tensor:0': input_image},return_elements=['detection_boxes:0', 'detection_scores:0','detection_classes:0','num_detections:0' ])
+                #新的输出节点为“detect”
+		tf.identity(detection, 'detect')
+		# second graph load
+		seg_predict = tf.import_graph_def(graph_def_seg, input_map={"create_inputs/batch:0": input_image1}, return_elements=["conv6/out_1:0"])
+		tf.identity(seg_predict, "seg_predict")
+ 
+		# freeze combined graph
+		g_combined_def = graph_util.convert_variables_to_constants(sess, sess.graph_def, ["seg_predict","detect"])
+                #合成大图，生成新的pb
+		tf.train.write_graph(g_combined_def, out_pb_path, 'merge_model.pb', as_text=False)
+```
+
+## 2.3. edge(边缘)操作
 ```python
 #根据名称返回操作节点 
 op=tf.Graph.get_operation_by_name(name)
@@ -54,7 +78,7 @@ tf.Graph.gradient_override_map(op_type_map)
 ```
 
 
-###　10.3 node(节点)操作
+## 2.4. node(节点)操作
 ```python
 op_list=tf.Graph.get_operations()  
 #返回图中的操作节点列表
@@ -79,7 +103,17 @@ tf.Graph
 
 
 
-
-
 Module: tf.contrib.graph_editor
 TensorFlow Graph Editor.
+
+
+
+# 3. 集合机制
+
+将 op 加入到集合中
+```python 
+tf.add_to_collection("training_collection",loss)
+
+tf.add_to_collection("training_collection",train_op)
+
+```

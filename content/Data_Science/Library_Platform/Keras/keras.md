@@ -6,7 +6,6 @@ date: 2099-06-02 00:00
 [TOC]
 
 
-
 # 1. 基本概念
 
 **版本1**
@@ -33,46 +32,61 @@ TensorFlow is a free and open-source software library for data flow and differen
 
 # 2. keras backend
 
-# 3. keras.layer
 
-keras 里面的几个基础layer
-## 3.1. Dense
-Dense就是常用的全连接层。
+# 3. 编程模式
 
-$$
-output = activation(dot(input, kernel)+bias)$$
+三步法：
+1. 选择模型
+2. 构建网络层
+3. 编译
 
-input shape=(None,n)
-output shape=(None,units)
 
-其中activation是逐元素计算的激活函数，kernel是本层的权值矩阵，bias为偏置向量，只有当use_bias=True才会添加。
-```python
-Dense(units, activation=None, use_bias=True, kernel_initializer='glorot_uniform', bias_initializer='zeros', kernel_regularizer=None, bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None)
+```python 
+from tensorflow.keras.models import Sequential  
+from tensorflow.keras.layers import Dense, Dropout, Activation  
+from tensorflow.keras.optimizers import SGD  
+# 第一步：选择模型
+
+model = Sequential()
+
+# 第二步：构建网络层
+
+model.add(Dense(500,input_shape=(784,))) # 输入层，28*28=784  
+model.add(Activation('tanh')) # 激活函数是tanh  
+model.add(Dropout(0.5)) # 采用50%的dropout
+
+model.add(Dense(500)) # 隐藏层节点500个  
+model.add(Activation('tanh'))  
+model.add(Dropout(0.5))
+
+model.add(Dense(10)) # 输出结果是10个类别，所以维度是10  
+model.add(Activation('softmax')) # 最后一层用softmax作为激活函数
+
+# 第三步：编译
+
+## 优化方法
+sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True) # 优化函数，设定学习率（lr）等参数  
+## 编译（损失函数、优化方法）
+model.compile(loss='categorical_crossentropy', optimizer=sgd, class_mode='categorical') # 使用交叉熵作为loss函数
+
+
+# 第四步：训练
+# .fit的一些参数
+# batch_size：对总的样本数进行分组，每组包含的样本数量
+# epochs ：训练次数
+# shuffle：是否把数据随机打乱之后再进行训练
+# validation_split：拿出百分之多少用来做交叉验证
+# verbose：屏显模式 0：不输出  1：输出进度  2：输出每次的训练结果
+
+(X_train, y_train), (X_test, y_test) = mnist.load_data() # 使用Keras自带的mnist工具读取数据（第一次需要联网）
+# 由于mist的输入数据维度是(num, 28, 28)，这里需要把后面的维度直接拼起来变成784维  
+X_train = X_train.reshape(X_train.shape[0], X_train.shape[1] * X_train.shape[2]) 
+X_test = X_test.reshape(X_test.shape[0], X_test.shape[1] * X_test.shape[2])  
+Y_train = (numpy.arange(10) == y_train[:, None]).astype(int) 
+Y_test = (numpy.arange(10) == y_test[:, None]).astype(int)
+
+model.fit(X_train,Y_train,batch_size=200,epochs=50,shuffle=True,verbose=0,validation_split=0.3)
+model.evaluate(X_test, Y_test, batch_size=200, verbose=0)
 ```
 
-## 3.2. Flatten
-用来将输入**压平**，即把多维的输入一维化，常用在从卷积层到全连接层的过渡。Flatten不影响batch的大小。
-
-```shell
-input_shape=(None,n,m,x,y,z)
-output_shape=(None,n*m*x*y,z)
-```
-
-```shell
-_________________________________________________________________
-lstm_24 (LSTM)               (None, 12, 10)            3000      
-_________________________________________________________________
-flatten_3 (Flatten)          (None, 120)               0         
-_________________________________________________________________
-```
-
-## 3.3. Embedding
-
-Embedding层只能作为模型的第一层
-
-
-```python
-keras.layers.embeddings.Embedding(input_dim, output_dim, embeddings_initializer='uniform', embeddings_regularizer=None, activity_regularizer=None, embeddings_constraint=None, mask_zero=False, input_length=None)
-
-```
-
+其中构建模型 可以使用加法模式，也剋

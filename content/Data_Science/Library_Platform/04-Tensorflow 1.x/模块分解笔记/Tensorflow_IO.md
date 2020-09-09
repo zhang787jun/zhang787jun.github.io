@@ -1,5 +1,5 @@
 ---
-title: "Tensorflow IO 问题"
+title: "Tensorflow 数据IO 问题"
 date: 2019-06-12 00:00
 render: True 
 tag: Tensorflow,框架,AI,

@@ -131,3 +131,11 @@ a.resize(4, 3)
 # 转置
 a.T
 ```
+
+```python 
+res=np.where(condition, x, y)
+# 满足条件(condition)，输出x，不满足输出y。
+
+res=np.where(condition)
+# 返回索引
+```

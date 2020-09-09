@@ -1091,6 +1091,33 @@ TFLite：基于flatbuf对模型进行优化，可以直接部署到Android、iOS
 </pre></div>
 
 
+<div class="hlcode"><pre><span class="n">full_model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="c"># full_model = tf.function(lambda Input: model(Input))</span>
+<span class="n">full_model</span> <span class="o">=</span> <span class="n">full_model</span><span class="o">.</span><span class="n">get_concrete_function</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">TensorSpec</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">))</span>
+
+<span class="n">frozen_func</span> <span class="o">=</span> <span class="n">convert_variables_to_constants_v2</span><span class="p">(</span><span class="n">full_model</span><span class="p">)</span>
+<span class="n">frozen_func</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">as_graph_def</span><span class="p">()</span>
+
+<span class="n">layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">op</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">frozen_func</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">get_operations</span><span class="p">()]</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;Frozen model layers: &quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;Frozen model inputs: &quot;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">frozen_func</span><span class="o">.</span><span class="n">inputs</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;Frozen model outputs: &quot;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">frozen_func</span><span class="o">.</span><span class="n">outputs</span><span class="p">)</span>
+
+<span class="c"># Save frozen graph from frozen ConcreteFunction to hard drive</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">write_graph</span><span class="p">(</span><span class="n">graph_or_graph_def</span><span class="o">=</span><span class="n">frozen_func</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span>
+                  <span class="n">logdir</span><span class="o">=</span><span class="s">&quot;./model&quot;</span><span class="p">,</span>
+                  <span class="n">name</span><span class="o">=</span><span class="s">&quot;model.pb&quot;</span><span class="p">,</span>
+                  <span class="n">as_text</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+
+
 <h2 id="frozengraph-savedmodel">FrozenGraph-&gt;SavedModel</h2>
 <div class="hlcode"><pre><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
 <span class="kn">from</span> <span class="nn">tensorflow.python.saved_model</span> <span class="kn">import</span> <span class="n">signature_constants</span>

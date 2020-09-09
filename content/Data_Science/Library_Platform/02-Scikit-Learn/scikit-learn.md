@@ -7,6 +7,7 @@ date: 2099-06-02 00:00
 [TOC]
 
 # 1. Scikit-learn 介绍
+
 Scikit-learn 是开源的 Python 库，通过统一的界面实现机器学习、预处理、交叉验证及可视化算法。
 
 Scikit-learn 基于 numpy、scipy 开发。numpy基于C编写，不支持GPU。

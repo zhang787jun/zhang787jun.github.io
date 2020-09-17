@@ -39,11 +39,16 @@
 </ul>
 </li>
 <li><a href="#2">2. 编程模式</a></li>
+<li><a href="#3">3. 构建模型的方式</a><ul>
+<li><a href="#31-torch">3.1. 函数式编程 (Torch 模式)</a></li>
+<li><a href="#32">3.2. 序列模型（加法模式）</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <h1 id="1">1. 基本概念</h1>
-<p><strong>版本1</strong><br />
-Keras is a high-level neural networks API, written in Python and capable of running on top of Tensorflow, Theano or CNTK. </p>
+<p><strong>版本1</strong></p>
+<p>Keras is a high-level neural networks API, written in Python and capable of running on top of Tensorflow, Theano or CNTK. </p>
 <p><strong>版本2</strong><br />
 Keras is a deep learning API written in Python, running on top of the machine learning platform TensorFlow.</p>
 <p><strong>重点</strong><br />
@@ -59,10 +64,10 @@ Keras is an API designed for human beings, not machines.</p>
 2. 构建网络层<br />
 3. 编译</p>
 <div class="hlcode"><pre><span class="kn">from</span> <span class="nn">tensorflow.keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>  
-<span class="kn">from</span> <span class="nn">tensorflow.keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span><span class="p">,</span> <span class="n">Dropout</span><span class="p">,</span> <span class="n">Activation</span>  
+<span class="kn">from</span> <span class="nn">tensorflow.keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span><span class="p">,</span> <span class="n">Dropout</span><span class="p">,</span> <span class="n">Activation</span>
 <span class="kn">from</span> <span class="nn">tensorflow.keras.optimizers</span> <span class="kn">import</span> <span class="n">SGD</span>  
-<span class="c"># 第一步：选择模型</span>
 
+<span class="c"># 第一步：选择模型</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
 
 <span class="c"># 第二步：构建网络层</span>
@@ -107,6 +112,34 @@ Keras is an API designed for human beings, not machines.</p>
 
 
 <p>其中构建模型 可以使用加法模式。</p>
+<h1 id="3">3. 构建模型的方式</h1>
+<h2 id="31-torch">3.1. 函数式编程 (Torch 模式)</h2>
+<div class="hlcode"><pre><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="32">3.2. 序列模型（加法模式）</h2>
+<div class="hlcode"><pre><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+
+<span class="c"># 第二步：构建网络层</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">784</span><span class="p">,)))</span> <span class="c"># 输入层，28*28=784  </span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s">&#39;tanh&#39;</span><span class="p">))</span> <span class="c"># 激活函数是tanh  </span>
+<span class="n">mod</span>
+<span class="n">el</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span> <span class="c"># 采用50%的dropout</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">500</span><span class="p">))</span> <span class="c"># 隐藏层节点500个  </span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s">&#39;tanh&#39;</span><span class="p">))</span>  
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span> <span class="c"># 输出结果是10个类别，所以维度是10  </span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s">&#39;softmax&#39;</span><span class="p">))</span> <span class="c"># 最后一层用softmax作为激活函数</span>
+</pre></div>
 </div>
 <div id="renote">
   <HR style=" FILTER: alpha (opacity = 100, finishopacity =0 , style= 3 )" width="80%" color=#987 cb 9 SIZE=3>

@@ -1,5 +1,5 @@
 ---
-title: "OpenCV--GUI操作"
+title: "02_OpenCV--GUI操作"
 layout: page
 date: 2099-06-02 00:00
 ---

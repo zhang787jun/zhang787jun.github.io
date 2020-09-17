@@ -3,12 +3,14 @@ title: "Keras基础简介"
 layout: page
 date: 2099-06-02 00:00
 ---
+
 [TOC]
 
 
 # 1. 基本概念
 
 **版本1**
+
 Keras is a high-level neural networks API, written in Python and capable of running on top of Tensorflow, Theano or CNTK. 
 
 **版本2**
@@ -40,10 +42,10 @@ TensorFlow is a free and open-source software library for data flow and differen
 
 ```python 
 from tensorflow.keras.models import Sequential  
-from tensorflow.keras.layers import Dense, Dropout, Activation  
+from tensorflow.keras.layers import Dense, Dropout, Activation
 from tensorflow.keras.optimizers import SGD  
-# 第一步：选择模型
 
+# 第一步：选择模型
 model = Sequential()
 
 # 第二步：构建网络层
@@ -87,3 +89,37 @@ model.evaluate(X_test, Y_test, batch_size=200, verbose=0)
 ```
 
 其中构建模型 可以使用加法模式。
+
+# 3. 构建模型的方式
+
+## 3.1. 函数式编程 (Torch 模式)
+
+```python 
+import tensorflow as tf
+ 
+inputs = tf.keras.Input(shape=(3,))
+x = tf.keras.layers.Dense(4, activation=tf.nn.relu)(inputs)
+outputs = tf.keras.layers.Dense(5, activation=tf.nn.softmax)(x)
+model = tf.keras.Model(inputs=inputs, outputs=outputs)
+
+```
+## 3.2. 序列模型（加法模式）
+
+```python
+model = Sequential()
+
+# 第二步：构建网络层
+
+model.add(Dense(500,input_shape=(784,))) # 输入层，28*28=784  
+model.add(Activation('tanh')) # 激活函数是tanh  
+mod
+el.add(Dropout(0.5)) # 采用50%的dropout
+
+model.add(Dense(500)) # 隐藏层节点500个  
+model.add(Activation('tanh'))  
+model.add(Dropout(0.5))
+
+model.add(Dense(10)) # 输出结果是10个类别，所以维度是10  
+model.add(Activation('softmax')) # 最后一层用softmax作为激活函数
+
+```

@@ -36,9 +36,9 @@
   <div class="toc"><span class="toctitle">Table of Contents</span><ul>
 <li><a href="#1-onnx">1. 什么是ONNX</a></li>
 <li><a href="#2-onnx">2. 获取 ONNX 模型</a><ul>
-<li><a href="#211-winmltools">2.1.1. 通用转换--基于winmltools</a></li>
-<li><a href="#212-tf_pd-onnx">2.1.2. tf_pd-&gt;onnx</a></li>
-<li><a href="#213-torch_pt-onnx">2.1.3. torch_pt-&gt;onnx</a></li>
+<li><a href="#21-winmltools">2.1. 通用转换--基于winmltools</a></li>
+<li><a href="#22-tf_pd-onnx">2.2. tf_pd-&gt;onnx</a></li>
+<li><a href="#23-torch_pt-onnx">2.3. torch_pt-&gt;onnx</a></li>
 </ul>
 </li>
 <li><a href="#3-onnxruntime">3. onnxruntime</a><ul>
@@ -58,7 +58,7 @@
 2. 将现有模型从其他格式转换为 ONNX（请参阅 教程）<br />
 3. 从 ONNX 模型 Zoo 获取预先定型的 ONNX 模型</p>
 <p>参考https://github.com/onnx/tutorials</p>
-<h2 id="211-winmltools">2.1.1. 通用转换--基于winmltools</h2>
+<h2 id="21-winmltools">2.1. 通用转换--基于winmltools</h2>
 <p><sup id="fnref:4"><a class="footnote-ref" href="#fn:4" rel="footnote">4</a></sup></p>
 <div class="hlcode"><pre><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="n">winmltools</span>
 </pre></div>
@@ -74,8 +74,8 @@
 </pre></div>
 
 
-<h2 id="212-tf_pd-onnx">2.1.2. tf_pd-&gt;onnx</h2>
-<h2 id="213-torch_pt-onnx">2.1.3. torch_pt-&gt;onnx</h2>
+<h2 id="22-tf_pd-onnx">2.2. tf_pd-&gt;onnx</h2>
+<h2 id="23-torch_pt-onnx">2.3. torch_pt-&gt;onnx</h2>
 <div class="hlcode"><pre><span class="c"># Input to the model</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 

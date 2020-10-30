@@ -1,11 +1,28 @@
 ---
-title: "Numpy 使用杂记"
+title: "Numpy 基础"
 layout: page
 date: 2099-06-02 00:00
 ---
 [TOC]
 
-# 创建N维数组对象
+
+# 1. 简介
+
+# 2. 地位
+NumPy 是Python数据科学生态系统的基础[^1]
+
+>NumPy is the base of the scientific Python ecosystem.
+
+
+![](../../../../attach/images/2020-10-30-21-31-28.png)
+
+# 3. 基本概念
+
+![](../../../../attach/images/2020-10-30-21-39-16.png)
+
+# 4. 创建数组对象
+
+## 4.1. N维数组
 
 ```python
 # zeros创建0矩阵
@@ -31,7 +48,7 @@ np.linspace(0, 1.5, 3)
 #创建随机
 ```
 
-# one-hot
+## 4.2. one-hot
 ```python
 a = np.array([1, 0, 3])
 b = np.zeros((a.size, a.max()+1))
@@ -42,7 +59,7 @@ array([[ 0.,  1.,  0.,  0.],
     [ 1.,  0.,  0.,  0.],
     [ 0.,  0.,  0.,  1.]])
 ```
-# 索引
+# 5. 索引
 
 `np.ravel_multi_index()`工作如何？
 
@@ -64,7 +81,7 @@ lidx=np.ravel_multi_index(array.T,dims)
 
 此函数为我们提供了线性索引当量数。它接受，设置为列的2D数组n-dimensional indices和该n维网格本身的形状，这些索引将映射到该n维网格上并计算等效的线性索引。
 
-# 数学运算
+# 6. 数学运算
 
 ```python
 
@@ -111,7 +128,7 @@ C = np.array([2, -1, 4])
 np.add(B, C) # 相加
 ```
 
-# shape
+# 7. 数组shape操作
 ```python
 a = np.floor(10*np.random.random((3,4)))	# <1的小数*10，取整
 array([[ 9.,  6.,  3.,  8.],
@@ -139,3 +156,8 @@ res=np.where(condition, x, y)
 res=np.where(condition)
 # 返回索引
 ```
+
+# 8. 参考资料
+
+
+[^1]: [Nature: Array programming with NumPy](https://www.nature.com/articles/s41586-020-2649-2)

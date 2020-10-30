@@ -7,25 +7,24 @@ date: 2099-06-02 00:00
 
 # 1. 概念
 Docker Compose 是 Docker 官方编排（Orchestration）项目之一，负责快速的部署分布式应用。
-本章将介绍 Compose 项目情况以及安装和使用。
 
-Compose 定位是 「定义和运行多个 Docker 容器的应用（Defining and running multi-container Docker applications）」，其前身是开源项目 Fig
+Compose 定位是 「定义和**运行多个** Docker 容器的应用（Defining and running multi-container Docker applications）」，其前身是开源项目 
 
-允许用户通过一个单独的 docker-compose.yml 模板文件（YAML 格式）来定义一组相关联的应用容器为一个项目（project）。
+允许用户通过一个单独的 `docker-compose.yml` 模板文件（YAML 格式）来定义一组相关联的应用容器为一个项目（project）。
 
 Compose 中有两个重要的概念：
 	• **服务 (service)**：一个应用的容器，实际上可以包括若干运行相同镜像的容器实例。
 	• **项目 (project)**：由一组关联的应用容器组成的一个完整业务单元，在 docker-compose.yml 文件中定义。
 Compose 的默认管理对象是项目，通过子命令对项目中的一组容器进行便捷地生命周期管理。
 
-Compose 项目由 Python 编写，实现上调用了 Docker 服务提供的 API 来对容器进行管理。因此，只要所操作的平台支持 Docker API，就可以在其上利用 Compose 来进行编排管理。
+Compose 项目**由 Python 编写**，实现上调用了 Docker 服务提供的 API 来对容器进行管理。因此，只要所操作的平台支持 Docker API，就可以在其上利用 Compose 来进行编排管理。
 
 # 2. 镜像编排实践
 
 ## 2.1. 忽略文件
+
 在工作目录下新建 `.dockerignore` 文件
 .dockerignore 语法与 .gitignore 语法一致。使用它排除构建无关的文件及目录，如 node_modules
-
 
 ## 2.2. docker-compose 命令
 对于 Compose 来说，大部分命令的对象既可以是项目本身，也可以指定为项目中的服务或者容器。如果没有特别的说明，命令对象将是项目，这意味着项目中所有的服务都会受到命令影响。
@@ -42,9 +41,15 @@ docker-compose [-f=<arg>...] [options] [COMMAND] [ARGS...]
 	• --x-network-driver DRIVER 指定网络后端的驱动，默认为 bridge
 	• --verbose 输出更多调试信息。
 	• -v, --version 打印版本并退出。
+
+
+### 2.2.1. 镜像构建
 **命令行 命令**
 - build
-格式为 docker-compose build [options] [SERVICE...]。
+格式为 
+```shell
+docker-compose build [options] [SERVICE...]
+```
 构建（重新构建）项目中的服务容器。
 服务容器一旦构建后，将会带上一个标记名，例如对于 web 项目中的一个 db 容器，可能是 web_db。
 可以随时在项目目录下运行 docker-compose build 来重新构建服务。
@@ -73,15 +78,21 @@ $ docker-compose kill -s SIGINT
 格式为 docker-compose logs [options] [SERVICE...]。
 查看服务容器的输出。默认情况下，docker-compose 将对不同的服务输出使用不同的颜色来区分。可以通过 --no-color 来关闭颜色。
 该命令在调试问题的时候十分有用。
-pause
-格式为 docker-compose pause [SERVICE...]。
+### 2.2.2. 容器暂停
+
+```shell
+docker-compose pause [SERVICE...]
+```
 暂停一个服务容器。
+
+### 2.2.3. 打印某个容器端口所映射的公共端口
 port
 格式为 docker-compose port [options] SERVICE PRIVATE_PORT。
 打印某个容器端口所映射的公共端口。
 选项：
 	• --protocol=proto 指定端口协议，tcp（默认值）或者 udp。
 	• --index=index 如果同一服务存在多个容器，指定命令对象容器的序号（默认为 1）。
+### 2.2.4. 
 ps
 格式为 docker-compose ps [options] [SERVICE...]。
 列出项目中目前的所有容器。
@@ -105,7 +116,10 @@ rm
 选项：
 	• -f, --force 强制直接删除，包括非停止状态的容器。一般尽量不要使用该选项。
 	• -v 删除容器所挂载的数据卷。
-run
+### 2.2.5. 容器管理
+
+#### 2.2.5.1. 容器运行
+
 格式为 docker-compose run [options] [-p PORT...] [-e KEY=VAL...] SERVICE [COMMAND] [ARGS...]。
 在指定服务上执行一个命令。
 例如：
@@ -175,16 +189,15 @@ up
 	• --no-recreate 如果容器已经存在了，则不重新创建，不能与 --force-recreate 同时使用。
 	• --no-build 不自动构建缺失的服务镜像。
 	• -t, --timeout TIMEOUT 停止容器时候的超时（默认为 10 秒）。
+### 2.2.6. 版本查看
 - version
 格式为 docker-compose version。
 打印版本信息。
 
-## Dockerfile 编写
-
-参考官方文档
+# 3. Dockerfile 编写
 
 如何写好Dockerfile，Dockerfile最佳实践
-预览目录
+
 
 准则和建议
 Dockerfile 指令
@@ -202,25 +215,24 @@ VOLUME
 USER
 WORKDIR
 ONBUILD
-通过前面一篇 如何写Dockerfile，Dockerfile 参考文档，相信你已经了解了如何写 Dockerfile 文件。本篇文章主要介绍 Docker 公司和 Docker 社区推荐的最佳写法。so，在写 Dockerfile 文件的时候，你应该遵循这些做法。
 
-准则和建议
+## 3.1. 准则和建议
 Docker 官方提供了一些建议和准则，在大多数情况下建议遵守。
-
-1、容器是短暂的，也就是说，你需要可以容易的创建、销毁、配置你的容器。
-2、多数情况，构建镜像的时候是将 Dockerfile 和所需文件放在同一文件夹下。但为了构建性能，我们可以采用 .dockerignore 文件来排除文件和目录。
+1. 容器是短暂的，也就是说，你需要可以容易的创建、销毁、配置你的容器。
+2. 多数情况，构建镜像的时候是将 Dockerfile 和所需文件放在同一文件夹下。但为了构建性能，我们可以采用 `.dockerignore` 文件来排除文件和目录。
 3、避免安装不必要的包，构建镜像应该尽可能减少复杂性、依赖关系、构建时间及镜像大小。
 4、最小化层数。
 5、排序多行参数，通过字母将参数排序来缓解以后的变化，这将帮你避免重复的包、使列表更容易更新，如：
-
-DOCKERFILE
+```DOCKERFILE
+# DOCKERFILE
 RUN apt-get update && apt-get install -y \
   bzr \
   cvs \
   git \
   mercurial \
   subversion
-6、构建缓存，大家知道 Docker 构建镜像的过程是顺序执行 Dockerfile 每个指令的过程。执行过程中，Docker 将在缓存中查找可重用的镜像，如果不想使用缓存，你也可以使用 docker build --no-cache=true ... 命令。
+```
+6、构建缓存，大家知道 Docker 构建镜像的过程是顺序执行 Dockerfile 每个指令的过程。执行过程中，Docker 将在缓存中查找可重用的镜像，如果不想使用缓存，你也可以使用 `docker build --no-cache=true ...` 命令。
 
 如果使用缓存，docker 将使用一下基本规则：
 
@@ -230,16 +242,15 @@ RUN apt-get update && apt-get install -y \
 除了 ADD 和 COPY 指令，缓存检查不会查看容器中的文件来确定缓存匹配。例如，当处理 RUN apt-get -y update 命令时，将不会检查在容器中更新的文件以确定是否存在高速缓存命中。在这种情况下，只需使用命令字符串本身来查找匹配。
 一旦缓存无效，所有后续 Dockerfile 命令将生成新的映像，并且高速缓存将不被使用。
 
-Dockerfile 指令
+## 3.2. Dockerfile 指令
 那么如何最好的编写 Dockerfile 呢，下面有一些建议。
 
-FROM
+### 3.2.1. FROM
 尽可能的使用官方仓库存储的镜像作为基础镜像。官方建议使用 Debian，大小在 150mb 左右。不过在实际开发中，应该用到 alpine 的次数比较多，因为它仅 5mb 左右。
 
-LABEL
+### 3.2.2. LABEL
 了解对象标签。你可以给镜像添加标签（LABEL），如记录许可信息，帮助自动化或其他信息。对象标签以键值对的形式出现，如果包含空格请用 " 扩起来。标签对象必须唯一，否则后者会覆盖前者。键可以包含 .、-、a-zA-Z、0-9。更多信息参考 Docker object labels。下面是一些例子：
-
-DOCKERFILE
+```DOCKERFILE
 # Set one or more individual labels
 LABEL com.example.version="0.0.1-beta"
 LABEL vendor="ACME Incorporated"
@@ -256,31 +267,34 @@ LABEL vendor=ACME\ Incorporated \
       com.example.version="0.0.1-beta" \
       com.example.release-date="2015-02-12"
 RUN
+```
 最常见的应该是安装软件包，如 RUN apt-get install -y foo...，你可以通过 \ 分隔成多行。
 
-APT-GET
+### 3.2.3. APT-GET
 使用 apt-get 你可以安装软件包，但这里有一些需要注意的地方。
 
 您应该避免 RUN apt-get upgrade 或者 dist-upgrade，如果你需要更新软件包，使用 apt-get install -y foo 命令将会自动更新。
 
 你应该将 RUN apt-get update 和 apt-get install 结合使用：
 
-DOCKERFILE
+```DOCKERFILE
 RUN apt-get update && apt-get install -y \
     package-bar \
     package-baz \
     package-foo
+```
 如果单独使用，会导致缓存失效或后续 apt-get install 指令失败，如：
 
-DOCKERFILE
+```DOCKERFILE
 FROM ubuntu:14.04
 RUN apt-get update
 RUN apt-get install -y curl
-why？ok，第一执行构建该镜像是没问题的。可是当你第二次构建，Docker 会将 RUN apt-get update 看作是与镜像一是同一指令，会命中缓存。导致结果就是，你可能会安装一些过时的软件包。所以，使用 RUN apt-get update && apt-get install -y 能够破解缓存机制，实现清除缓存的结果。
+```
+why？ok，第一执行构建该镜像是没问题的。可是当你第二次构建，Docker 会将 RUN apt-get update 看作是与镜像一是同一指令，会命中缓存。导致结果就是，你可能会安装一些过时的软件包。所以，使用 `RUN apt-get update && apt-get install -y `能够破解缓存机制，实现清除缓存的结果。
 
 下面是一个使用 apt-get 的指导建议：
 
-DOCKERFILE
+```DOCKERFILE
 RUN apt-get update && apt-get install -y \
     aufs-tools \
     automake \
@@ -295,6 +309,7 @@ RUN apt-get update && apt-get install -y \
     ruby1.9.1-dev \
     s3cmd=1.1.* \
  && rm -rf /var/lib/apt/lists/*
+```
 当然 alpine 的使用也是同样的情况：
 
 apk add --update --no-cache sudo make
@@ -366,7 +381,8 @@ $ docker run s3cmd
 $ docker run s3cmd ls s3://mybucket
 ENTRYPOINT 也可以于脚本组合使用，允许其以类似于上述命令的方式运行。如一个 Postgres Official Image 的例子。：
 
-SH
+
+```shell
 #!/bin/bash
 set -e
 
@@ -381,6 +397,7 @@ if [ "$1" = 'postgres' ]; then
 fi
 
 exec "$@"
+```
 注：此脚本使用的 exec bash 命令 ，使最终运行的应用程序成为容器的 PID 1。这允许应用程序接收发送到容器任何 Unix 信号。有关 ENTRYPOINT 详细信息，请参阅帮助。
 
 将脚本复制到容器，并通过 ENTRYPOINT 开始运行：
@@ -423,12 +440,12 @@ ONBUILD 指令在当前 Dockerfile 构建完成后执行，存储到镜像 的ma
 
 当把 ADD 或 COPY 加入 ONBUILD 中时要小心，如果新创建镜像的上下文缺少这些要添加的资源情况会导致创建的失败。因而添加单独的标签可以帮助我们减小这种情况发生的可能， 让 Dockerfile 作者来做决定。
 
-本文链接：https://deepzz.com/post/dockerfile-best-practices.html，参与评论 »
 
---EOF--
 
-发表于 2017-06-10 15:38:00，并被添加「dockerfile、dockerfile-practices」标签。
 
-# 参考文献
+
+# 4. 参考文献
+
+1. 本文链接：https://deepzz.com/post/dockerfile-best-practices.html
 
 

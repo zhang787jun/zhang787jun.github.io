@@ -37,27 +37,42 @@
 <li><a href="#1">1. 概念</a></li>
 <li><a href="#2">2. 镜像编排实践</a><ul>
 <li><a href="#21">2.1. 忽略文件</a></li>
-<li><a href="#22-docker-compose">2.2. docker-compose 命令</a></li>
-<li><a href="#dockerfile">Dockerfile 编写</a></li>
+<li><a href="#22-docker-compose">2.2. docker-compose 命令</a><ul>
+<li><a href="#221">2.2.1. 镜像构建</a></li>
+<li><a href="#222">2.2.2. 容器暂停</a></li>
+<li><a href="#223">2.2.3. 打印某个容器端口所映射的公共端口</a></li>
+<li><a href="#224">2.2.4.</a></li>
+<li><a href="#225">2.2.5. 容器管理</a><ul>
+<li><a href="#2251">2.2.5.1. 容器运行</a></li>
 </ul>
 </li>
-<li><a href="#set-one-or-more-individual-labels">Set one or more individual labels</a></li>
-<li><a href="#set-multiple-labels-on-one-line">Set multiple labels on one line</a></li>
-<li><a href="#set-multiple-labels-at-once-using-line-continuation-characters-to-break-long-lines">Set multiple labels at once, using line-continuation characters to break long lines</a></li>
-<li><a href="#binbash">!/bin/bash</a></li>
-<li><a href="#_1">参考文献</a></li>
+<li><a href="#226">2.2.6. 版本查看</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#3-dockerfile">3. Dockerfile 编写</a><ul>
+<li><a href="#31">3.1. 准则和建议</a></li>
+<li><a href="#32-dockerfile">3.2. Dockerfile 指令</a><ul>
+<li><a href="#321-from">3.2.1. FROM</a></li>
+<li><a href="#322-label">3.2.2. LABEL</a></li>
+<li><a href="#323-apt-get">3.2.3. APT-GET</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#4">4. 参考文献</a></li>
 </ul>
 </div>
 <h1 id="1">1. 概念</h1>
-<p>Docker Compose 是 Docker 官方编排（Orchestration）项目之一，负责快速的部署分布式应用。<br />
-本章将介绍 Compose 项目情况以及安装和使用。</p>
-<p>Compose 定位是 「定义和运行多个 Docker 容器的应用（Defining and running multi-container Docker applications）」，其前身是开源项目 Fig</p>
-<p>允许用户通过一个单独的 docker-compose.yml 模板文件（YAML 格式）来定义一组相关联的应用容器为一个项目（project）。</p>
+<p>Docker Compose 是 Docker 官方编排（Orchestration）项目之一，负责快速的部署分布式应用。</p>
+<p>Compose 定位是 「定义和<strong>运行多个</strong> Docker 容器的应用（Defining and running multi-container Docker applications）」，其前身是开源项目 </p>
+<p>允许用户通过一个单独的 <code>docker-compose.yml</code> 模板文件（YAML 格式）来定义一组相关联的应用容器为一个项目（project）。</p>
 <p>Compose 中有两个重要的概念：<br />
     • <strong>服务 (service)</strong>：一个应用的容器，实际上可以包括若干运行相同镜像的容器实例。<br />
     • <strong>项目 (project)</strong>：由一组关联的应用容器组成的一个完整业务单元，在 docker-compose.yml 文件中定义。<br />
 Compose 的默认管理对象是项目，通过子命令对项目中的一组容器进行便捷地生命周期管理。</p>
-<p>Compose 项目由 Python 编写，实现上调用了 Docker 服务提供的 API 来对容器进行管理。因此，只要所操作的平台支持 Docker API，就可以在其上利用 Compose 来进行编排管理。</p>
+<p>Compose 项目<strong>由 Python 编写</strong>，实现上调用了 Docker 服务提供的 API 来对容器进行管理。因此，只要所操作的平台支持 Docker API，就可以在其上利用 Compose 来进行编排管理。</p>
 <h1 id="2">2. 镜像编排实践</h1>
 <h2 id="21">2.1. 忽略文件</h2>
 <p>在工作目录下新建 <code>.dockerignore</code> 文件<br />
@@ -76,11 +91,16 @@ Compose 的默认管理对象是项目，通过子命令对项目中的一组容
     • --x-networking 使用 Docker 的可拔插网络后端特性<br />
     • --x-network-driver DRIVER 指定网络后端的驱动，默认为 bridge<br />
     • --verbose 输出更多调试信息。<br />
-    • -v, --version 打印版本并退出。<br />
-<strong>命令行 命令</strong><br />
+    • -v, --version 打印版本并退出。</p>
+<h3 id="221">2.2.1. 镜像构建</h3>
+<p><strong>命令行 命令</strong><br />
 - build<br />
-格式为 docker-compose build [options] [SERVICE...]。<br />
-构建（重新构建）项目中的服务容器。<br />
+格式为 </p>
+<div class="hlcode"><pre><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">build</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span> <span class="p">[</span><span class="n">SERVICE</span><span class="p">...]</span>
+</pre></div>
+
+
+<p>构建（重新构建）项目中的服务容器。<br />
 服务容器一旦构建后，将会带上一个标记名，例如对于 web 项目中的一个 db 容器，可能是 web_db。<br />
 可以随时在项目目录下运行 docker-compose build 来重新构建服务。<br />
 选项包括：<br />
@@ -109,17 +129,23 @@ Compose 的默认管理对象是项目，通过子命令对项目中的一组容
 <li>logs<br />
 格式为 docker-compose logs [options] [SERVICE...]。<br />
 查看服务容器的输出。默认情况下，docker-compose 将对不同的服务输出使用不同的颜色来区分。可以通过 --no-color 来关闭颜色。<br />
-该命令在调试问题的时候十分有用。<br />
-pause<br />
-格式为 docker-compose pause [SERVICE...]。<br />
-暂停一个服务容器。<br />
-port<br />
+该命令在调试问题的时候十分有用。</li>
+</ul>
+<h3 id="222">2.2.2. 容器暂停</h3>
+<div class="hlcode"><pre><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">pause</span> <span class="p">[</span><span class="n">SERVICE</span><span class="p">...]</span>
+</pre></div>
+
+
+<p>暂停一个服务容器。</p>
+<h3 id="223">2.2.3. 打印某个容器端口所映射的公共端口</h3>
+<p>port<br />
 格式为 docker-compose port [options] SERVICE PRIVATE_PORT。<br />
 打印某个容器端口所映射的公共端口。<br />
 选项：<br />
     • --protocol=proto 指定端口协议，tcp（默认值）或者 udp。<br />
-    • --index=index 如果同一服务存在多个容器，指定命令对象容器的序号（默认为 1）。<br />
-ps<br />
+    • --index=index 如果同一服务存在多个容器，指定命令对象容器的序号（默认为 1）。</p>
+<h3 id="224">2.2.4.</h3>
+<p>ps<br />
 格式为 docker-compose ps [options] [SERVICE...]。<br />
 列出项目中目前的所有容器。<br />
 选项：<br />
@@ -141,12 +167,12 @@ rm<br />
 删除所有（停止状态的）服务容器。推荐先执行 docker-compose stop 命令来停止容器。<br />
 选项：<br />
     • -f, --force 强制直接删除，包括非停止状态的容器。一般尽量不要使用该选项。<br />
-    • -v 删除容器所挂载的数据卷。<br />
-run<br />
-格式为 docker-compose run [options] [-p PORT...] [-e KEY=VAL...] SERVICE [COMMAND] [ARGS...]。<br />
+    • -v 删除容器所挂载的数据卷。</p>
+<h3 id="225">2.2.5. 容器管理</h3>
+<h4 id="2251">2.2.5.1. 容器运行</h4>
+<p>格式为 docker-compose run [options] [-p PORT...] [-e KEY=VAL...] SERVICE [COMMAND] [ARGS...]。<br />
 在指定服务上执行一个命令。<br />
-例如：</li>
-</ul>
+例如：</p>
 <div class="hlcode"><pre><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">run</span> <span class="n">ubuntu</span> <span class="n">ping</span> <span class="n">docker</span><span class="p">.</span><span class="n">com</span>
 </pre></div>
 
@@ -215,14 +241,15 @@ up<br />
     • --force-recreate 强制重新创建容器，不能与 --no-recreate 同时使用。<br />
     • --no-recreate 如果容器已经存在了，则不重新创建，不能与 --force-recreate 同时使用。<br />
     • --no-build 不自动构建缺失的服务镜像。<br />
-    • -t, --timeout TIMEOUT 停止容器时候的超时（默认为 10 秒）。<br />
-- version<br />
+    • -t, --timeout TIMEOUT 停止容器时候的超时（默认为 10 秒）。</p>
+<h3 id="226">2.2.6. 版本查看</h3>
+<ul>
+<li>version<br />
 格式为 docker-compose version。<br />
-打印版本信息。</p>
-<h2 id="dockerfile">Dockerfile 编写</h2>
-<p>参考官方文档</p>
-<p>如何写好Dockerfile，Dockerfile最佳实践<br />
-预览目录</p>
+打印版本信息。</li>
+</ul>
+<h1 id="3-dockerfile">3. Dockerfile 编写</h1>
+<p>如何写好Dockerfile，Dockerfile最佳实践</p>
 <p>准则和建议<br />
 Dockerfile 指令<br />
 FROM<br />
@@ -238,83 +265,95 @@ ENTRYPOINT<br />
 VOLUME<br />
 USER<br />
 WORKDIR<br />
-ONBUILD<br />
-通过前面一篇 如何写Dockerfile，Dockerfile 参考文档，相信你已经了解了如何写 Dockerfile 文件。本篇文章主要介绍 Docker 公司和 Docker 社区推荐的最佳写法。so，在写 Dockerfile 文件的时候，你应该遵循这些做法。</p>
-<p>准则和建议<br />
-Docker 官方提供了一些建议和准则，在大多数情况下建议遵守。</p>
-<p>1、容器是短暂的，也就是说，你需要可以容易的创建、销毁、配置你的容器。<br />
-2、多数情况，构建镜像的时候是将 Dockerfile 和所需文件放在同一文件夹下。但为了构建性能，我们可以采用 .dockerignore 文件来排除文件和目录。<br />
+ONBUILD</p>
+<h2 id="31">3.1. 准则和建议</h2>
+<p>Docker 官方提供了一些建议和准则，在大多数情况下建议遵守。<br />
+1. 容器是短暂的，也就是说，你需要可以容易的创建、销毁、配置你的容器。<br />
+2. 多数情况，构建镜像的时候是将 Dockerfile 和所需文件放在同一文件夹下。但为了构建性能，我们可以采用 <code>.dockerignore</code> 文件来排除文件和目录。<br />
 3、避免安装不必要的包，构建镜像应该尽可能减少复杂性、依赖关系、构建时间及镜像大小。<br />
 4、最小化层数。<br />
 5、排序多行参数，通过字母将参数排序来缓解以后的变化，这将帮你避免重复的包、使列表更容易更新，如：</p>
-<p>DOCKERFILE<br />
-RUN apt-get update &amp;&amp; apt-get install -y \<br />
-  bzr \<br />
-  cvs \<br />
-  git \<br />
-  mercurial \<br />
-  subversion<br />
-6、构建缓存，大家知道 Docker 构建镜像的过程是顺序执行 Dockerfile 每个指令的过程。执行过程中，Docker 将在缓存中查找可重用的镜像，如果不想使用缓存，你也可以使用 docker build --no-cache=true ... 命令。</p>
+<div class="hlcode"><pre><span class="cp"># DOCKERFILE</span>
+<span class="n">RUN</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span> <span class="o">&amp;&amp;</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> \
+  <span class="n">bzr</span> \
+  <span class="n">cvs</span> \
+  <span class="n">git</span> \
+  <span class="n">mercurial</span> \
+  <span class="n">subversion</span>
+</pre></div>
+
+
+<p>6、构建缓存，大家知道 Docker 构建镜像的过程是顺序执行 Dockerfile 每个指令的过程。执行过程中，Docker 将在缓存中查找可重用的镜像，如果不想使用缓存，你也可以使用 <code>docker build --no-cache=true ...</code> 命令。</p>
 <p>如果使用缓存，docker 将使用一下基本规则：</p>
 <p>从第一条指令开始，它将比较从基础镜像导出的所有子镜像，查看是否有相同的的构建指令，以此来获取缓存。<br />
 在大多数情况下，简单地比较 Dockerfile 与其中一个子镜像的指令是足够的。但是，某些说明需要更多的检查和解释。<br />
 对于 ADD 和 COPY 指令，会去比较文件的校验和，但不考虑文件的修改时间和访问时间。如果有任何变化，缓存无效。<br />
 除了 ADD 和 COPY 指令，缓存检查不会查看容器中的文件来确定缓存匹配。例如，当处理 RUN apt-get -y update 命令时，将不会检查在容器中更新的文件以确定是否存在高速缓存命中。在这种情况下，只需使用命令字符串本身来查找匹配。<br />
 一旦缓存无效，所有后续 Dockerfile 命令将生成新的映像，并且高速缓存将不被使用。</p>
-<p>Dockerfile 指令<br />
-那么如何最好的编写 Dockerfile 呢，下面有一些建议。</p>
-<p>FROM<br />
-尽可能的使用官方仓库存储的镜像作为基础镜像。官方建议使用 Debian，大小在 150mb 左右。不过在实际开发中，应该用到 alpine 的次数比较多，因为它仅 5mb 左右。</p>
-<p>LABEL<br />
-了解对象标签。你可以给镜像添加标签（LABEL），如记录许可信息，帮助自动化或其他信息。对象标签以键值对的形式出现，如果包含空格请用 " 扩起来。标签对象必须唯一，否则后者会覆盖前者。键可以包含 .、-、a-zA-Z、0-9。更多信息参考 Docker object labels。下面是一些例子：</p>
-<p>DOCKERFILE</p>
-<h1 id="set-one-or-more-individual-labels">Set one or more individual labels</h1>
-<p>LABEL com.example.version="0.0.1-beta"<br />
-LABEL vendor="ACME Incorporated"<br />
-LABEL com.example.release-date="2015-02-12"<br />
-LABEL com.example.version.is-production=""</p>
-<h1 id="set-multiple-labels-on-one-line">Set multiple labels on one line</h1>
-<p>LABEL com.example.version="0.0.1-beta" com.example.release-date="2015-02-12"</p>
-<h1 id="set-multiple-labels-at-once-using-line-continuation-characters-to-break-long-lines">Set multiple labels at once, using line-continuation characters to break long lines</h1>
-<p>LABEL vendor=ACME\ Incorporated \<br />
-      com.example.is-beta= \<br />
-      com.example.is-production="" \<br />
-      com.example.version="0.0.1-beta" \<br />
-      com.example.release-date="2015-02-12"<br />
-RUN<br />
-最常见的应该是安装软件包，如 RUN apt-get install -y foo...，你可以通过 \ 分隔成多行。</p>
-<p>APT-GET<br />
-使用 apt-get 你可以安装软件包，但这里有一些需要注意的地方。</p>
+<h2 id="32-dockerfile">3.2. Dockerfile 指令</h2>
+<p>那么如何最好的编写 Dockerfile 呢，下面有一些建议。</p>
+<h3 id="321-from">3.2.1. FROM</h3>
+<p>尽可能的使用官方仓库存储的镜像作为基础镜像。官方建议使用 Debian，大小在 150mb 左右。不过在实际开发中，应该用到 alpine 的次数比较多，因为它仅 5mb 左右。</p>
+<h3 id="322-label">3.2.2. LABEL</h3>
+<p>了解对象标签。你可以给镜像添加标签（LABEL），如记录许可信息，帮助自动化或其他信息。对象标签以键值对的形式出现，如果包含空格请用 " 扩起来。标签对象必须唯一，否则后者会覆盖前者。键可以包含 .、-、a-zA-Z、0-9。更多信息参考 Docker object labels。下面是一些例子：</p>
+<div class="hlcode"><pre><span class="cp"># Set one or more individual labels</span>
+<span class="n">LABEL</span> <span class="n">com</span><span class="p">.</span><span class="n">example</span><span class="p">.</span><span class="n">version</span><span class="o">=</span><span class="s">&quot;0.0.1-beta&quot;</span>
+<span class="n">LABEL</span> <span class="n">vendor</span><span class="o">=</span><span class="s">&quot;ACME Incorporated&quot;</span>
+<span class="n">LABEL</span> <span class="n">com</span><span class="p">.</span><span class="n">example</span><span class="p">.</span><span class="n">release</span><span class="o">-</span><span class="n">date</span><span class="o">=</span><span class="s">&quot;2015-02-12&quot;</span>
+<span class="n">LABEL</span> <span class="n">com</span><span class="p">.</span><span class="n">example</span><span class="p">.</span><span class="n">version</span><span class="p">.</span><span class="n">is</span><span class="o">-</span><span class="n">production</span><span class="o">=</span><span class="s">&quot;&quot;</span>
+
+<span class="cp"># Set multiple labels on one line</span>
+<span class="n">LABEL</span> <span class="n">com</span><span class="p">.</span><span class="n">example</span><span class="p">.</span><span class="n">version</span><span class="o">=</span><span class="s">&quot;0.0.1-beta&quot;</span> <span class="n">com</span><span class="p">.</span><span class="n">example</span><span class="p">.</span><span class="n">release</span><span class="o">-</span><span class="n">date</span><span class="o">=</span><span class="s">&quot;2015-02-12&quot;</span>
+
+<span class="cp"># Set multiple labels at once, using line-continuation characters to break long lines</span>
+<span class="n">LABEL</span> <span class="n">vendor</span><span class="o">=</span><span class="n">ACME</span><span class="err">\</span> <span class="n">Incorporated</span> \
+      <span class="n">com</span><span class="p">.</span><span class="n">example</span><span class="p">.</span><span class="n">is</span><span class="o">-</span><span class="n">beta</span><span class="o">=</span> \
+      <span class="n">com</span><span class="p">.</span><span class="n">example</span><span class="p">.</span><span class="n">is</span><span class="o">-</span><span class="n">production</span><span class="o">=</span><span class="s">&quot;&quot;</span> \
+      <span class="n">com</span><span class="p">.</span><span class="n">example</span><span class="p">.</span><span class="n">version</span><span class="o">=</span><span class="s">&quot;0.0.1-beta&quot;</span> \
+      <span class="n">com</span><span class="p">.</span><span class="n">example</span><span class="p">.</span><span class="n">release</span><span class="o">-</span><span class="n">date</span><span class="o">=</span><span class="s">&quot;2015-02-12&quot;</span>
+<span class="n">RUN</span>
+</pre></div>
+
+
+<p>最常见的应该是安装软件包，如 RUN apt-get install -y foo...，你可以通过 \ 分隔成多行。</p>
+<h3 id="323-apt-get">3.2.3. APT-GET</h3>
+<p>使用 apt-get 你可以安装软件包，但这里有一些需要注意的地方。</p>
 <p>您应该避免 RUN apt-get upgrade 或者 dist-upgrade，如果你需要更新软件包，使用 apt-get install -y foo 命令将会自动更新。</p>
 <p>你应该将 RUN apt-get update 和 apt-get install 结合使用：</p>
-<p>DOCKERFILE<br />
-RUN apt-get update &amp;&amp; apt-get install -y \<br />
-    package-bar \<br />
-    package-baz \<br />
-    package-foo<br />
-如果单独使用，会导致缓存失效或后续 apt-get install 指令失败，如：</p>
-<p>DOCKERFILE<br />
-FROM ubuntu:14.04<br />
-RUN apt-get update<br />
-RUN apt-get install -y curl<br />
-why？ok，第一执行构建该镜像是没问题的。可是当你第二次构建，Docker 会将 RUN apt-get update 看作是与镜像一是同一指令，会命中缓存。导致结果就是，你可能会安装一些过时的软件包。所以，使用 RUN apt-get update &amp;&amp; apt-get install -y 能够破解缓存机制，实现清除缓存的结果。</p>
+<div class="hlcode"><pre><span class="n">RUN</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span> <span class="o">&amp;&amp;</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> \
+    <span class="n">package</span><span class="o">-</span><span class="n">bar</span> \
+    <span class="n">package</span><span class="o">-</span><span class="n">baz</span> \
+    <span class="n">package</span><span class="o">-</span><span class="n">foo</span>
+</pre></div>
+
+
+<p>如果单独使用，会导致缓存失效或后续 apt-get install 指令失败，如：</p>
+<div class="hlcode"><pre><span class="n">FROM</span> <span class="n">ubuntu</span><span class="o">:</span><span class="mf">14.04</span>
+<span class="n">RUN</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span>
+<span class="n">RUN</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="n">curl</span>
+</pre></div>
+
+
+<p>why？ok，第一执行构建该镜像是没问题的。可是当你第二次构建，Docker 会将 RUN apt-get update 看作是与镜像一是同一指令，会命中缓存。导致结果就是，你可能会安装一些过时的软件包。所以，使用 <code>RUN apt-get update &amp;&amp; apt-get install -y</code>能够破解缓存机制，实现清除缓存的结果。</p>
 <p>下面是一个使用 apt-get 的指导建议：</p>
-<p>DOCKERFILE<br />
-RUN apt-get update &amp;&amp; apt-get install -y \<br />
-    aufs-tools \<br />
-    automake \<br />
-    build-essential \<br />
-    curl \<br />
-    dpkg-sig \<br />
-    libcap-dev \<br />
-    libsqlite3-dev \<br />
-    mercurial \<br />
-    reprepro \<br />
-    ruby1.9.1 \<br />
-    ruby1.9.1-dev \<br />
-    s3cmd=1.1.<em> \<br />
- &amp;&amp; rm -rf /var/lib/apt/lists/</em><br />
-当然 alpine 的使用也是同样的情况：</p>
+<div class="hlcode"><pre><span class="n">RUN</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span> <span class="o">&amp;&amp;</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> \
+    <span class="n">aufs</span><span class="o">-</span><span class="n">tools</span> \
+    <span class="n">automake</span> \
+    <span class="n">build</span><span class="o">-</span><span class="n">essential</span> \
+    <span class="n">curl</span> \
+    <span class="n">dpkg</span><span class="o">-</span><span class="n">sig</span> \
+    <span class="n">libcap</span><span class="o">-</span><span class="n">dev</span> \
+    <span class="n">libsqlite3</span><span class="o">-</span><span class="n">dev</span> \
+    <span class="n">mercurial</span> \
+    <span class="n">reprepro</span> \
+    <span class="n">ruby1</span><span class="mf">.9.1</span> \
+    <span class="n">ruby1</span><span class="mf">.9.1</span><span class="o">-</span><span class="n">dev</span> \
+    <span class="n">s3cmd</span><span class="o">=</span><span class="mf">1.1</span><span class="p">.</span><span class="o">*</span> \
+ <span class="o">&amp;&amp;</span> <span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">apt</span><span class="o">/</span><span class="n">lists</span><span class="o">/*</span>
+</pre></div>
+
+
+<p>当然 alpine 的使用也是同样的情况：</p>
 <p>apk add --update --no-cache sudo make<br />
 USING PIPES<br />
 在 RUN 指令中使用 | 会有什么问题，Docker 只关注最后一个命令执行的正确与否，如：</p>
@@ -366,22 +405,24 @@ CMD ["--help"]<br />
 你也可以通过命令行覆盖 CMD 参数：</p>
 <p>$ docker run s3cmd ls s3://mybucket<br />
 ENTRYPOINT 也可以于脚本组合使用，允许其以类似于上述命令的方式运行。如一个 Postgres Official Image 的例子。：</p>
-<p>SH</p>
-<h1 id="binbash">!/bin/bash</h1>
-<p>set -e</p>
-<p>if [ "$1" = 'postgres' ]; then<br />
-    chown -R postgres "$PGDATA"</p>
-<div class="hlcode"><pre><span class="k">if</span> <span class="p">[</span> <span class="o">-</span><span class="n">z</span> <span class="s">&quot;$(ls -A &quot;</span><span class="err">$</span><span class="n">PGDATA</span><span class="s">&quot;)&quot;</span> <span class="p">];</span> <span class="n">then</span>
-    <span class="n">gosu</span> <span class="n">postgres</span> <span class="n">initdb</span>
-<span class="n">fi</span>
+<div class="hlcode"><pre><span class="c">#!/bin/bash</span>
+<span class="nb">set</span> -e
 
-<span class="n">exec</span> <span class="n">gosu</span> <span class="n">postgres</span> <span class="s">&quot;$@&quot;</span>
+<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$1&quot;</span> <span class="o">=</span> <span class="s1">&#39;postgres&#39;</span> <span class="o">]</span>; <span class="k">then</span>
+<span class="k">    </span>chown -R postgres <span class="s2">&quot;$PGDATA&quot;</span>
+
+    <span class="k">if</span> <span class="o">[</span> -z <span class="s2">&quot;$(ls -A &quot;</span><span class="nv">$PGDATA</span><span class="s2">&quot;)&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+<span class="k">        </span>gosu postgres initdb
+    <span class="k">fi</span>
+
+<span class="k">    </span><span class="nb">exec </span>gosu postgres <span class="s2">&quot;$@&quot;</span>
+<span class="k">fi</span>
+
+<span class="nb">exec</span> <span class="s2">&quot;$@&quot;</span>
 </pre></div>
 
 
-<p>fi</p>
-<p>exec "$@"<br />
-注：此脚本使用的 exec bash 命令 ，使最终运行的应用程序成为容器的 PID 1。这允许应用程序接收发送到容器任何 Unix 信号。有关 ENTRYPOINT 详细信息，请参阅帮助。</p>
+<p>注：此脚本使用的 exec bash 命令 ，使最终运行的应用程序成为容器的 PID 1。这允许应用程序接收发送到容器任何 Unix 信号。有关 ENTRYPOINT 详细信息，请参阅帮助。</p>
 <p>将脚本复制到容器，并通过 ENTRYPOINT 开始运行：</p>
 <p>COPY ./docker-entrypoint.sh /<br />
 ENTRYPOINT ["/docker-entrypoint.sh"]<br />
@@ -407,10 +448,10 @@ ONBUILD 指令在当前 Dockerfile 构建完成后执行，存储到镜像 的ma
 <p>当我们使用带有 ONBUILD 触发器的镜像作为基础镜像来创建新镜像时，当 Dockerfile 执行到 FROM 时会自动查找 OnBuild 信息并执行这个触发器命令。成功后继续向下执行下一条指令，失败的话就停止向下执行并中止创建过程。如果成功创建了新的镜像后，这个新镜像中不会继承基础镜像中的 ONBUILD 触发器内容。参考 Ruby’s ONBUILD variants。</p>
 <p>建立的图像 ONBUILD 应该有一个单独的标签，例如：ruby:1.9-onbuild 或 ruby:2.0-onbuild。</p>
 <p>当把 ADD 或 COPY 加入 ONBUILD 中时要小心，如果新创建镜像的上下文缺少这些要添加的资源情况会导致创建的失败。因而添加单独的标签可以帮助我们减小这种情况发生的可能， 让 Dockerfile 作者来做决定。</p>
-<p>本文链接：https://deepzz.com/post/dockerfile-best-practices.html，参与评论 »</p>
-<p>--EOF--</p>
-<p>发表于 2017-06-10 15:38:00，并被添加「dockerfile、dockerfile-practices」标签。</p>
-<h1 id="_1">参考文献</h1>
+<h1 id="4">4. 参考文献</h1>
+<ol>
+<li>本文链接：https://deepzz.com/post/dockerfile-best-practices.html</li>
+</ol>
 </div>
 <div id="renote">
   <HR style=" FILTER: alpha (opacity = 100, finishopacity =0 , style= 3 )" width="80%" color=#987 cb 9 SIZE=3>

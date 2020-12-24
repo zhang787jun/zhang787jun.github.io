@@ -43,7 +43,7 @@
 <li><a href="#22">2.2. 详解</a><ul>
 <li><a href="#221">2.2.1. 简单修饰器</a></li>
 <li><a href="#222">2.2.2. 内置修饰器</a><ul>
-<li><a href="#2221-staticmethod">2.2.2.1. @staticmethod</a></li>
+<li><a href="#2221-staticmethod-">2.2.2.1. @staticmethod--静态方法</a></li>
 <li><a href="#2222-classmethod-">2.2.2.2. @classmethod--类方法</a></li>
 <li><a href="#2223-property-">2.2.2.3. @property--属性</a></li>
 </ul>
@@ -161,9 +161,14 @@
 
 
 <h4 id="222">2.2.2. 内置修饰器</h4>
-<p>修饰器可以自定义，同时，python中也有自定义的几个修饰器<br />
-内置的装饰器有三个，分别是staticmethod、classmethod和property，作用分别是把类中定义的实例方法变成静态方法、类方法和类属性。</p>
-<p>使用频率也非常低。</p>
+<p>修饰器可以自定义，同时，python中也有内置的3个修饰器分别是<br />
+1. staticmethod<br />
+2. classmethod<br />
+3. property</p>
+<p>作用分别是把类中定义的实例方法变成<br />
+1. 静态方法<br />
+2. 类方法<br />
+3. 类属性</p>
 <p>而使用@staticmethod或@classmethod，就可以不需要实例化，直接类名.方法名()来调用。</p>
 <p>这有利于组织代码，把某些应该属于某个类的函数给放到那个类里去，同时有利于命名空间的整洁。</p>
 <p>既然@staticmethod和@classmethod都可以直接类名.方法名()来调用，那他们有什么区别呢</p>
@@ -173,7 +178,7 @@
 如果在@staticmethod中要调用到这个类的一些属性方法，只能直接类名.属性名或类名.方法名。</p>
 <p>而@classmethod因为持有cls参数，可以来调用类的属性，类的方法，实例化对象等，避免硬编码。</p>
 <p>下面上代码。</p>
-<h5 id="2221-staticmethod">2.2.2.1. @staticmethod</h5>
+<h5 id="2221-staticmethod-">2.2.2.1. @staticmethod--静态方法</h5>
 <p>一般来说，要使用某个类的方法，需要先实例化一个对象再调用方法。直接类名.方法名()来调用，不需要实例化类。</p>
 <div class="hlcode"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
@@ -186,7 +191,7 @@
 <span class="o">&gt;&gt;&gt;</span>
 <span class="n">static_foo</span>
 
-
+<span class="c"># 对比</span>
 <span class="n">class_instance</span><span class="o">=</span><span class="n">A</span><span class="p">(</span><span class="s">&quot;name_1&quot;</span><span class="p">)</span>
 <span class="n">class_instance</span><span class="o">.</span><span class="n">static_foo</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span>

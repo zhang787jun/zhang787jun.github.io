@@ -1,12 +1,11 @@
 ---
-title: "Python--程序性能测试"
+title: "Python--性能优化"
 layout: page
 date: 2099-06-02 00:00
 ---
 [TOC]
-
 # 1. 时间消耗
-## 1.1. 程序运行时间
+## 1.1. python 程序运行时间
 ```shell
 vim  python_file.py
 ---
@@ -40,7 +39,7 @@ Wall time: 0 ns
 # 指定loop次数为5000
 %%timeit -n 5000
 ```
-## 1.3. 修饰器函数计时
+## 修饰器函数计时
 
 ```python
 import datetime
@@ -69,7 +68,7 @@ def Pi(N):
 ```
 
 
-## 1.4. cProfile
+## cProfile
 
 
 

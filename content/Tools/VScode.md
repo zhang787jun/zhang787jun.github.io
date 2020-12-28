@@ -35,7 +35,6 @@ Setting Sync 快捷键：
 
 # 2. VScode 远程开发
 
-
 # 3. VSCode-Markdown 图片复制插件路径配置
 Markdown Paste 插件
 
@@ -144,3 +143,5 @@ print(msg)
 
 
 VS code有两种补全方案：Jedi和python.language.server。
+
+#  添加header 

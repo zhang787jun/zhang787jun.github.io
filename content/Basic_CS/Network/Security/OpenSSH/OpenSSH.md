@@ -85,6 +85,8 @@ ClientAliveCountMax 86400
 
 service sshd restart
 ```
+## ssh-keygen--用于生成安全的密钥
+
 
 
 # 4. 案例

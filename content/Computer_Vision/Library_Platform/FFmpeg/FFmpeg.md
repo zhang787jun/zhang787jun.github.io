@@ -9,7 +9,7 @@ date: 2099-06-02 00:00
 
 
 
-GStreamer-多媒体框架，
+GStreamer-多媒体框架
 FFMPEG-容器解析器，音频/视频解码器的软件实现，软件缩放，
 Plain GStreamer没有插件就无法做任何事情，GStreamer需要各种插件，
 
@@ -18,12 +18,12 @@ FFmpeg 是视频处理最常用的开源软件。
 
 它功能强大，用途广泛，大量用于视频网站和商业软件（比如 Youtube 和 iTunes），也是许多音频和视频格式的标准编码/解码实现。
 
-# 背景
+# 1. 背景
 
-## 视频文件就是容器
+## 1.1. 视频文件就是容器
 视频文件本身其实是一个容器（container），里面包括了视频和音频，也可能有字幕等其他内容
 
-## 编码格式
+## 1.2. 编码格式
 
 ```shell
 # 查看 FFmpeg 支持的容器。
@@ -36,7 +36,15 @@ ffmpeg -codecs
 ffmpeg -encoders
 ```
 
-# FFmpeg 的使用格式
+
+
+# 2. 安装
+
+```shell
+# FFmpeg dev package
+sudo apt install libavcodec-dev
+```
+# 3. FFmpeg 的使用格式
 FFmpeg 的命令行参数非常多，可以分成五个部分。
 
 

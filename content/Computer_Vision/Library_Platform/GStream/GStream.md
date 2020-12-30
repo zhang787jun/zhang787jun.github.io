@@ -12,7 +12,7 @@ date: 2099-06-02 00:00
 
 Gstreamer是一个支持Windows、Linux、Android， iOS的跨平台的多媒体框架，应用程序可以通过管道（Pipeline）的方式，将多媒体处理的各个步骤串联起来，达到预期的效果。每个步骤通过元素（Element）基于GObject对象系统通过插件（plugins）的方式实现，方便了各项功能的扩展。
 
-Plain GStreamer没有插件就无法做任何事情，GStreamer需要各种插件，
+Plain GStreamer 没有插件就无法做任何事情，GStreamer需要各种插件，
 
 ## 1.1. 安装
 
@@ -24,8 +24,6 @@ sudo apt install \
     libgstreamer-plugins-{base,good,bad}1.0-dev \
     gstreamer1.0-libav \
     gstreamer1.0-vaapi
-# FFmpeg dev package
-sudo apt install libavcodec-dev
 ```
 
 ## 1.2. 组成
@@ -41,7 +39,7 @@ gst-plugins-base: an essential exemplary set of elements
 
 4. a few others packages
 
-### 1.2.1. 核心 core package
+### 1.2.1. 核心 Core package
 ### 1.2.2. 插件 Plugins
 最下层为各种插件，实现具体的数据处理及音视频输出，应用不需要关注插件的细节，会由Core Framework层负责插件的加载及管理。主要分类为：
 

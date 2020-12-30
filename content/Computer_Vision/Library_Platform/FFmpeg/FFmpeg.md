@@ -35,7 +35,10 @@ ffmpeg -codecs
 # 查看 FFmpeg 支持的编码格式。
 ffmpeg -encoders
 ```
-
+```shell
+# FFmpeg dev package
+sudo apt install libavcodec-dev
+```
 # FFmpeg 的使用格式
 FFmpeg 的命令行参数非常多，可以分成五个部分。
 

@@ -1,11 +1,16 @@
 ---
-title: "01_Gstream python 实践"
+title: "01_Gstreamer python 实践"
 layout: page
 date: 2099-06-02 00:00
 ---
 
 [TOC]
+# 安装
 
+并不简单
+参考
+https://gstreamer.freedesktop.org/documentation/playback/playbin.html?gi-language=python#playbin-page
+# 案例
 ```python
 import gi
 gi.require_version('Gst', '1.0')

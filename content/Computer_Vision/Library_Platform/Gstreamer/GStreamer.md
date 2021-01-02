@@ -239,16 +239,13 @@ gst-launch-1.0 filesrc location=sintel_trailer-480p.ogv ! oggdemux name=demux ! 
 ## 3.2. 编解（转）码
 
 # 4. 进阶
-GStreamer多线程
+## GStreamer多线程
 　　GStreamer框架是一个支持多线程的框架，线程会根据Pipeline的需要自动创建和销毁，例如，将媒体流与应用线程解耦，应用线程不会被GStreamer的处理阻塞。而且，GStreamer的插件还可以创建自己所需的线程用于媒体的处理，例如：在一个4核的CPU上，视频解码插件可以创建4个线程来最大化利用CPU资源。
 　　此外，在创建Pipeline时，我们还可以指定某个Pipeline的分支在不同的线程中执行（例如，使audio、video同时在不同的线程中进行解码）。这是通过queue Element来实现的，queue的sink pad仅仅将数据放入队列，另外一个线程从队列中取出数据，并传递到下一个Element。queue通常也被用于作为数据缓冲，缓冲区大小可以通过queue的属性进行配置。
 
-
-
 　　在上面的示例Pipeline中，souce是audiotestsrc，会产生一个相应的audio信号，然后使用tee Element将数据分为两路，一路被用于播放，通过声卡输出，另一路被用于转换为视频波形，用于输出到屏幕。
+
 示例图中的红色阴影部分表示位于同一个线程中，queue会创建单独的线程，所以上面的Pipeline使用了3个线程完成相应的功能。拥有多个sink的Pipeline通常需要多个线程，因为在多个sync间进行同步的时候，sink会阻塞当前所在线程直到所等待的事件发生。
-
-
 # 5. 数据消息交互
 在pipeline运行的过程中，各个element以及应用之间不可避免的需要进行数据消息的传输，gstreamer提供了bus系统以及多种数据类型（Buffers、Events、Messages，Queries）来达到此目的：
 

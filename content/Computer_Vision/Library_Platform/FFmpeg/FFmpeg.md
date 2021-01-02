@@ -38,13 +38,15 @@ ffmpeg version 3.4.8-0ubuntu0.2 Copyright (c) 2000-2020 the FFmpeg developers
 ```
 
 
-### 1.3.1. 支持的格式与容器
+### 1.3.1. 支持的容器
 
 ```shell
 # 查看 FFmpeg 支持的容器。
 ffmpeg -formats
 ffmpeg -formats| grep "mp4" -hide_banner
-
+```
+### 1.3.1. 支持的编解码格式
+```shell 
 # 查看 FFmpeg 支持的编码格式。
 ffmpeg -codecs 
 ffmpeg -codecs | grep "h264" -hide_banner
@@ -75,16 +77,14 @@ cuvid
 
 # 2. 组成
 
-FFmpeg主要由format、codec、util三大核心模块的功能。
+FFmpeg主要由 `format`,`codec`,`util` 三大核心模块的功能。
 
 ## 2.1. format
 ## 2.2. codec
 ## 2.3. util
 
-
 # 3. FFmpeg 的使用格式
 FFmpeg 的命令行参数非常多，可以分成五个部分。
-
 
 ```shell
 ffmpeg {1} {2} -i {3} {4} {5}
@@ -111,12 +111,7 @@ output.webm # 输出文件
 ```shell
 ffmpeg -i input.avi output.mp4
 ```
-# 功能
 
-
-## 编解码
-
-## 
 # 4. 参考资料
 
 https://zhuanlan.zhihu.com/p/143195044

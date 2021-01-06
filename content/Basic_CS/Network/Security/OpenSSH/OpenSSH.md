@@ -30,7 +30,7 @@ digraph {
 > 官网:https://www.openssh.com/
 > Github:https://github.com/PowerShell/openssh-portable/tree/v8.1.0.0
 
-## 特色与组成
+## 1.1. 特色与组成
 
 SSH 基于客户端-服务器体系结构，用户在其中工作的系统是客户端，所管理的远程系统是服务器。 OpenSSH 包含一系列组件和工具，用于提供一种安全且简单的远程系统管理方法，其中包括：
 1. `sshd.exe`，它是远程所管理的系统上必须运行的 SSH 服务器组件
@@ -43,7 +43,7 @@ SSH 基于客户端-服务器体系结构，用户在其中工作的系统是客
 7. `ssh-add.exe`，将私钥添加到服务器允许的列表中
 8. `ssh-keyscan.exe`，帮助从许多主机收集公用 SSH 主机密钥
 
-## ssh和ssl的联系和区别
+## 1.2. ssh和ssl的联系和区别
 
 
 
@@ -62,18 +62,18 @@ ssl	Secure Sockets Layer	安全套接字层	协议	传输层之上应用层之�
 
 
 
-# 3. OpenSSH实践 
+# 3. OpenSSH实践
 
-## 3.1. sshd 
+## 3.1. sshd
 
-## 3.2. ssh 
+## 3.2. ssh
 
 ```shell
 ssh username@servername 22 
 ```
 
 
-### 3.2.1. ssh 掉线的问题 
+### 3.2.1. ssh 掉线的问题
 
 ```shell
 vim /etc/ssh/sshd_config
@@ -85,7 +85,7 @@ ClientAliveCountMax 86400
 
 service sshd restart
 ```
-## ssh-keygen--用于生成安全的密钥
+## 3.3. ssh-keygen--用于生成安全的密钥
 
 
 
@@ -105,9 +105,45 @@ cat ~/id_rsa.pub >> ~/.ssh/authorized_keys
 rm ~/id_rsa.pub                 # 用完就可以删掉了
 ```
 
-## 4.2. gitlab 
+## 4.2. gitlab
+
+## 4.3. github 免密使用
+
+完成ssh-agent 服务的启动和 ssh-add 的私钥添加和管理后，
+开 Terminal（终端）。输入以下内容：
+
+```shell
+$ ssh -T git@github.com
+# Attempts to ssh to GitHub
+```
+您可能会看到类似如下的警告：
+```shell
+> The authenticity of host 'github.com (IP ADDRESS)' can't be established.
+> RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+> Are you sure you want to continue connecting (yes/no)?
+Verify that the fingerprint in the message you see matches GitHub's RSA public key fingerprint. If it does, then type yes:
+
+> Hi username! You've successfully authenticated, but GitHub does not
+> provide shell access.
+```
+
+您可能会看到以下错误消息：
 
 
-# 5. 参考资料 
+```shell
+...
+Agent admitted failure to sign using the key.
+debug1: No more authentication methods to try.
+Permission denied (publickey).
+```
+这是某些 Linux 发行版的已知问题。 更多信息请参阅“错误：代理承认没有签署”。
+
+验证生成的消息包含您的用户名。 如果收到“权限被拒绝”消息，请参阅“错误：权限被拒绝（公钥）”。
+
+
+# 5. 参考资料
 
 https://docs.microsoft.com/zh-cn/windows-server/administration/openssh/openssh_install_firstuse
+
+
+[Github官网：使用 SSH 连接到 GitHub](https://docs.github.com/cn/free-pro-team@latest/github/authenticating-to-github/testing-your-ssh-connection)

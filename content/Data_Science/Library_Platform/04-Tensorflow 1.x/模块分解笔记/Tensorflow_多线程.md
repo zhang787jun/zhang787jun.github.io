@@ -10,7 +10,7 @@ tag: Tensorflow,框架,AI,
 TensorFlow提供两个类帮助实现多线程：
 1. 是tf.train.Coordinator，
 2. 是tf.train.QueueRunner。
-. 
+
 Coordinator主要用来实现多个线程同时停止，QueueRunner用来创建一系列线程。
 
 # Coordinator

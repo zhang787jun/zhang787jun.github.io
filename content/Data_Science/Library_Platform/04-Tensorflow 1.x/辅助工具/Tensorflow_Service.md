@@ -728,7 +728,11 @@ if __name__ == "__main__":
 
 
 
-# 4. 客户端请求 gRPC
+# 4. 客户端请求实践
+
+1. 了解模型
+2. 定义通讯手段 restful grpc?
+3. 写好脚本
 
 
 从上面两段代码可以知道，我们只需要约定好输入输出的别名，在保存模型的时候使用这些别名创建signature，输入输出tensor的具体名称已经完全隐藏，这就实现创建模型与使用模型的解耦。
@@ -811,11 +815,6 @@ if __name__ == '__main__':
   tf.app.run()
 ```
 
-# 客户端请求实践
-
-1. 了解模型
-2. 定义通讯手段 restful grpc?
-3. 写好脚本
 
 
 # 5. [进阶] simple_tensorflow_serving 工具
@@ -831,7 +830,7 @@ SavedModel CLI 在 SavedModel 中 MetaGraphDef 上支持以下两个命令：
 
 1. `show` ，显示在 SavedModel 中 MetaGraphDef 上的计算。
 2. `run` ，在 MetaGraphDef 上运行计算。
-### 6.1. show 查看模型文件信息
+### 6.0.1. show 查看模型文件信息
 ```shell 
 # 查看模型中所有Metagraph的tag
 saved_model_cli show --dir "/export_model"
@@ -851,7 +850,7 @@ saved_model_cli show --dir /tmp/saved_model_dir --all
 ```
 
 
-### 6.2. run 运行
+### 6.0.2. run 运行
 
 调用 run 命令以运行图计算、传递输入，然后显示（并可选地保存）输出。语法如下：
 ```shell

@@ -10,21 +10,21 @@ date: 2099-06-02 00:00
 keras.layer
 
 keras 里面的几个基础layer
-# 常用层
+# 1. 常用层
 ## 1.1. Dense
 Dense就是常用的全连接层。
 
 $$output = activation(dot(input, kernel)+bias)$$
 
+```python
 input shape=(None,n)
 output shape=(None,units)
+```
 
 其中activation是逐元素计算的激活函数，kernel是本层的权值矩阵，bias为偏置向量，只有当use_bias=True才会添加。
 
 ```python
 Dense(units, activation=None, use_bias=True, kernel_initializer='glorot_uniform', bias_initializer='zeros', kernel_regularizer=None, bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None)
-
-
 ```
 
 ## 1.2. Flatten
@@ -53,21 +53,44 @@ keras.layers.embeddings.Embedding(input_dim, output_dim, embeddings_initializer=
 
 ```
 
-# 卷积层
+# 2. 卷积层
 
-# 池化层
+# 3. 池化层
 
-# 局部连接层
+# 4. 局部连接层
 
-# 循环层
+# 5. 循环层
 
-# 嵌入层
+# 6. 嵌入层
 
 
-# 激活层
+# 7. 激活层
 
-# BN层
+# 8. BN层
 
-# 噪声层
+# 9. 噪声层
 
-# 包装器
+# 10. 包装器
+
+# 11. 自定义层
+将自定义的tensorflow图写入keras 
+
+参考 [Tensorflow 官方:通过子类化创建新的层和模型](https://www.tensorflow.org/guide/keras/custom_layers_and_models#call_%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84%E7%89%B9%E6%9D%83_training_%E5%8F%82%E6%95%B0) 
+```python
+class Linear(keras.layers.Layer):
+    def __init__(self, units=32, input_dim=32):
+        super(Linear, self).__init__()
+        w_init = tf.random_normal_initializer()
+        self.w = tf.Variable(
+            initial_value=w_init(shape=(input_dim, units), dtype="float32"),
+            trainable=True,
+        )
+        b_init = tf.zeros_initializer()
+        self.b = tf.Variable(
+            initial_value=b_init(shape=(units,), dtype="float32"), trainable=True
+        )
+
+    def call(self, inputs):
+        return tf.matmul(inputs, self.w) + self.b
+
+```

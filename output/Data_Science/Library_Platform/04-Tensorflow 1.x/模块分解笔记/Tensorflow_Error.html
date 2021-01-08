@@ -28,12 +28,20 @@
     <div id="container">
         
 <div id="header">
-  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Data_Science\Library_Platform\04-Tensorflow 1.x\模块分解笔记">Data_Science\Library_Platform\04-Tensorflow 1.x\模块分解笔记</a>&nbsp;»&nbsp;Tensorflow_异常集锦</div>
+  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Data_Science">Data_Science</a>&nbsp;»&nbsp;<a href="/Wiki/#-Library_Platform">Library_Platform</a>&nbsp;»&nbsp;<a href="/Wiki/#-04-Tensorflow 1.x">04-Tensorflow 1.x</a>&nbsp;»&nbsp;<a href="/Wiki/#-模块分解笔记">模块分解笔记</a>&nbsp;»&nbsp;Tensorflow_异常集锦</div>
 </div>
 <div class="clearfix"></div>
 <div id="title">Tensorflow_异常集锦</div>
 <div id="content">
-  <h1 id="1-tensorflow">1. Tensorflow异常集锦</h1>
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#1-tensorflow">1. Tensorflow异常集锦</a><ul>
+<li><a href="#11-tensorflow-checkpoint">1.1. tensorflow checkpoint报错</a></li>
+<li><a href="#12-feed_dict">1.2. feed_dict</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1 id="1-tensorflow">1. Tensorflow异常集锦</h1>
 <h2 id="11-tensorflow-checkpoint">1.1. tensorflow checkpoint报错</h2>
 <p>在调用<code>tf.train.Saver</code>#save时，如果使用的路径是绝对路径，那么保存的checkpoint里面用的就是绝对路径；如果使用的是相对路径，那么保存的checkpoint里面用的就是相对路径。正确的方法应该是使用相对路径进行保存，这样才能保证较好的可移植性。<br />
 如果使用相对路径，复制到本地之后，会报找不到文件的错误。<br />
@@ -82,7 +90,7 @@ tensorflow.python.framework.errors_impl.NotFoundError: FindFirstFile failed for:
     </div>
     <div id="footer">
         <span>
-            Copyright © 2020 zhang787jun.
+            Copyright © 2021 zhang787jun.
             Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
         </span>
     </div>

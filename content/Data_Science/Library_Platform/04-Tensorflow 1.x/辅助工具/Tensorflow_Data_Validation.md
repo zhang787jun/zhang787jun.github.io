@@ -1,6 +1,5 @@
 ---
-title: "Tensorflow数据可视化工具--TensorFlow Data Validation
-"
+title: "Tensorflow数据可视化工具--TensorFlow Data Validation"
 date: 2019-06-12 00:00
 render: True 
 tag: Tensorflow,框架,AI,

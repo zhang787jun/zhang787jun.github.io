@@ -28,7 +28,7 @@
     <div id="container">
         
 <div id="header">
-  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Data_Science\Library_Platform\04-Tensorflow 1.x\辅助工具">Data_Science\Library_Platform\04-Tensorflow 1.x\辅助工具</a>&nbsp;»&nbsp;TensorFlow Serving--模型服务部署</div>
+  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Data_Science">Data_Science</a>&nbsp;»&nbsp;<a href="/Wiki/#-Library_Platform">Library_Platform</a>&nbsp;»&nbsp;<a href="/Wiki/#-04-Tensorflow 1.x">04-Tensorflow 1.x</a>&nbsp;»&nbsp;<a href="/Wiki/#-辅助工具">辅助工具</a>&nbsp;»&nbsp;TensorFlow Serving--模型服务部署</div>
 </div>
 <div class="clearfix"></div>
 <div id="title">TensorFlow Serving--模型服务部署</div>
@@ -90,12 +90,11 @@
 <li><a href="#35">3.5. 示例</a></li>
 </ul>
 </li>
-<li><a href="#4-grpc">4. 客户端请求 gRPC</a></li>
-<li><a href="#_1">客户端请求实践</a></li>
+<li><a href="#4">4. 客户端请求实践</a></li>
 <li><a href="#5-simple_tensorflow_serving">5. [进阶] simple_tensorflow_serving 工具</a></li>
 <li><a href="#6-savedmodel-cli-3">6. SavedModel CLI 3</a><ul>
-<li><a href="#61-show">6.1. show 查看模型文件信息</a></li>
-<li><a href="#62-run">6.2. run 运行</a></li>
+<li><a href="#601-show">6.0.1. show 查看模型文件信息</a></li>
+<li><a href="#602-run">6.0.2. run 运行</a></li>
 </ul>
 </li>
 <li><a href="#7">7. 参考文献</a></li>
@@ -797,7 +796,12 @@ GET http://127.0.0.1:8501/v1/models/iris/versions/1570601080
 </pre></div>
 
 
-<h1 id="4-grpc">4. 客户端请求 gRPC</h1>
+<h1 id="4">4. 客户端请求实践</h1>
+<ol>
+<li>了解模型</li>
+<li>定义通讯手段 restful grpc?</li>
+<li>写好脚本</li>
+</ol>
 <p>从上面两段代码可以知道，我们只需要约定好输入输出的别名，在保存模型的时候使用这些别名创建signature，输入输出tensor的具体名称已经完全隐藏，这就实现创建模型与使用模型的解耦。</p>
 <p>最重要的是使用TensorInfo对象进行，训练和预测时候的解耦</p>
 <div class="hlcode"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
@@ -875,12 +879,6 @@ GET http://127.0.0.1:8501/v1/models/iris/versions/1570601080
 </pre></div>
 
 
-<h1 id="_1">客户端请求实践</h1>
-<ol>
-<li>了解模型</li>
-<li>定义通讯手段 restful grpc?</li>
-<li>写好脚本</li>
-</ol>
 <h1 id="5-simple_tensorflow_serving">5. [进阶] simple_tensorflow_serving 工具</h1>
 <p>simple_tensorflow_serving 是一个TensorFlow Serving的封装，是机器学习模型的通用且易于使用的服务，使得模型的部署变得更加容易</p>
 <p>参考：https://github.com/tobegit3hub/simple_tensorflow_serving</p>
@@ -891,7 +889,7 @@ GET http://127.0.0.1:8501/v1/models/iris/versions/1570601080
 <li><code>show</code> ，显示在 SavedModel 中 MetaGraphDef 上的计算。</li>
 <li><code>run</code> ，在 MetaGraphDef 上运行计算。</li>
 </ol>
-<h3 id="61-show">6.1. show 查看模型文件信息</h3>
+<h3 id="601-show">6.0.1. show 查看模型文件信息</h3>
 <div class="hlcode"><pre><span class="cp"># 查看模型中所有Metagraph的tag</span>
 <span class="n">saved_model_cli</span> <span class="n">show</span> <span class="o">--</span><span class="n">dir</span> <span class="s">&quot;/export_model&quot;</span>
 <span class="o">&gt;&gt;&gt;</span>
@@ -910,7 +908,7 @@ GET http://127.0.0.1:8501/v1/models/iris/versions/1570601080
 </pre></div>
 
 
-<h3 id="62-run">6.2. run 运行</h3>
+<h3 id="602-run">6.0.2. run 运行</h3>
 <p>调用 run 命令以运行图计算、传递输入，然后显示（并可选地保存）输出。语法如下：</p>
 <div class="hlcode"><pre><span class="n">usage</span><span class="o">:</span> <span class="n">saved_model_cli</span> <span class="n">run</span> <span class="o">[-</span><span class="n">h</span><span class="o">]</span> <span class="o">--</span><span class="n">dir</span> <span class="n">DIR</span> <span class="o">--</span><span class="n">tag_set</span> <span class="n">TAG_SET</span> <span class="o">--</span><span class="n">signature_def</span>
                            <span class="n">SIGNATURE_DEF_KEY</span> <span class="o">[--</span><span class="n">inputs</span> <span class="n">INPUTS</span><span class="o">]</span>
@@ -949,7 +947,7 @@ GET http://127.0.0.1:8501/v1/models/iris/versions/1570601080
     </div>
     <div id="footer">
         <span>
-            Copyright © 2020 zhang787jun.
+            Copyright © 2021 zhang787jun.
             Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
         </span>
     </div>

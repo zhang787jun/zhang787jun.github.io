@@ -28,7 +28,7 @@
     <div id="container">
         
 <div id="header">
-  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Data_Science\Library_Platform\04-Tensorflow 1.x\模块分解笔记">Data_Science\Library_Platform\04-Tensorflow 1.x\模块分解笔记</a>&nbsp;»&nbsp;TensorFlow中的多线程</div>
+  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Data_Science">Data_Science</a>&nbsp;»&nbsp;<a href="/Wiki/#-Library_Platform">Library_Platform</a>&nbsp;»&nbsp;<a href="/Wiki/#-04-Tensorflow 1.x">04-Tensorflow 1.x</a>&nbsp;»&nbsp;<a href="/Wiki/#-模块分解笔记">模块分解笔记</a>&nbsp;»&nbsp;TensorFlow中的多线程</div>
 </div>
 <div class="clearfix"></div>
 <div id="title">TensorFlow中的多线程</div>
@@ -40,9 +40,8 @@
 </div>
 <p>TensorFlow提供两个类帮助实现多线程：<br />
 1. 是tf.train.Coordinator，<br />
-2. 是tf.train.QueueRunner。<br />
-. <br />
-Coordinator主要用来实现多个线程同时停止，QueueRunner用来创建一系列线程。</p>
+2. 是tf.train.QueueRunner。</p>
+<p>Coordinator主要用来实现多个线程同时停止，QueueRunner用来创建一系列线程。</p>
 <h1 id="coordinator">Coordinator</h1>
 <p>根据官方文档，Coordinator主要有三个方法：</p>
 <p>tf.train.Coordinator.should_stop: returns True if the threads should stop.<br />
@@ -112,7 +111,7 @@ tf.train.Coordinator.join: waits until the specified threads have stopped.<br />
     </div>
     <div id="footer">
         <span>
-            Copyright © 2020 zhang787jun.
+            Copyright © 2021 zhang787jun.
             Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
         </span>
     </div>

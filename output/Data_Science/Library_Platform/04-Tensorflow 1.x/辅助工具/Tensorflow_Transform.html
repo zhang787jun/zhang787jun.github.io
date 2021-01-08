@@ -6,7 +6,7 @@
     <link rel="Stylesheet" type="text/css" href="/Wiki/static/css/tango.css">
     <link rel="shortcut icon" href="/Wiki/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/Wiki/favicon.ico" type="image/x-icon">
-    <title>Tensorflow Gfile文件操作  - Jun's personal knowledge wiki</title>
+    <title>TensorFlow Transform--数据预处理 - Jun's personal knowledge wiki</title>
     <meta name="keywords" content="Technology, MachineLearning, DataMining, Wiki" />
     <meta name="description" content="A wiki website" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -28,16 +28,47 @@
     <div id="container">
         
 <div id="header">
-  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Data_Science\Library_Platform\04-Tensorflow 1.x\模块分解笔记">Data_Science\Library_Platform\04-Tensorflow 1.x\模块分解笔记</a>&nbsp;»&nbsp;Tensorflow Gfile文件操作 </div>
+  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Data_Science">Data_Science</a>&nbsp;»&nbsp;<a href="/Wiki/#-Library_Platform">Library_Platform</a>&nbsp;»&nbsp;<a href="/Wiki/#-04-Tensorflow 1.x">04-Tensorflow 1.x</a>&nbsp;»&nbsp;<a href="/Wiki/#-辅助工具">辅助工具</a>&nbsp;»&nbsp;TensorFlow Transform--数据预处理</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">Tensorflow Gfile文件操作 </div>
+<div id="title">TensorFlow Transform--数据预处理</div>
 <div id="content">
-  <div class="toc"><span class="toctitle">Table of Contents</span><ul></ul>
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#1">1. 使用步骤</a></li>
+</ul>
 </div>
-<p>1、提供了一种类似于python文件操作的API；<br />
-2、提供了一种操作tensorflow C++文件系统的API；<br />
-tensorflow c++文件操作接口支持多个文件系统实现，包括本地文件、谷歌云存储(以gs://开头)和HDFS(以HDFS://开头)，tensorflow封装这些接口到tf.gfile，以便我们可以使用这些接口来存储和加载检查点文件、将tensorboard log信息写到文本里以及访问训练数据(在其他用途里)。但是，如果所有文件都放在本地，那么我们直接使用python提供的常规文本操作接口也是一样效果且毫无问题的！</p>
+<p>TensorFlow Transform是一个用于使用TensorFlow预处理数据的库。 tf.Transform对于需要完全通过的数据很有用，例如：</p>
+<ol>
+<li>通过平均值和标准偏差对输入值进行归一化。</li>
+<li>通过在所有输入值上生成词汇表，将字符串转换为整数。</li>
+</ol>
+<p>通过根据观察到的数据分布将浮点数分配给存储桶，将浮点数转换为整数。<br />
+TensorFlow内置了对单个示例或一批示例进行操作的支持。<code>tf.Transform</code>扩展了这些功能，以支持对示例数据的全传递。</p>
+<h1 id="1">1. 使用步骤</h1>
+<ol>
+<li>定义一个 <code>preprocessing</code> 函数，即对管道的逻辑描述，该管道将原始数据转换为用于训练机器学习模型的数据。</li>
+<li>通过将预处理功能转换为Beam管道，展示用于转换数据的Apache Beam实现。</li>
+<li>显示其他用法示例。</li>
+</ol>
+<p>```python</p>
+<p>import tensorflow as tf<br />
+import tensorflow_transform as tft<br />
+import tensorflow_transform.beam as tft_beam</p>
+<p>def preprocessing_fn(inputs):<br />
+  x = inputs['x']<br />
+  y = inputs['y']<br />
+  s = inputs['s']<br />
+  x_centered = x - tft.mean(x)<br />
+  y_normalized = tft.scale_to_0_1(y)<br />
+  s_integerized = tft.compute_and_apply_vocabulary(s)<br />
+  x_centered_times_y_normalized = x_centered * y_normalized<br />
+  return {<br />
+      'x_centered': x_centered,<br />
+      'y_normalized': y_normalized,<br />
+      'x_centered_times_y_normalized': x_centered_times_y_normalized,<br />
+      's_integerized': s_integerized<br />
+  }<br />
+  ```</p>
 </div>
 <div id="renote">
   <HR style=" FILTER: alpha (opacity = 100, finishopacity =0 , style= 3 )" width="80%" color=#987 cb 9 SIZE=3>
@@ -48,7 +79,7 @@ tensorflow c++文件操作接口支持多个文件系统实现，包括本地文
     </div>
     <div id="footer">
         <span>
-            Copyright © 2020 zhang787jun.
+            Copyright © 2021 zhang787jun.
             Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
         </span>
     </div>

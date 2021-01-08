@@ -28,15 +28,44 @@
     <div id="container">
         
 <div id="header">
-  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Programming_Language\Python\高性能的python">Programming_Language\Python\高性能的python</a>&nbsp;»&nbsp;Python--高性能编程</div>
+  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Programming_Language">Programming_Language</a>&nbsp;»&nbsp;<a href="/Wiki/#-Python">Python</a>&nbsp;»&nbsp;<a href="/Wiki/#-高性能的python">高性能的python</a>&nbsp;»&nbsp;Python--高性能编程</div>
 </div>
 <div class="clearfix"></div>
 <div id="title">Python--高性能编程</div>
 <div id="content">
   <div class="toc"><span class="toctitle">Table of Contents</span><ul>
-<li><a href="#_1">列表</a></li>
+<li><a href="#python">Python 有多慢</a></li>
+<li><a href="#python_1">Python为什么慢</a><ul>
+<li><a href="#gil">GIL</a></li>
+<li><a href="#_1">过于强大的动态</a><ul>
+<li><a href="#_2">内存分布不紧凑</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_3">列表和元组</a></li>
 </ul>
 </div>
+<h1 id="python">Python 有多慢</h1>
+<p>2–10x slower than another language, </p>
+<h1 id="python_1">Python为什么慢</h1>
+<p>首先，语言实现具有速度，Python作为一种语言是一组规则（其语法和语义），因此没有“速度”。只有特定的语言实现可以具有可衡量的速度，然后我们才可以将性能与另一种语言的特定实现进行比较。通常，您无法将一种语言与另一种语言的速度进行比较-您只能比较实现。</p>
+<p>使用Python时，有几种实现-CPython（带有或不带有Psyco，一个专门用于CPython的编译器），IronPython，Jython，PyPy-加上几个实现Python子集（Tinypy）甚至可以将Python子集编译为C ++的部分实现。 （Shedskin）。如果您说Python运行缓慢，那么您在谈论哪种具体实现？</p>
+<p>话虽这么说，作为一种动态语言，Python对于某些特定的基准测试通常比某些其他语言的标准实现要慢（尽管它比其他许多语言要快）。作为一种动态语言，只能在运行时确定有关程序的许多信息。这意味着许多依赖于在编译时了解对象类型的常见编译器技巧无法正常工作。尽管如此，仍然可以做很多事情来提高动态语言的性能（许多人相信，除了静态类型语言的性能之外），其中一些已经在像Strongtalk这样的虚拟机中完成过，并且正在在Python中进行探索。在PyPy JIT编译器跟踪。 最后，使用执行概要分析器（例如Python概要文件或cprofile模块）提供了加快执行速度的关键信息。大多数程序将大部分执行时间花费在对操作系统库的调用上，并且执行权衡不太直观。例如，跨网络的许多小型数据请求比一个较大的单个请求要慢得多。实际上，Python代码执行速度足够快。</p>
+<h2 id="gil">GIL</h2>
+<blockquote>
+<p>It’s the GIL (Global Interpreter Lock)</p>
+</blockquote>
+<p>“It’s because its interpreted and not compiled”<br />
+“It’s because its a dynamically typed language”</p>
+<p>在进行代码的性能优化之前，我们先简单分析Python性能较低的原因：</p>
+<h2 id="_1">过于强大的动态</h2>
+<p>Python是一个非常动态的语言，而这使得为Python提供JIT(Just in Time Compiler)异常困难。</p>
+<h3 id="_2">内存分布不紧凑</h3>
+<p>由于python数据内存分布不紧凑，导致没有很好的利用L1/L2 缓存进行加速。</p>
+<p>由于硬件技术的限制，我们可以制造出容量很小但很快的存储器，也可以制造出容量很大但很慢的存储器，但不可能两边的好处都占着，不可能制造出访问速度又快容量又大的存储器。因此，现代计算机都把存储器分成若干级，称为Memory Hierarchy，按照离CPU由近到远的顺序依次是CPU寄存器、Cache、内存、硬盘，越靠近CPU的存储器容量越小但访问速度越快。</p>
+<p>大多数程序的行为都具有局部性（Locality）的特点：它们会花费大量的时间反复执行一小段代码（例如循环），或者反复访问一个很小的地址范围中的数据（例如访问一个数组）。所以预读缓存可以有效的提高程序的运行效率：CPU取一条指令，我把和它相邻的指令也都缓存起来，CPU很可能马上就会取到；CPU访问一个数据，我把和它相邻的数据也都缓存起来，CPU很可能马上就会访问到。</p>
+<p>但由于python的数据缺乏局部性的特点，导致于都缓存的失效，以下显示了一个列表内部元素的地址分布情况</p>
 <p><a href="https://readbook.readthedocs.io/zh_CN/readbook/book/Python%E9%AB%98%E6%80%A7%E8%83%BD%E7%BC%96%E7%A8%8B.html">电子书：Python高性能编程</a></p>
 <p>第1章　理解高性能Python　1<br />
 第2章　通过性能分析找到瓶颈　15<br />
@@ -65,7 +94,7 @@ mmap</p>
 <p>迭代器、生成器<br />
 节约内存<br />
 延迟估值</p>
-<h1 id="_1">列表</h1>
+<h1 id="_3">列表和元组</h1>
 <p>列表<br />
 当我们要将一串长度固定的数子放入列表中，有两种方法：</p>
 <div class="hlcode"><pre><span class="c"># 方法一</span>
@@ -83,15 +112,6 @@ mmap</p>
 
 
 <p>当列表的长度较大时，方法二较方法一有明显的性能优势，原因在于方法一的列表需要不断的动态扩张和重新分配内存空间，关于动态表扩张和收缩的策略，可以看《算法导论》第17章第4节。</p>
-<p>Python为什么慢<br />
-在进行代码的性能优化之前，我们先简单分析Python性能较低的原因</p>
-<p>过于强大的动态<br />
-Python是一个非常动态的语言，而这使得为Python提供JIT(Just in Time Compiler)异常困难。更加具体的内容可以阅读这篇文章why is python slow</p>
-<p>内存分布不紧凑<br />
-由于python数据内存分布不紧凑，导致没有很好的利用L1/L2 缓存进行加速。</p>
-<p>由于硬件技术的限制，我们可以制造出容量很小但很快的存储器，也可以制造出容量很大但很慢的存储器，但不可能两边的好处都占着，不可能制造出访问速度又快容量又大的存储器。因此，现代计算机都把存储器分成若干级，称为Memory Hierarchy，按照离CPU由近到远的顺序依次是CPU寄存器、Cache、内存、硬盘，越靠近CPU的存储器容量越小但访问速度越快。</p>
-<p>大多数程序的行为都具有局部性（Locality）的特点：它们会花费大量的时间反复执行一小段代码（例如循环），或者反复访问一个很小的地址范围中的数据（例如访问一个数组）。所以预读缓存可以有效的提高程序的运行效率：CPU取一条指令，我把和它相邻的指令也都缓存起来，CPU很可能马上就会取到；CPU访问一个数据，我把和它相邻的数据也都缓存起来，CPU很可能马上就会访问到。</p>
-<p>但由于python的数据缺乏局部性的特点，导致于都缓存的失效，以下显示了一个列表内部元素的地址分布情况</p>
 </div>
 <div id="renote">
   <HR style=" FILTER: alpha (opacity = 100, finishopacity =0 , style= 3 )" width="80%" color=#987 cb 9 SIZE=3>
@@ -102,7 +122,7 @@ Python是一个非常动态的语言，而这使得为Python提供JIT(Just in Ti
     </div>
     <div id="footer">
         <span>
-            Copyright © 2020 zhang787jun.
+            Copyright © 2021 zhang787jun.
             Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
         </span>
     </div>

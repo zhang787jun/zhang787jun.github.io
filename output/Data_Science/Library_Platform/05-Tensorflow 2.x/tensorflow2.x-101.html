@@ -6,7 +6,7 @@
     <link rel="Stylesheet" type="text/css" href="/Wiki/static/css/tango.css">
     <link rel="shortcut icon" href="/Wiki/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/Wiki/favicon.ico" type="image/x-icon">
-    <title>TensorFlow Transform--数据预处理 - Jun's personal knowledge wiki</title>
+    <title>Tensorflow 2.X-101 - Jun's personal knowledge wiki</title>
     <meta name="keywords" content="Technology, MachineLearning, DataMining, Wiki" />
     <meta name="description" content="A wiki website" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -28,44 +28,20 @@
     <div id="container">
         
 <div id="header">
-  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Data_Science\Library_Platform\04-Tensorflow 1.x\辅助工具">Data_Science\Library_Platform\04-Tensorflow 1.x\辅助工具</a>&nbsp;»&nbsp;TensorFlow Transform--数据预处理</div>
+  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Data_Science">Data_Science</a>&nbsp;»&nbsp;<a href="/Wiki/#-Library_Platform">Library_Platform</a>&nbsp;»&nbsp;<a href="/Wiki/#-05-Tensorflow 2.x">05-Tensorflow 2.x</a>&nbsp;»&nbsp;Tensorflow 2.X-101</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">TensorFlow Transform--数据预处理</div>
+<div id="title">Tensorflow 2.X-101</div>
 <div id="content">
-  <p>TensorFlow Transform是一个用于使用TensorFlow预处理数据的库。 tf.Transform对于需要完全通过的数据很有用，例如：</p>
-<p>通过平均值和标准偏差对输入值进行归一化。<br />
-通过在所有输入值上生成词汇表，将字符串转换为整数。<br />
-通过根据观察到的数据分布将浮点数分配给存储桶，将浮点数转换为整数。<br />
-TensorFlow内置了对单个示例或一批示例进行操作的支持。tf.Transform扩展了这些功能，以支持对示例数据的全传递。</p>
-<h1 id="_1">使用步骤</h1>
-<ol>
-<li>定义一个 <code>preprocessing</code> 函数，即对管道的逻辑描述，该管道将原始数据转换为用于训练机器学习模型的数据。</li>
-<li>通过将预处理功能转换为Beam管道，展示用于转换数据的Apache Beam实现。</li>
-<li>显示其他用法示例。</li>
-</ol>
-<p>```python</p>
-<p>import tensorflow as tf<br />
-import tensorflow_transform as tft<br />
-import tensorflow_transform.beam as tft_beam</p>
-<p>def preprocessing_fn(inputs):<br />
-  x = inputs['x']<br />
-  y = inputs['y']<br />
-  s = inputs['s']<br />
-  x_centered = x - tft.mean(x)<br />
-  y_normalized = tft.scale_to_0_1(y)<br />
-  s_integerized = tft.compute_and_apply_vocabulary(s)<br />
-  x_centered_times_y_normalized = x_centered * y_normalized<br />
-  return {<br />
-      'x_centered': x_centered,<br />
-      'y_normalized': y_normalized,<br />
-      'x_centered_times_y_normalized': x_centered_times_y_normalized,<br />
-      's_integerized': s_integerized<br />
-  }<br />
-  ```</p>
-<p>Define a preprocessing function, a logical description of the pipeline that transforms the raw data into the data used to train a machine learning model.<br />
-Show the Apache Beam implementation used to transform data by converting the preprocessing function into a Beam pipeline.<br />
-Show additional usage examples.</p>
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#tensorflow-2x">关闭 Tensorflow 2.X</a></li>
+</ul>
+</div>
+<h1 id="tensorflow-2x">关闭 Tensorflow 2.X</h1>
+<p>学习Tensorflow 2.X 的第一步就是关闭Tensorflow 2.X</p>
+<div class="hlcode"><pre><span class="n">import</span> <span class="n">tensorflow</span><span class="p">.</span><span class="n">compat</span><span class="p">.</span><span class="n">v1</span> <span class="n">as</span> <span class="n">tf</span>
+<span class="n">tf</span><span class="p">.</span><span class="n">compat</span><span class="p">.</span><span class="n">v1</span><span class="p">.</span><span class="n">disable_eager_execution</span><span class="p">()</span>
+</pre></div>
 </div>
 <div id="renote">
   <HR style=" FILTER: alpha (opacity = 100, finishopacity =0 , style= 3 )" width="80%" color=#987 cb 9 SIZE=3>
@@ -76,7 +52,7 @@ Show additional usage examples.</p>
     </div>
     <div id="footer">
         <span>
-            Copyright © 2020 zhang787jun.
+            Copyright © 2021 zhang787jun.
             Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
         </span>
     </div>

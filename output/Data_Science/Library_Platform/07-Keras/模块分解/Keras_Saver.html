@@ -28,7 +28,7 @@
     <div id="container">
         
 <div id="header">
-  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Data_Science\Library_Platform\07-Keras\模块分解">Data_Science\Library_Platform\07-Keras\模块分解</a>&nbsp;»&nbsp;Keras 模型保存与加载</div>
+  <div id="post-nav"><a href="/Wiki/">Home</a>&nbsp;»&nbsp;<a href="/Wiki/#Data_Science">Data_Science</a>&nbsp;»&nbsp;<a href="/Wiki/#-Library_Platform">Library_Platform</a>&nbsp;»&nbsp;<a href="/Wiki/#-07-Keras">07-Keras</a>&nbsp;»&nbsp;<a href="/Wiki/#-模块分解">模块分解</a>&nbsp;»&nbsp;Keras 模型保存与加载</div>
 </div>
 <div class="clearfix"></div>
 <div id="title">Keras 模型保存与加载</div>
@@ -44,7 +44,9 @@
 <li><a href="#21-hdf5">2.1. HDF5 格式是什么</a></li>
 </ul>
 </li>
-<li><a href="#3">3. 便捷保存</a><ul>
+<li><a href="#3">3. 便捷保存</a></li>
+<li><a href="#14">1.4. 模型加载</a><ul>
+<li><a href="#141">1.4.1. 载入模型结构与权重</a></li>
 <li><a href="#142">1.4.2. 加载权重</a></li>
 </ul>
 </li>
@@ -108,19 +110,12 @@
 <span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="c">#</span>
 <span class="c"># case2 </span>
 <span class="n">model</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> 
-<span class="sb">``</span>
-<span class="err">`</span>
+</pre></div>
 
 
-<span class="c">## 1.4. 模型加载</span>
-
-
-
-
-<span class="c">### 1.4.1. 载入模型结构与权重</span>
-
-<span class="sb">``</span><span class="err">`</span><span class="n">python</span>
-<span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">load_model</span>
+<h2 id="14">1.4. 模型加载</h2>
+<h3 id="141">1.4.1. 载入模型结构与权重</h3>
+<div class="hlcode"><pre><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">load_model</span>
 
 <span class="c"># 载入模型</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="s">&#39;model.h5&#39;</span><span class="p">)</span>
@@ -159,7 +154,7 @@
     </div>
     <div id="footer">
         <span>
-            Copyright © 2020 zhang787jun.
+            Copyright © 2021 zhang787jun.
             Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
         </span>
     </div>

@@ -450,12 +450,13 @@ dataset.padded_batch(
 ```
 **适用场景** 
 1. 变长度数据（常见于语音、视频、NLP等领域）
+
 **通用解决方案**
 
 
-1.在把数据写入tfrecord时，先把数据pad到统一的长度再写入tfrecord；这个方法的问题在于：若是有大量数据的长度都远远小于最大长度，则会造成存储空间的大量浪费。
+1. 在把数据写入tfrecord时，先把数据pad到统一的长度再写入tfrecord；这个方法的问题在于：若是有大量数据的长度都远远小于最大长度，则会造成存储空间的大量浪费。
 
-2.使用dataset中的padded_batch方法来进行
+2. 使用dataset中的padded_batch方法来进行
 
 可见每个batch的每个序列长度都是6，不足就补0
 
@@ -621,6 +622,8 @@ example.SerializeToString()
 ```
 ### 2.2.4. 实践
 #### 2.2.4.1. 存储为 TFrecord格式文件
+
+##### 通用
 ```python
 
 float_list=tf.train.Int64List(value:list=[1,2,3,4])
@@ -643,6 +646,28 @@ writer= tf.python_io.TFRecordWriter(path=<...>,options=None)
 3. TFRecordCompressionType.NONE
 # 默认为最后一种，即不做任何压缩，定义方法如下
 ```
+#### 将tensor 写入
+```pyto
+
+import tensorflow as tf
+
+x = tf.constant([[2.0, 3.0, 3.0],
+                 [1.0, 5.0, 9.0]], dtype='float32')
+# Write to file
+ds = (tf.data.Dataset.from_tensors(x)
+      .map(tf.io.serialize_tensor))
+writer = tf.data.experimental.TFRecordWriter('temp.tfrecord')
+writer.write(ds)
+# Read from file
+parse_tensor_f32 = lambda x: tf.io.parse_tensor(x, tf.float32)
+ds2 = (tf.data.TFRecordDataset('temp.tfrecord')
+       .map(parse_tensor_f32))
+for x2 in ds2:
+    tf.print(x2)
+# [[2 3 3]
+#  [1 5 9]]
+```
+
 #### 2.2.4.2. 输入到tensorflow计算图中
 使用tf.data将TFrecord格式文件输入到tensorflow图中
 ##### 2.2.4.2.1. 导入

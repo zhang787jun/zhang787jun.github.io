@@ -31,9 +31,9 @@ with tf.Session() as sess:
 # tensorflow 2.x 
 data_numpy = data_tensor.numpy()
 ```
-# shape 转换
+# 3. shape 转换
 
-## NHWC <–> NCHW：
+## 3.1. NHWC <–> NCHW：
 ```python
 import tensorflow as tf
 

@@ -437,6 +437,29 @@ Dataset=Dataset.shuffle(shuffle_size=10) #
 
 代表將被加入緩衝器的元素的**最大数量**。
 buffer_size 需要合理取值，然而不当的buffer size，会导致shuffle无意义。如 `buffer_size=1`
+需要明确的是：
+1. 无论 ·`buffer_size` qqzhi
+
+
+
+No matter what buffer size you will choose, all samples will be used, it only affects the randomness of the shuffle.
+
+If buffer size is 100, it means that Tensorflow will keep a buffer of the next 100 samples, and will randomly select one those 100 samples. it then adds the next element to the buffer.
+
+so, if buffer_size = 1 there is no shuffle at all, and if buffer_size > data_set_size a perfect uniform random shuffle is guaranteed.
+
+I would highly suggest to shuffle the data set before creating the TFrecords, and keep a small buffer size.
+
+
+154
+
+TL;DR Despite their similar names, these arguments have quite difference meanings. The buffer_size in Dataset.shuffle() can affect the randomness of your dataset, and hence the order in which elements are produced. The buffer_size in Dataset.prefetch() only affects the time it takes to produce the next element.
+
+The buffer_size argument in tf.data.Dataset.prefetch() and the output_buffer_size argument in tf.contrib.data.Dataset.map() provide a way to tune the performance of your input pipeline: both arguments tell TensorFlow to create a buffer of at most buffer_size elements, and a background thread to fill that buffer in the background. (Note that we removed the output_buffer_size argument from Dataset.map() when it moved from tf.contrib.data to tf.data. New code should use Dataset.prefetch() after map() to get the same behavior.)
+
+Adding a prefetch buffer can improve performance by overlapping the preprocessing of data with downstream computation. Typically it is most useful to add a small prefetch buffer (with perhaps just a single element) at the very end of the pipeline, but more complex pipelines can benefit from additional prefetching, especially when the time to produce a single element can vary.
+
+By contrast, the buffer_size argument to tf.data.Dataset.shuffle() affects the randomness of the transformation. We designed the Dataset.shuffle() transformation (like the tf.train.shuffle_batch() function that it replaces) to handle datasets that are too large to fit in memory. Instead of shuffling the entire dataset, it maintains a buffer of buffer_size elements, and randomly selects the next element from that buffer (replacing it with the next input element, if one is available). Changing the value of buffer_size affects how uniform the shuffling is: if buffer_size is greater than the number of elements in the dataset, you get a uniform shuffle; if it is 1 then you get no shuffling at all. For very large datasets, a typical "good enough" approach is to randomly shard the data into multiple files once before training, then shuffle the filenames uniformly, and then use a smaller shuffle buffer. However, the appropriate choice will depend on the exact nature of your training job
 
 ![dd](../../../../../attach/images/2019-07-25-10-26-19.png)
 
@@ -488,10 +511,15 @@ count: (Optional.) A tf.int64 scalar tf.Tensor, representing the number of times
 #### 1.4.3.6.  prefetch
 
 
+#### 1.4.3.7. take skip 划分数据集
 
+```python
+train_db = dataset.take(1000)  # 前1000个batch
+test_db = dataset.skip(1000)  # 跳过前1000，选取后面的
+```
 
 ### 1.4.4. 在训练中使用
-#### 1.4.4.1. 在Session中使用
+#### 1.4.4.1. 在Session 模式下中使用
 ```python
 iterator = dataset.make_one_shot_iterator()
 next_example, next_label = iterator.get_next()
@@ -623,7 +651,7 @@ example.SerializeToString()
 ### 2.2.4. 实践
 #### 2.2.4.1. 存储为 TFrecord格式文件
 
-##### 通用
+##### 2.2.4.1.1. 通用
 ```python
 
 float_list=tf.train.Int64List(value:list=[1,2,3,4])
@@ -646,7 +674,7 @@ writer= tf.python_io.TFRecordWriter(path=<...>,options=None)
 3. TFRecordCompressionType.NONE
 # 默认为最后一种，即不做任何压缩，定义方法如下
 ```
-#### 将tensor 写入
+#### 2.2.4.2. 将tensor 写入
 ```pyto
 
 import tensorflow as tf
@@ -668,15 +696,15 @@ for x2 in ds2:
 #  [1 5 9]]
 ```
 
-#### 2.2.4.2. 输入到tensorflow计算图中
+#### 2.2.4.3. 输入到tensorflow计算图中
 使用tf.data将TFrecord格式文件输入到tensorflow图中
-##### 2.2.4.2.1. 导入
+##### 2.2.4.3.1. 导入
 从多个tfrecord文件中导入数据到Dataset类
 ```python 
 filenames = ["test.tfrecord", "test2.tfrecord"]
 dataset = tf.data.TFRecordDataset(filenames)
 ```
-##### 2.2.4.2.2. 序列化样本解析
+##### 2.2.4.3.2. 序列化样本解析
 tfrecord文件是序列化样本，所以我们需要对每一个样本进行解析。 具体实现 通过dataset 的map方法，如下：
 ```python
 dataset=dataset.map(parse_function)
@@ -758,14 +786,14 @@ parsed_example['matrix'] = tf.reshape(parsed_example['matrix'], parsed_example['
 parsed_example['tensor'] = tf.reshape(parsed_example['tensor'], parsed_example['tensor_shape'])
 ```
 
-##### 2.2.4.2.3. 执行解析函数
+##### 2.2.4.3.3. 执行解析函数
 
 创建好解析函数后，将创建的parse_function送入dataset.map()得到新的数据集
 
 ```python
 new_dataset = dataset.map(parse_function)
 ```
-##### 2.2.4.2.4. 创建迭代器
+##### 2.2.4.3.4. 创建迭代器
 后续与其他dataset 处理一致
 ```python
 iterator = dataset.make_one_shot_iterator()

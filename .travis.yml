@@ -5,7 +5,7 @@ env:
     - secure: "... entrypted data ..."
 sudo: required
 before_install:
-  - pip install ghp-import
+  - sudo pip install ghp-import simiki 
   - git remote add my_origin https://${gh_token}@${GH_REF}
 script:
   - ghp-import -f -p -m "Update output documentation" -r my_origin -b gh-pages output

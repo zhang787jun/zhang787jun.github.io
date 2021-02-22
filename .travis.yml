@@ -1,7 +1,7 @@
 language: shell
 env:
   global:
-    - GH_REF: github.com/zhang787jun/Wiki.git
+    - GH_REF: github.com/zhang787jun/zhang787jun.github.io.git
     - secure: "... entrypted data ..."
 sudo: required
 before_install:

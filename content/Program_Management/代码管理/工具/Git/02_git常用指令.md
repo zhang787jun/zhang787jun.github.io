@@ -561,9 +561,19 @@ git push [remote shortname] --all
 # 创建标签
 git tag -a v1.4 -m "my version 1.4"
 # 列出所有标签
-git tag
-
-
+git tag  
+```
+标签 推送
+```
+默认情况下，git push并不会把tag标签传送到远端服务器上，只有通过显式命令才能分享标签到远端仓库。
+1.push单个tag，命令格式为：git push origin [tagname]
+例如：
+git push origin v1.0 #将本地v1.0的tag推送到远端服务器
+2.push所有tag，命令格式为：git push [origin] --tags
+例如：
+git push --tags
+或
+git push origin --tags
 ```
 ## 1.7. 版本退回
 

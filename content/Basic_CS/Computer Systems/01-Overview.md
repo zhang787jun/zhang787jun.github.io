@@ -165,13 +165,7 @@ Mon
 Nov
 2
 Recitation 10: Virtual Memory (pdf, pptx)
-Tue
-Nov
-3
-Storage Allocation: Basic (pdf, pptx, code, tar)
-droh
-9.9
-L5 due 11:59pm, L6 (malloclab) out
+Tue L6 (malloclab) out
 Thu
 Nov
 5
@@ -184,7 +178,7 @@ Nov
 9
 Recitation 11: Malloc Lab (pdf, pptx)
 Tue
-Nov
+N
 10
 Network Programming: Part 1 (pdf, pptx)
 reb

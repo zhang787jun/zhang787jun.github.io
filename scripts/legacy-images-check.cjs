@@ -14,7 +14,9 @@ const article='/Wiki/20-数据科学/Algorithm/04-图学习/03_图深度学习/t
    const context=await browser.newContext({viewport:{width,height:900},colorScheme});const page=await context.newPage();
    await page.goto(origin+article);const imgs=page.locator('img[src^="/home/liuyuhang/"]');assert.equal(await imgs.count(),38);
    for(let i=0;i<await imgs.count();i++){const img=imgs.nth(i);await img.scrollIntoViewIfNeeded();await img.evaluate(e=>e.decode());assert(await img.evaluate(e=>e.naturalWidth>0&&e.naturalHeight>0));}
-   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'page overflow');
+   const layout=await page.evaluate(()=>({viewport:innerWidth,documentWidth:document.documentElement.scrollWidth}));console.log('GNN_LAYOUT '+JSON.stringify({name,width,colorScheme,...layout}));
+   await page.screenshot({path:`rendering-evidence/gnn-${name}-${width}-${colorScheme}-end.png`});
+   assert(layout.documentWidth<=layout.viewport+1,'page overflow');
    await imgs.first().scrollIntoViewIfNeeded();await page.screenshot({path:`rendering-evidence/gnn-${name}-${width}-${colorScheme}.png`});
    results.push({browser:name,width,colorScheme,decoded:await imgs.count(),passed:true});await context.close();
   }await browser.close();

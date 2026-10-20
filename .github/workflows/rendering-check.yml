@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: zhang787jun/Wiki
-          ref: 14c4436e67a3f43efe8cb210d898f53bd0b4f015
+          ref: 3535bd6aa2d6623b5373ca032d762574a740e6b0
           path: _wiki-source
       - uses: actions/setup-python@v5
         with:
@@ -44,8 +44,8 @@ jobs:
           NODE_PATH: /tmp/jim-render-test/node_modules
         run: |
           python -m http.server 8080 > /tmp/render-server.log 2>&1 &
-          node scripts/rendering-check.cjs
           node scripts/legacy-images-check.cjs
+          node scripts/rendering-check.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

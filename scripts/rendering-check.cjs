@@ -28,7 +28,7 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.png`,
     await page.locator('[data-render-mode="map"]').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>document.querySelector('.rendering-stage').dataset.backend==='canvas2d');
     await page.locator('[data-theme-toggle]').click();await overflow(page);
     await page.goto(origin+article);await page.waitForSelector('.pele-diagram[data-renderer="pele"] svg');await page.locator('.pele-diagram').scrollIntoViewIfNeeded();
-    assert((await page.locator('.pele-chart').innerText()).includes('主进程'));await overflow(page);
+    assert((await page.locator('.pele-chart').textContent()).includes('主进程'));await overflow(page);
     const summary=page.locator('.pele-diagram summary');await summary.focus();await page.keyboard.press('Enter');assert(await page.locator('.pele-diagram details').evaluate(e=>e.open));assert((await page.locator('.pele-diagram pre').textContent()).includes('A-->B'));
     await shot(page,`${name}-${width}-${scheme}-pele`);assert.deepEqual(errors,[]);c.passed=true;
    }catch(e){c.error=e.stack;await shot(page,`${name}-${width}-${scheme}-failure`);}

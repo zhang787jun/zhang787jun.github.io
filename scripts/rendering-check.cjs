@@ -30,7 +30,7 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.png`,
     await page.locator('[data-theme-toggle]').click();await overflow(page);
     await page.goto(origin+article);await page.waitForSelector('.pele-diagram[data-renderer="pele"] svg');await page.locator('.pele-diagram').scrollIntoViewIfNeeded();
     const chartText=await page.locator('.pele-chart').textContent();assert(chartText.includes('主进程'));assert(!chartText.includes('复制'),'copy control leaked into graph');await overflow(page);
-    assert.equal(await page.locator('.prose .toc:visible').count(),1,'duplicate article directory');const scale=await page.locator('.pele-chart svg').evaluate(svg=>svg.getBoundingClientRect().width/svg.viewBox.baseVal.width);assert(scale>=.99,'diagram labels shrunk below authored size');
+    assert.equal(await page.locator('.prose .toc:visible').count(),width>=1000?0:1,'duplicate article directory');const scale=await page.locator('.pele-chart svg').evaluate(svg=>svg.getBoundingClientRect().width/svg.viewBox.baseVal.width);assert(scale>=.99,'diagram labels shrunk below authored size');
     const summary=page.locator('.pele-diagram summary');await summary.focus();await page.keyboard.press('Enter');assert(await page.locator('.pele-diagram details').evaluate(e=>e.open));assert((await page.locator('.pele-diagram pre').textContent()).includes('A-->B'));
     await shot(page,`${name}-${width}-${scheme}-pele`);assert.deepEqual(errors,[]);c.passed=true;
    }catch(e){c.error=e.stack;await shot(page,`${name}-${width}-${scheme}-failure`);}

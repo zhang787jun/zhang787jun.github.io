@@ -26,7 +26,7 @@ if (root) {
       status.textContent = '';
     } catch(error) {
       if(ticket !== generation) return;
-      canvas.remove();status.textContent = '此视图暂不可用，可切换到「关联」。';
+      active?.dispose();active=null;canvas.remove();status.textContent = '此视图暂不可用，可切换到「关联」。';
       stage.dataset.error = error.message || error.name || 'Error';
       console.warn('Optional rendering view unavailable:', error);
     }

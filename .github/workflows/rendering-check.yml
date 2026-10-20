@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: zhang787jun/Wiki
-          ref: b261143e0e2258a90eb765c39f15d31c1b0e62a5
+          ref: 14c4436e67a3f43efe8cb210d898f53bd0b4f015
           path: _wiki-source
       - uses: actions/setup-python@v5
         with:

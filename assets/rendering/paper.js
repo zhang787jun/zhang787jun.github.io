@@ -2,7 +2,11 @@ import * as THREE from '../vendor/three/three.webgpu.js';
 // TSL nodes compile to WGSL on WebGPU or GLSL on the WebGL2 fallback.
 const {color, mix, positionLocal} = THREE.TSL;
 export async function create(canvas) {
-  const renderer=new THREE.WebGPURenderer({canvas,alpha:true,antialias:true});
+  let adapter=null;
+  try {adapter=await navigator.gpu?.requestAdapter();} catch {}
+  const options={canvas,alpha:true,antialias:true};
+  if(!adapter){options.forceWebGL=true;options.context=canvas.getContext('webgl2',{alpha:true,antialias:true,preserveDrawingBuffer:true});if(!options.context)throw new Error('WebGL2 unavailable');}
+  const renderer=new THREE.WebGPURenderer(options);
   try {await renderer.init();} catch(e){renderer.dispose();throw e;}
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));
   const scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(32,1,.1,30);

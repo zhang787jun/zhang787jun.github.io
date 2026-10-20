@@ -8,7 +8,7 @@ float radius(int i){return i==2?.22:.64;}
 vec3 trace(vec3 ro,vec3 rd){vec3 result=vec3(0.);float weight=1.;for(int bounce=0;bounce<2;bounce++){float near=100.;int id=-1;for(int i=0;i<3;i++){float t=hit(ro,rd,center(i),radius(i));if(t>0.&&t<near){near=t;id=i;}}if(id<0){result+=weight*background;break;}vec3 p=ro+rd*near,n=normalize(p-center(id)),ld=normalize(vec3(-3.,4.,5.)-p);float shadow=1.;for(int i=0;i<3;i++){if(i!=id&&hit(p+n*.005,ld,center(i),radius(i))>0.)shadow=.32;}vec3 base=id==1?mix(accent,background,.65):accent;float diffuse=max(dot(n,ld),0.)*shadow;float spec=pow(max(dot(reflect(-ld,n),-rd),0.),48.)*.2;result+=weight*(base*(.35+.65*diffuse)+spec)*.78;weight*=.22;ro=p+n*.005;rd=reflect(rd,n);}return result;}
 void main(){vec2 uv=(gl_FragCoord.xy/resolution-.5)*vec2(resolution.x/resolution.y,1.);vec3 ro=vec3(pointer*.3,4.);vec3 rd=normalize(vec3(uv*2.9,-4.));gl_FragColor=vec4(trace(ro,rd),1.);}`;
 export function create(canvas){
- const gl=canvas.getContext('webgl',{alpha:false,antialias:false});if(!gl)throw new Error('WebGL unavailable');
+ const gl=canvas.getContext('webgl',{alpha:false,antialias:false,preserveDrawingBuffer:true});if(!gl)throw new Error('WebGL unavailable');
  const shaders=[];let program,buffer;
  try {
  const compile=(type,source)=>{const s=gl.createShader(type);shaders.push(s);gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s;};

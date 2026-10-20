@@ -1,5 +1,6 @@
 const {chromium,webkit}=require('playwright');
 const fs=require('node:fs/promises'),assert=require('node:assert/strict');
+const {PNG}=require('pngjs');
 const origin=process.env.TEST_ORIGIN||'http://127.0.0.1:8080';
 const article='/Wiki/10-计算机科学/02-Programming_Language/Python/python高性能编程/03-并行运算策略.html';
 const results=[];const out='rendering-evidence';
@@ -22,7 +23,7 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.png`,
      if(mode==='map')assert.equal(backend,'canvas2d');
      // WebKit in Linux CI may not expose GPU; record fallback explicitly.
      if(name==='chromium')assert(backend,`${mode} failed: ${await stage.getAttribute('data-error')}`);
-     if(backend){const pixels=await page.locator('.rendering-stage canvas').screenshot();c.canvas=await stage.evaluate(e=>{const c=e.querySelector('canvas');return {w:c.width,h:c.height,rect:c.getBoundingClientRect().toJSON()};});assert(pixels.length>1200,'empty canvas screenshot');}
+     if(backend){const pixels=await page.locator('.rendering-stage canvas').screenshot();c.canvas=await stage.evaluate(e=>{const c=e.querySelector('canvas');return {w:c.width,h:c.height,rect:c.getBoundingClientRect().toJSON()};});await fs.writeFile(`${out}/${name}-${width}-${scheme}-${mode}-canvas.png`,pixels);const png=PNG.sync.read(pixels),colors=new Set();for(let i=0;i<png.data.length;i+=4)colors.add(`${png.data[i]},${png.data[i+1]},${png.data[i+2]}`);assert(colors.size>16,`blank canvas: ${colors.size} colors`);}
      c.modes.push({mode,backend:backend||'static-fallback'});await overflow(page);await shot(page,`${name}-${width}-${scheme}-${mode}`);
     }
     await page.locator('[data-render-mode="map"]').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>document.querySelector('.rendering-stage').dataset.backend==='canvas2d');

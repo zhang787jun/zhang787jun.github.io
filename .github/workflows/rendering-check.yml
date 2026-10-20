@@ -1,0 +1,51 @@
+name: Progressive rendering acceptance
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browsers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: zhang787jun/Wiki
+          ref: feat/pele-diagrams
+          path: _wiki-source
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build Wiki fixture
+        working-directory: _wiki-source
+        run: |
+          pip install --no-deps -r requirements-build.txt
+          simiki g
+          cp 404.html output/404.html
+          python scripts/copy_legacy_assets.py
+          python scripts/build_search_index.py
+          python scripts/check_pages_build.py
+          python scripts/check_redesign.py
+          mv output ../Wiki
+      - name: Install test browsers
+        run: |
+          npm install --prefix /tmp/jim-render-test --no-package-lock --ignore-scripts playwright@1.56.1
+          /tmp/jim-render-test/node_modules/.bin/playwright install --with-deps chromium webkit
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Browser acceptance
+        env:
+          NODE_PATH: /tmp/jim-render-test/node_modules
+        run: |
+          python -m http.server 8080 > /tmp/render-server.log 2>&1 &
+          node scripts/rendering-check.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rendering-evidence
+          path: rendering-evidence/
+          retention-days: 30

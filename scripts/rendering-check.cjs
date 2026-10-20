@@ -11,7 +11,7 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.png`,
   const browser=await type.launch(name==='chromium'?{args:['--enable-unsafe-webgpu','--use-angle=swiftshader','--enable-features=Vulkan','--use-vulkan=swiftshader','--disable-vulkan-surface']}:{});
   for(const width of [320,390,768,1366])for(const scheme of ['light','dark']){
    const context=await browser.newContext({viewport:{width,height:900},colorScheme:scheme});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
-   const c={browser:name,width,scheme,modes:[]};results.push(c);
+   const c={browser:name,width,scheme,modes:[],console:[]};page.on('console',m=>{if(['warning','error'].includes(m.type()))c.console.push(m.text());});results.push(c);
    try{
     await page.goto(origin);await page.locator('.rendering-note').scrollIntoViewIfNeeded();
     const stage=page.locator('.rendering-stage');
@@ -21,8 +21,8 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.png`,
      const backend=await stage.getAttribute('data-backend');
      if(mode==='map')assert.equal(backend,'canvas2d');
      // WebKit in Linux CI may not expose GPU; record fallback explicitly.
-     if(name==='chromium')assert(backend,`${mode} failed: ${await page.locator('.rendering-status').textContent()}`);
-     if(backend){const pixels=await page.locator('.rendering-stage canvas').screenshot();assert(pixels.length>1200,'empty canvas screenshot');}
+     if(name==='chromium')assert(backend,`${mode} failed: ${await stage.getAttribute('data-error')}`);
+     if(backend){const pixels=await page.locator('.rendering-stage canvas').screenshot();c.canvas=await stage.evaluate(e=>{const c=e.querySelector('canvas');return {w:c.width,h:c.height,rect:c.getBoundingClientRect().toJSON()};});assert(pixels.length>1200,'empty canvas screenshot');}
      c.modes.push({mode,backend:backend||'static-fallback'});await overflow(page);await shot(page,`${name}-${width}-${scheme}-${mode}`);
     }
     await page.locator('[data-render-mode="map"]').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>document.querySelector('.rendering-stage').dataset.backend==='canvas2d');

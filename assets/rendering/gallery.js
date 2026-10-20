@@ -6,7 +6,8 @@ if (root) {
   let active, generation = 0, visible = false;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const theme = () => {const s = getComputedStyle(root);return {bg:s.getPropertyValue('--surface').trim(), ink:s.getPropertyValue('--ink').trim(), accent:s.getPropertyValue('--accent').trim(), line:s.getPropertyValue('--line').trim()};};
-  const redraw = () => {if(active && visible && !document.hidden) active.draw(theme());};
+  let frame = 0;
+  const redraw = () => {cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{if(active && visible && !document.hidden) active.draw(theme());});};
   async function select(mode) {
     const ticket = ++generation;
     active?.dispose(); active = null;
@@ -21,12 +22,13 @@ if (root) {
       const instance = await module.create(canvas, {reducedMotion:reduced.matches});
       if(ticket !== generation) {instance.dispose();return;}
       active = instance; active.resize(stage.clientWidth, stage.clientHeight);
-      active.draw(theme()); stage.dataset.ready = 'true'; stage.dataset.backend = active.backend;
+      active.draw(theme()); redraw(); stage.dataset.ready = 'true'; stage.dataset.backend = active.backend;
       status.textContent = '';
     } catch(error) {
       if(ticket !== generation) return;
       canvas.remove();status.textContent = '此视图暂不可用，可切换到「关联」。';
-      stage.dataset.error = error.name || 'Error';
+      stage.dataset.error = error.message || error.name || 'Error';
+      console.warn('Optional rendering view unavailable:', error);
     }
   }
   buttons.forEach(b => b.addEventListener('click', () => select(b.dataset.renderMode)));
@@ -37,5 +39,5 @@ if (root) {
   new IntersectionObserver(entries => {visible=entries[0].isIntersecting;if(visible && !generation) select('map');else redraw();}).observe(stage);
   stage.addEventListener('pointermove', e => {if(!active || reduced.matches || !visible)return;const r=stage.getBoundingClientRect();active.pointer?.((e.clientX-r.left)/r.width-.5,(e.clientY-r.top)/r.height-.5);redraw();});
   stage.addEventListener('pointerleave', () => {active?.pointer?.(0,0);redraw();});
-  window.addEventListener('pagehide',()=>active?.dispose(),{once:true});
+  window.addEventListener('pagehide',event=>{if(!event.persisted)active?.dispose();});
 }

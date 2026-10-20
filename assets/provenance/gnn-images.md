@@ -1,6 +1,6 @@
 # GNN article image recovery
 
-Recovered 38 unique files (40 image occurrences) from the original author repository:
+Recovered 38 unique files (38 image occurrences) from the original author repository:
 https://github.com/LYuhang/GNN_Review/tree/ab3a44343ec6f7fcde756d2ecd3a2ed92d084b02
 
 The original Wiki Markdown and the upstream Markdown share the same `/home/liuyuhang/项目/GNN/` references. The files were present upstream but absent from both published site repositories. This restores unmodified bytes at those historical root-relative URLs. The two `code/images` files are found under upstream `GNN示例代码/images`. No article text, URL, or existing project entry changes.

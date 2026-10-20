@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: zhang787jun/Wiki
-          ref: feat/pele-diagrams
+          ref: 27030d2fb9ab7d962cc104adff1c7bfede0daf75
           path: _wiki-source
       - uses: actions/setup-python@v5
         with:
@@ -27,6 +27,8 @@ jobs:
           pip install --no-deps -r requirements-build.txt
           simiki g
           cp 404.html output/404.html
+          cp favicon.ico output/favicon.ico
+          touch output/.nojekyll
           python scripts/copy_legacy_assets.py
           python scripts/build_search_index.py
           python scripts/check_pages_build.py
